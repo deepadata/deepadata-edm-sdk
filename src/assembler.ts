@@ -162,7 +162,7 @@ export function createEmptyArtifact(): EdmArtifact {
       recurrence_pattern: null,
       strength_score: 0,
       temporal_decay: null,
-      resilience_markers: [],
+      resilience_markers: null,
       adaptation_trajectory: null,
     },
     impulse: {

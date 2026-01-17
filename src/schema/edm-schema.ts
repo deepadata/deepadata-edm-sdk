@@ -188,7 +188,7 @@ export const GravitySchema = z.object({
     .describe("Temporal recurrence structure"),
   strength_score: z.number().min(0).max(1).describe("Binding strength (0.0-1.0)"),
   temporal_decay: z.enum(["fast", "moderate", "slow"]).nullable().describe("Intensity diminishment rate"),
-  resilience_markers: z.array(z.string()).min(1).max(3).describe("Stabilizing indicators"),
+  resilience_markers: z.array(z.string()).min(1).max(3).nullable().describe("Stabilizing indicators"),
   adaptation_trajectory: z
     .enum(["improving", "stable", "declining", "integrative"])
     .nullable()
