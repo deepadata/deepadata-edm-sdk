@@ -54,7 +54,16 @@ export {
 // =============================================================================
 // LLM Integration
 // =============================================================================
-export { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
+export {
+  extractWithLlm,
+  createAnthropicClient,
+  EXTRACTION_SYSTEM_PROMPT,
+  calculateConfidence,
+} from "./extractors/llm-extractor.js";
+
+export type { LlmExtractionResult } from "./extractors/llm-extractor.js";
+
+export { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 
 export { analyzeImage, mergeImageContext } from "./extractors/image-analyzer.js";
 

@@ -90,7 +90,9 @@ export interface ExtractionOptions {
   content: ExtractionInput;
   /** Metadata and governance options */
   metadata: ExtractionMetadata;
-  /** Model to use for extraction */
+  /** LLM provider to use for extraction (default: 'anthropic') */
+  provider?: 'anthropic' | 'openai';
+  /** Model to use for extraction (provider-specific, uses default if omitted) */
   model?: string;
 }
 

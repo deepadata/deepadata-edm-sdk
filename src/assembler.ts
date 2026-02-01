@@ -5,6 +5,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { EdmArtifact, ExtractionOptions, LlmExtractedFields } from "./schema/types.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
+import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 import {
   createMeta,
   createGovernance,
@@ -18,13 +19,16 @@ import {
  * Extract a complete EDM artifact from content
  */
 export async function extractFromContent(options: ExtractionOptions): Promise<EdmArtifact> {
-  const { content, metadata, model } = options;
+  const { content, metadata, model, provider = "anthropic" } = options;
 
-  // Create Anthropic client
-  const client = createAnthropicClient();
-
-  // Extract with LLM
-  const llmResult = await extractWithLlm(client, content, model);
+  let llmResult;
+  if (provider === "openai") {
+    const client = createOpenAIClient();
+    llmResult = await extractWithOpenAI(client, content, model);
+  } else {
+    const client = createAnthropicClient();
+    llmResult = await extractWithLlm(client, content, model);
+  }
 
   // Assemble complete artifact
   return assembleArtifact(llmResult.extracted, metadata, {

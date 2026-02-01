@@ -17,7 +17,7 @@ import { LlmExtractedFieldsSchema } from "../schema/edm-schema.js";
  * - reentry_score → recurrence_pattern (type changed: number → enum)
  * - ADDED: somatic_signature
  */
-const EXTRACTION_SYSTEM_PROMPT = `
+export const EXTRACTION_SYSTEM_PROMPT = `
 You classify emotionally rich memories into a JSON object. Input may include text and an image.
 
 Rules
@@ -115,7 +115,7 @@ Schema
 }
 `;
 
-interface LlmExtractionResult {
+export interface LlmExtractionResult {
   extracted: LlmExtractedFields;
   confidence: number;
   model: string;
@@ -206,7 +206,7 @@ export async function extractWithLlm(
 /**
  * Calculate extraction confidence based on field population
  */
-function calculateConfidence(extracted: LlmExtractedFields): number {
+export function calculateConfidence(extracted: LlmExtractedFields): number {
   const weights = {
     core: 0.25,
     constellation: 0.25,
