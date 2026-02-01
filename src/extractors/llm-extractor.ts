@@ -170,10 +170,15 @@ export async function extractWithLlm(
     throw new Error("No text response from LLM");
   }
 
-  // Parse JSON response
+  // Parse JSON response (strip markdown code fences if present)
+  let jsonText = textBlock.text.trim();
+  const fenceMatch = jsonText.match(/^```(?:json)?\s*\n?([\s\S]*?)\n?\s*```$/);
+  if (fenceMatch?.[1]) {
+    jsonText = fenceMatch[1].trim();
+  }
   let parsed: unknown;
   try {
-    parsed = JSON.parse(textBlock.text);
+    parsed = JSON.parse(jsonText);
   } catch {
     throw new Error(`Failed to parse LLM response as JSON: ${textBlock.text.slice(0, 200)}...`);
   }
