@@ -120,6 +120,36 @@ Schema
   // - directionality: inward (self-processing), outward (toward others), transcendent (beyond self).
   // - social_visibility: private (to self or 1:1), relational (friends/family), collective (community-wide).
   // - If uncertain, choose the most conservative option or null.
+
+  // CROSS-CONTAMINATION DISAMBIGUATION (read carefully)
+  //
+  // temporal_rhythm vs urgency:
+  //   - temporal_rhythm describes the CADENCE or PACE of time in the memory experience
+  //     (still, sudden, rising, fading, recurring, spiraling, dragging, suspended, looping, cyclic)
+  //   - urgency describes the INTENSITY of motivational pressure RIGHT NOW
+  //     (calm, elevated, pressing, acute)
+  //   - "pressing" belongs ONLY in urgency, NEVER in temporal_rhythm
+  //
+  // temporal_rhythm vs viscosity:
+  //   - temporal_rhythm is about TIME MOVEMENT in the memory
+  //   - viscosity is about EMOTIONAL PERSISTENCE over time
+  //     (low=fleeting, medium=moderate, high=sticky, enduring=long-lasting, fluid=changeable)
+  //   - "enduring" belongs ONLY in viscosity, NEVER in temporal_rhythm
+  //
+  // relational_dynamics vs relational_perspective:
+  //   - relational_dynamics: the TYPE of relationship (parent_child, friendship, mentorship, etc.)
+  //   - relational_perspective: WHOSE viewpoint the narrative is told from (self, partner, family, etc.)
+  //   - "family" can appear in BOTH fields with different meanings
+  //
+  // drive_state vs coping_style:
+  //   - drive_state: the MOTIVATIONAL direction (explore, approach, avoid, confront, etc.)
+  //   - coping_style: the STRATEGY for managing emotions (reframe_meaning, seek_support, confront, etc.)
+  //   - "confront" is valid in BOTH - use drive_state for action impulse, coping_style for emotion management
+  //
+  // emotion_primary (STRICT ENUM) vs higher_order_emotion (free text):
+  //   - emotion_primary MUST be one of the 12 listed values ONLY
+  //   - Do NOT put free-text emotions like "compassion", "reflection", "frustration" in emotion_primary
+  //   - Use higher_order_emotion for complex emotions not in the primary list
 }
 `;
 
