@@ -29,6 +29,14 @@ Rules
 - Output JSON only — no commentary, markdown, or extra text.
 - If motivation is ambiguous, choose the most conservative option (e.g., "curiosity" vs "fear") or return null.
 
+CRITICAL: Enum Field Constraints
+- Many fields below are STRICT ENUMS with a fixed set of allowed values.
+- You MUST use ONLY the values listed in the enum sets. Do not invent similar values.
+- Cross-contamination warning: Each enum field has its own distinct value set. Do not use values from one field in another.
+  Example: "pride" is valid for higher_order_emotion (free text) but NOT for emotion_primary (strict 8-value enum).
+  Example: "milestone" is valid for memory_type but NOT for narrative_arc.
+- If none of the allowed enum values adequately capture the expressed content, use the closest match. Do not invent alternatives.
+
 Normalization (very important)
 - Emit lowercase for all string fields except proper names in arrays like associated_people.
 - For array fields (emotion_subtone, recall_triggers, retrieval_keys, nearby_themes, resilience_markers, associated_people):
@@ -49,20 +57,20 @@ Schema
     "narrative": ""          // 3–5 sentences; include ≥1 sensory detail, ≥1 temporal cue, and a symbolic callback; faithful and concise
   },
   "constellation": {
-    "emotion_primary": "",           // joy, sadness, anger, fear, wonder, peace, tenderness, reverence (best-fit; lowercase)
-    "emotion_subtone": [],           // 2–4 short words (e.g., bittersweet, grateful)
-    "higher_order_emotion": "",      // e.g., awe, forgiveness, pride, moral_elevation (or null)
-    "meta_emotional_state": "",      // e.g., acceptance, confusion, curiosity (or null)
-    "interpersonal_affect": "",      // e.g., warmth, openness, defensiveness (or null)
-    "narrative_arc": "",             // overcoming, transformation, connection, reflection, closure (or null)
-    "relational_dynamics": "",       // parent_child, romantic_partnership, sibling_bond, friendship, companionship, mentorship, reunion, community_ritual, grief, self_reflection (best-fit)
-    "temporal_context": "",          // childhood, early_adulthood, midlife, late_life, recent, future, timeless (or null)
-    "memory_type": "",               // legacy_artifact, fleeting_moment, milestone, reflection, formative_experience (or null)
+    "emotion_primary": "",           // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence (pick best-fit from these 8 ONLY)
+    "emotion_subtone": [],           // 2–4 short words (e.g., bittersweet, grateful) — free text array
+    "higher_order_emotion": "",      // free text: e.g., awe, forgiveness, pride, moral_elevation (or null)
+    "meta_emotional_state": "",      // free text: e.g., acceptance, confusion, curiosity (or null)
+    "interpersonal_affect": "",      // free text: e.g., warmth, openness, defensiveness (or null)
+    "narrative_arc": "",             // STRICT ENUM: overcoming | transformation | connection | reflection | closure (pick ONE or null)
+    "relational_dynamics": "",       // STRICT ENUM: parent_child | romantic_partnership | sibling_bond | friendship | companionship | mentorship | reunion | community_ritual | grief | self_reflection (pick ONE)
+    "temporal_context": "",          // STRICT ENUM: childhood | early_adulthood | midlife | late_life | recent | future | timeless (pick ONE or null)
+    "memory_type": "",               // STRICT ENUM: legacy_artifact | fleeting_moment | milestone | reflection | formative_experience (pick ONE or null)
     "media_format": "",              // photo, video, audio, text, photo_with_story (or null)
-    "narrative_archetype": "",       // hero, caregiver, seeker, sage, lover, outlaw, innocent, magician, creator, everyman, jester, ruler, mentor (or null; lowercase)
+    "narrative_archetype": "",       // STRICT ENUM: hero | caregiver | seeker | sage | lover | outlaw | innocent | magician | creator | everyman | jester | ruler | mentor (pick ONE or null; lowercase)
     "symbolic_anchor": "",           // concrete object/place/ritual (or null)
-    "relational_perspective": "",    // self, partner, family, friends, community, humanity (or null)
-    "temporal_rhythm": "",           // choose ONE of: still, sudden, rising, fading, recurring, spiraling, dragging, suspended, looping, cyclic (or null)
+    "relational_perspective": "",    // STRICT ENUM: self | partner | family | friends | community | humanity (pick ONE or null)
+    "temporal_rhythm": "",           // STRICT ENUM: still | sudden | rising | fading | recurring | spiraling | dragging | suspended | looping | cyclic (pick ONE or null)
     "identity_thread": "",           // short sentence
     "expressed_insight": "",         // brief insight explicitly stated by subject (extracted, not inferred)
     "transformational_pivot": false, // true if subject explicitly identifies this as life-changing
@@ -72,39 +80,39 @@ Schema
     "event_type": "",                // e.g., family gathering, farewell, birthday (or null)
     "location_context": "",          // place from text or image (or null)
     "associated_people": [],         // names or roles (proper case allowed)
-    "visibility_context": "",        // private, family_only, shared_publicly (or null)
+    "visibility_context": "",        // STRICT ENUM: private | family_only | shared_publicly (pick ONE or null)
     "tone_shift": ""                 // e.g., loss to gratitude (or null)
   },
   "gravity": {
     "emotional_weight": 0.0,         // 0.0–1.0 (felt intensity)
-    "emotional_density": "",         // low, medium, high (or null)
-    "valence": "",                   // positive, negative, mixed (or null)
-    "viscosity": "",                 // low, medium, high, enduring, fluid (or null)
+    "emotional_density": "",         // STRICT ENUM: low | medium | high (pick ONE or null)
+    "valence": "",                   // STRICT ENUM: positive | negative | mixed (pick ONE or null)
+    "viscosity": "",                 // STRICT ENUM: low | medium | high | enduring | fluid (pick ONE or null)
     "gravity_type": "",              // short phrase (e.g., symbolic resonance)
-    "tether_type": "",               // choose ONE of: person, symbol, event, place, ritual, object, tradition (or null)
+    "tether_type": "",               // STRICT ENUM: person | symbol | event | place | ritual | object | tradition (pick ONE or null)
     "recall_triggers": [],           // sensory or symbolic cues (lowercase tokens)
     "retrieval_keys": [],            // compact hooks (3–6 tokens recommended)
     "nearby_themes": [],             // adjacent concepts
     "legacy_embed": false,
-    "recurrence_pattern": "",        // cyclical, isolated, chronic, emerging (or null)
+    "recurrence_pattern": "",        // STRICT ENUM: cyclical | isolated | chronic | emerging (pick ONE or null)
     "strength_score": 0.0,           // 0.0–1.0 (binding strength)
-    "temporal_decay": "",            // fast, moderate, slow (or null)
+    "temporal_decay": "",            // STRICT ENUM: fast | moderate | slow (pick ONE or null)
     "resilience_markers": [],        // 1–3 (e.g., acceptance, optimism, continuity)
-    "adaptation_trajectory": ""      // improving, stable, declining, integrative (or null)
+    "adaptation_trajectory": ""      // STRICT ENUM: improving | stable | declining | integrative (pick ONE or null)
   },
   "impulse": {
-    "primary_energy": "",              // e.g., curiosity, fear, compassion (or null; lowercase)
-    "drive_state": "",                 // explore, approach, avoid, repair, persevere, share (or null)
-    "motivational_orientation": "",    // belonging, safety, mastery, meaning, autonomy (or null)
-    "temporal_focus": "",              // past, present, future (or null)
-    "directionality": "",              // inward, outward, transcendent (or null)
-    "social_visibility": "",           // private, relational, collective (or null)
-    "urgency": "",                     // calm, elevated, pressing, acute (or null)
-    "risk_posture": "",                // cautious, balanced, bold (or null)
-    "agency_level": "",                // low, medium, high (or null)
-    "regulation_state": "",            // regulated, wavering, dysregulated (or null)
-    "attachment_style": "",            // secure, anxious, avoidant, disorganized (or null)
-    "coping_style": ""                 // choose ONE of: reframe_meaning, seek_support, distract, ritualize, confront, detach (or null)
+    "primary_energy": "",              // free text: e.g., curiosity, fear, compassion (or null; lowercase)
+    "drive_state": "",                 // STRICT ENUM: explore | approach | avoid | repair | persevere | share (pick ONE or null)
+    "motivational_orientation": "",    // STRICT ENUM: belonging | safety | mastery | meaning | autonomy (pick ONE or null)
+    "temporal_focus": "",              // STRICT ENUM: past | present | future (pick ONE or null)
+    "directionality": "",              // STRICT ENUM: inward | outward | transcendent (pick ONE or null)
+    "social_visibility": "",           // STRICT ENUM: private | relational | collective (pick ONE or null)
+    "urgency": "",                     // STRICT ENUM: calm | elevated | pressing | acute (pick ONE or null)
+    "risk_posture": "",                // STRICT ENUM: cautious | balanced | bold (pick ONE or null)
+    "agency_level": "",                // STRICT ENUM: low | medium | high (pick ONE or null)
+    "regulation_state": "",            // STRICT ENUM: regulated | wavering | dysregulated (pick ONE or null)
+    "attachment_style": "",            // STRICT ENUM: secure | anxious | avoidant | disorganized (pick ONE or null)
+    "coping_style": ""                 // STRICT ENUM: reframe_meaning | seek_support | distract | ritualize | confront | detach (pick ONE or null)
   }
 
   // Calibration — Impulse (helps apply the fields consistently)

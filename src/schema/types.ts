@@ -91,7 +91,7 @@ export interface ExtractionOptions {
   /** Metadata and governance options */
   metadata: ExtractionMetadata;
   /** LLM provider to use for extraction (default: 'anthropic') */
-  provider?: 'anthropic' | 'openai';
+  provider?: 'anthropic' | 'openai' | 'kimi';
   /** Model to use for extraction (provider-specific, uses default if omitted) */
   model?: string;
 }

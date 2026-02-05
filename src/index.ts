@@ -65,6 +65,8 @@ export type { LlmExtractionResult } from "./extractors/llm-extractor.js";
 
 export { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 
+export { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
+
 export { analyzeImage, mergeImageContext } from "./extractors/image-analyzer.js";
 
 // =============================================================================

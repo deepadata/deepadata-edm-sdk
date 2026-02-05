@@ -6,6 +6,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { EdmArtifact, ExtractionOptions, LlmExtractedFields } from "./schema/types.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
 import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
+import { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
 import {
   createMeta,
   createGovernance,
@@ -25,6 +26,9 @@ export async function extractFromContent(options: ExtractionOptions): Promise<Ed
   if (provider === "openai") {
     const client = createOpenAIClient();
     llmResult = await extractWithOpenAI(client, content, model);
+  } else if (provider === "kimi") {
+    const client = createKimiClient();
+    llmResult = await extractWithKimi(client, content, model ?? getKimiModelId());
   } else {
     const client = createAnthropicClient();
     llmResult = await extractWithLlm(client, content, model);
