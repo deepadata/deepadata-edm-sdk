@@ -21,10 +21,11 @@ const DEFAULT_KIMI_MODEL = "kimi-k2-0711-preview";
 
 /**
  * Kimi API base URLs
- * - Direct: api.moonshot.cn (requires MOONSHOT_API_KEY or KIMI_API_KEY)
+ * - Direct: api.moonshot.cn or api.moonshot.ai (requires MOONSHOT_API_KEY or KIMI_API_KEY)
  * - OpenRouter: openrouter.ai (requires OPENROUTER_API_KEY)
+ * Set MOONSHOT_BASE_URL env var to override the default
  */
-const KIMI_BASE_URL = "https://api.moonshot.cn/v1";
+const DEFAULT_KIMI_BASE_URL = "https://api.moonshot.cn/v1";
 const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 const OPENROUTER_KIMI_MODEL = "moonshotai/kimi-k2";
 
@@ -119,9 +120,10 @@ export function createKimiClient(apiKey?: string): OpenAI {
   // Try direct MoonshotAI API first
   const directKey = apiKey ?? process.env["MOONSHOT_API_KEY"] ?? process.env["KIMI_API_KEY"];
   if (directKey) {
+    const baseURL = process.env["MOONSHOT_BASE_URL"] ?? DEFAULT_KIMI_BASE_URL;
     return new OpenAI({
       apiKey: directKey,
-      baseURL: KIMI_BASE_URL,
+      baseURL,
     });
   }
 
