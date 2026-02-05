@@ -19,8 +19,8 @@ import {
 export async function extractWithOpenAI(
   client: OpenAI,
   input: ExtractionInput,
-  model: string = "gpt-4o",
-  temperature?: number
+  model: string = "gpt-4o-mini",
+  temperature: number = 0
 ): Promise<LlmExtractionResult> {
   const userContent: ChatCompletionContentPart[] = [];
 
@@ -47,7 +47,7 @@ export async function extractWithOpenAI(
     model,
     max_tokens: 4096,
     response_format: { type: "json_object" },
-    ...(temperature !== undefined && { temperature }),
+    temperature,
     messages: [
       {
         role: "system",
