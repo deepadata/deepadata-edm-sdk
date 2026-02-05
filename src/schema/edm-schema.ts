@@ -62,7 +62,7 @@ export const CoreSchema = z.object({
 // =============================================================================
 export const ConstellationSchema = z.object({
   emotion_primary: z
-    .enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence"])
+    .enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing"])
     .nullable()
     .describe("Dominant emotional quality"),
   emotion_subtone: z
@@ -89,6 +89,10 @@ export const ConstellationSchema = z.object({
       "community_ritual",
       "grief",
       "self_reflection",
+      "professional",
+      "therapeutic",
+      "service",
+      "adversarial",
     ])
     .nullable()
     .describe("Dominant relational configuration"),
@@ -201,7 +205,7 @@ export const GravitySchema = z.object({
 export const ImpulseSchema = z.object({
   primary_energy: z.string().nullable().describe("Dominant motivational energy"),
   drive_state: z
-    .enum(["explore", "approach", "avoid", "repair", "persevere", "share"])
+    .enum(["explore", "approach", "avoid", "repair", "persevere", "share", "confront", "protect", "process"])
     .nullable()
     .describe("Behavioral direction"),
   motivational_orientation: z
