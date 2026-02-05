@@ -33,8 +33,8 @@ CRITICAL: Enum Field Constraints
 - Many fields below are STRICT ENUMS with a fixed set of allowed values.
 - You MUST use ONLY the values listed in the enum sets. Do not invent similar values.
 - Cross-contamination warning: Each enum field has its own distinct value set. Do not use values from one field in another.
-  Example: "pride" is valid for higher_order_emotion (free text) but NOT for emotion_primary (strict 8-value enum).
   Example: "milestone" is valid for memory_type but NOT for narrative_arc.
+  Example: "confront" is valid for both drive_state and coping_style - check which field you're populating.
 - If none of the allowed enum values adequately capture the expressed content, use the closest match. Do not invent alternatives.
 
 Normalization (very important)
@@ -57,13 +57,13 @@ Schema
     "narrative": ""          // 3–5 sentences; include ≥1 sensory detail, ≥1 temporal cue, and a symbolic callback; faithful and concise
   },
   "constellation": {
-    "emotion_primary": "",           // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence (pick best-fit from these 8 ONLY)
+    "emotion_primary": "",           // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing (pick best-fit from these 12 ONLY)
     "emotion_subtone": [],           // 2–4 short words (e.g., bittersweet, grateful) — free text array
     "higher_order_emotion": "",      // free text: e.g., awe, forgiveness, pride, moral_elevation (or null)
     "meta_emotional_state": "",      // free text: e.g., acceptance, confusion, curiosity (or null)
     "interpersonal_affect": "",      // free text: e.g., warmth, openness, defensiveness (or null)
     "narrative_arc": "",             // STRICT ENUM: overcoming | transformation | connection | reflection | closure (pick ONE or null)
-    "relational_dynamics": "",       // STRICT ENUM: parent_child | romantic_partnership | sibling_bond | friendship | companionship | mentorship | reunion | community_ritual | grief | self_reflection (pick ONE)
+    "relational_dynamics": "",       // STRICT ENUM: parent_child | romantic_partnership | sibling_bond | friendship | companionship | mentorship | reunion | community_ritual | grief | self_reflection | professional | therapeutic | service | adversarial (pick ONE)
     "temporal_context": "",          // STRICT ENUM: childhood | early_adulthood | midlife | late_life | recent | future | timeless (pick ONE or null)
     "memory_type": "",               // STRICT ENUM: legacy_artifact | fleeting_moment | milestone | reflection | formative_experience (pick ONE or null)
     "media_format": "",              // photo, video, audio, text, photo_with_story (or null)
@@ -102,7 +102,7 @@ Schema
   },
   "impulse": {
     "primary_energy": "",              // free text: e.g., curiosity, fear, compassion (or null; lowercase)
-    "drive_state": "",                 // STRICT ENUM: explore | approach | avoid | repair | persevere | share (pick ONE or null)
+    "drive_state": "",                 // STRICT ENUM: explore | approach | avoid | repair | persevere | share | confront | protect | process (pick ONE or null)
     "motivational_orientation": "",    // STRICT ENUM: belonging | safety | mastery | meaning | autonomy (pick ONE or null)
     "temporal_focus": "",              // STRICT ENUM: past | present | future (pick ONE or null)
     "directionality": "",              // STRICT ENUM: inward | outward | transcendent (pick ONE or null)
