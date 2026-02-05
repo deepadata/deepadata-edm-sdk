@@ -10,7 +10,9 @@
       "Bash(git commit --amend -m \"$\\(cat <<''EOF''\nComplete EDM v0.4.0 SDK implementation\n\nFeatures:\n- All 10 EDM domains with Zod validation schemas\n- LLM extraction using Anthropic Claude for 5 domains \\(core, constellation, milky_way, gravity, impulse\\)\n- Auto-population for 5 domains \\(meta, governance, telemetry, system, crosswalks\\)\n- Stateless mode for privacy-preserving session use\n- Comprehensive validation with detailed error reporting\n- Crosswalk mapping to Plutchik and HMD taxonomies\n- Text + image fusion support\n\nField reconciliation from system-prompt-B.ts to canonical v0.4:\n- archetype_energy -> narrative_archetype\n- meaning_inference -> expressed_insight\n- transcendent_moment -> transformational_pivot\n- reentry_score -> recurrence_pattern \\(type change\\)\n- Removed: active_motivational_state, media_context, memory_layers, tether_target\n- Added: somatic_signature\n\nTests: 77 passing across 5 test suites\n\nDocumentation:\n- EXTRACTION_VS_INFERENCE.md - Interpretation boundary\n- EU_AI_ACT_COMPLIANCE.md - Regulatory compliance guide\n- ARCHITECTURE.md - System design\nEOF\n\\)\")",
       "Bash(git push)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }
