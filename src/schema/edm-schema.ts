@@ -82,6 +82,7 @@ export const ConstellationSchema = z.object({
       "parent_child",
       "romantic_partnership",
       "sibling_bond",
+      "family",
       "friendship",
       "companionship",
       "mentorship",

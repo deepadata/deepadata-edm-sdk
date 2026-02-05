@@ -61,7 +61,7 @@ Schema
     "meta_emotional_state": "",      // free text: e.g., acceptance, confusion, curiosity (or null)
     "interpersonal_affect": "",      // free text: e.g., warmth, openness, defensiveness (or null)
     "narrative_arc": "",             // STRICT ENUM: overcoming | transformation | connection | reflection | closure (pick ONE or null)
-    "relational_dynamics": "",       // STRICT ENUM: parent_child | romantic_partnership | sibling_bond | friendship | companionship | mentorship | reunion | community_ritual | grief | self_reflection | professional | therapeutic | service | adversarial (pick ONE)
+    "relational_dynamics": "",       // STRICT ENUM: parent_child | romantic_partnership | sibling_bond | family | friendship | companionship | mentorship | reunion | community_ritual | grief | self_reflection | professional | therapeutic | service | adversarial (pick ONE)
     "temporal_context": "",          // STRICT ENUM: childhood | early_adulthood | midlife | late_life | recent | future | timeless (pick ONE or null)
     "memory_type": "",               // STRICT ENUM: legacy_artifact | fleeting_moment | milestone | reflection | formative_experience (pick ONE or null)
     "media_format": "",              // photo, video, audio, text, photo_with_story (or null)
