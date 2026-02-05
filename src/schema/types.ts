@@ -94,6 +94,8 @@ export interface ExtractionOptions {
   provider?: 'anthropic' | 'openai' | 'kimi';
   /** Model to use for extraction (provider-specific, uses default if omitted) */
   model?: string;
+  /** Temperature for OpenAI extractions (0-2, lower = more deterministic) */
+  temperature?: number;
 }
 
 // =============================================================================

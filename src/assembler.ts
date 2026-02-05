@@ -20,12 +20,12 @@ import {
  * Extract a complete EDM artifact from content
  */
 export async function extractFromContent(options: ExtractionOptions): Promise<EdmArtifact> {
-  const { content, metadata, model, provider = "anthropic" } = options;
+  const { content, metadata, model, provider = "anthropic", temperature } = options;
 
   let llmResult;
   if (provider === "openai") {
     const client = createOpenAIClient();
-    llmResult = await extractWithOpenAI(client, content, model);
+    llmResult = await extractWithOpenAI(client, content, model, temperature);
   } else if (provider === "kimi") {
     const client = createKimiClient();
     llmResult = await extractWithKimi(client, content, model ?? getKimiModelId());

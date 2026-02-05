@@ -9,7 +9,7 @@ import { EXTRACTION_SYSTEM_PROMPT, calculateConfidence, } from "./llm-extractor.
 /**
  * Extract EDM fields from content using OpenAI
  */
-export async function extractWithOpenAI(client, input, model = "gpt-4o") {
+export async function extractWithOpenAI(client, input, model = "gpt-4o", temperature) {
     const userContent = [];
     // Add text content
     if (input.text) {
@@ -31,6 +31,8 @@ export async function extractWithOpenAI(client, input, model = "gpt-4o") {
     const response = await client.chat.completions.create({
         model,
         max_tokens: 4096,
+        response_format: { type: "json_object" },
+        ...(temperature !== undefined && { temperature }),
         messages: [
             {
                 role: "system",

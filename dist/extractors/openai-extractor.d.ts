@@ -9,7 +9,7 @@ import { type LlmExtractionResult } from "./llm-extractor.js";
 /**
  * Extract EDM fields from content using OpenAI
  */
-export declare function extractWithOpenAI(client: OpenAI, input: ExtractionInput, model?: string): Promise<LlmExtractionResult>;
+export declare function extractWithOpenAI(client: OpenAI, input: ExtractionInput, model?: string, temperature?: number): Promise<LlmExtractionResult>;
 /**
  * Create an OpenAI client
  */
