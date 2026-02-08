@@ -1,6 +1,6 @@
 {
   "name": "deepadata-edm-sdk",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "SDK for assembling EDM v0.4.0 artifacts from user content. LLM-assisted extraction with interpretation constraints.",
   "type": "module",
   "main": "dist/index.js",
