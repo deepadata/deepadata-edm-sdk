@@ -110,7 +110,7 @@ Schema
     "agency_level": "",                // STRICT ENUM: low | medium | high (pick ONE or null)
     "regulation_state": "",            // STRICT ENUM: regulated | wavering | dysregulated (pick ONE or null)
     "attachment_style": "",            // STRICT ENUM: secure | anxious | avoidant | disorganized (pick ONE or null)
-    "coping_style": ""                 // STRICT ENUM: reframe_meaning | seek_support | distract | ritualize | confront | detach (pick ONE or null)
+    "coping_style": ""                 // STRICT ENUM: reframe_meaning | seek_support | distract | ritualize | confront | detach | process (pick ONE or null)
   }
 
   // Calibration — Impulse (helps apply the fields consistently)

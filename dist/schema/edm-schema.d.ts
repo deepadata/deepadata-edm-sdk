@@ -215,7 +215,7 @@ export declare const ImpulseSchema: z.ZodObject<{
     agency_level: z.ZodNullable<z.ZodEnum<["low", "medium", "high"]>>;
     regulation_state: z.ZodNullable<z.ZodEnum<["regulated", "wavering", "dysregulated"]>>;
     attachment_style: z.ZodNullable<z.ZodEnum<["secure", "anxious", "avoidant", "disorganized"]>>;
-    coping_style: z.ZodNullable<z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach"]>>;
+    coping_style: z.ZodNullable<z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"]>>;
 }, "strip", z.ZodTypeAny, {
     primary_energy: string | null;
     drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -228,7 +228,7 @@ export declare const ImpulseSchema: z.ZodObject<{
     agency_level: "low" | "high" | "medium" | null;
     regulation_state: "regulated" | "wavering" | "dysregulated" | null;
     attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-    coping_style: "confront" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+    coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
 }, {
     primary_energy: string | null;
     drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -241,7 +241,7 @@ export declare const ImpulseSchema: z.ZodObject<{
     agency_level: "low" | "high" | "medium" | null;
     regulation_state: "regulated" | "wavering" | "dysregulated" | null;
     attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-    coping_style: "confront" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+    coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
 }>;
 export declare const RetentionPolicySchema: z.ZodObject<{
     basis: z.ZodNullable<z.ZodEnum<["user_defined", "legal", "business_need"]>>;
@@ -782,7 +782,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         agency_level: z.ZodNullable<z.ZodEnum<["low", "medium", "high"]>>;
         regulation_state: z.ZodNullable<z.ZodEnum<["regulated", "wavering", "dysregulated"]>>;
         attachment_style: z.ZodNullable<z.ZodEnum<["secure", "anxious", "avoidant", "disorganized"]>>;
-        coping_style: z.ZodNullable<z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach"]>>;
+        coping_style: z.ZodNullable<z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"]>>;
     }, "strip", z.ZodTypeAny, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -795,7 +795,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
     }, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -808,7 +808,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
     }>;
     governance: z.ZodObject<{
         jurisdiction: z.ZodNullable<z.ZodEnum<["GDPR", "CCPA", "HIPAA", "PIPEDA", "LGPD", "None", "Mixed"]>>;
@@ -1105,7 +1105,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
     };
     governance: {
         jurisdiction: "GDPR" | "CCPA" | "HIPAA" | "PIPEDA" | "LGPD" | "None" | "Mixed" | null;
@@ -1242,7 +1242,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
     };
     governance: {
         jurisdiction: "GDPR" | "CCPA" | "HIPAA" | "PIPEDA" | "LGPD" | "None" | "Mixed" | null;
@@ -1461,7 +1461,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         agency_level: z.ZodNullable<z.ZodEnum<["low", "medium", "high"]>>;
         regulation_state: z.ZodNullable<z.ZodEnum<["regulated", "wavering", "dysregulated"]>>;
         attachment_style: z.ZodNullable<z.ZodEnum<["secure", "anxious", "avoidant", "disorganized"]>>;
-        coping_style: z.ZodNullable<z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach"]>>;
+        coping_style: z.ZodNullable<z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"]>>;
     }, "strip", z.ZodTypeAny, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -1474,7 +1474,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
     }, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -1487,7 +1487,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
     }>;
 }, "strip", z.ZodTypeAny, {
     core: {
@@ -1555,7 +1555,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
     };
 }, {
     core: {
@@ -1623,7 +1623,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
     };
 }>;
 //# sourceMappingURL=edm-schema.d.ts.map

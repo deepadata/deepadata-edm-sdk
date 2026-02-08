@@ -228,7 +228,7 @@ export const ImpulseSchema = z.object({
         .nullable()
         .describe("Relational attachment pattern"),
     coping_style: z
-        .enum(["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach"])
+        .enum(["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"])
         .nullable()
         .describe("Primary coping strategy"),
 });
