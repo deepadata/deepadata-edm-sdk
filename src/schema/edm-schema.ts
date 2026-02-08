@@ -195,7 +195,7 @@ export const GravitySchema = z.object({
   temporal_decay: z.enum(["fast", "moderate", "slow"]).nullable().describe("Intensity diminishment rate"),
   resilience_markers: z.array(z.string()).max(3).nullable().describe("Stabilizing indicators"),
   adaptation_trajectory: z
-    .enum(["improving", "stable", "declining", "integrative"])
+    .enum(["improving", "stable", "declining", "integrative", "emerging"])
     .nullable()
     .describe("Emotional evolution"),
 });

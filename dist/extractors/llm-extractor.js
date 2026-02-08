@@ -96,7 +96,7 @@ Schema
     "strength_score": 0.0,           // 0.0–1.0 (binding strength)
     "temporal_decay": "",            // STRICT ENUM: fast | moderate | slow (pick ONE or null)
     "resilience_markers": [],        // 1–3 (e.g., acceptance, optimism, continuity)
-    "adaptation_trajectory": ""      // STRICT ENUM: improving | stable | declining | integrative (pick ONE or null)
+    "adaptation_trajectory": ""      // STRICT ENUM: improving | stable | declining | integrative | emerging (pick ONE or null)
   },
   "impulse": {
     "primary_energy": "",              // free text: e.g., curiosity, fear, compassion (or null; lowercase)
@@ -148,6 +148,13 @@ Schema
   //   - emotion_primary MUST be one of the 13 listed values ONLY
   //   - Do NOT put free-text emotions like "compassion", "reflection", "frustration" in emotion_primary
   //   - Use higher_order_emotion for complex emotions not in the primary list
+  //
+  // narrative_arc (CRITICAL - common error):
+  //   - Describes the STORY TRAJECTORY (overcoming, transformation, connection, reflection, closure)
+  //   - "confrontation" is NOT a valid arc — it describes an event/scene, not a trajectory
+  //   - If the story involves confronting something, use "overcoming" (challenge faced and resolved)
+  //     or "transformation" (fundamental change through conflict)
+  //   - "confront" belongs in drive_state or coping_style, NOT in narrative_arc
 }
 `;
 /**

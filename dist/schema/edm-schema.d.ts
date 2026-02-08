@@ -169,7 +169,7 @@ export declare const GravitySchema: z.ZodObject<{
     strength_score: z.ZodNumber;
     temporal_decay: z.ZodNullable<z.ZodEnum<["fast", "moderate", "slow"]>>;
     resilience_markers: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
-    adaptation_trajectory: z.ZodNullable<z.ZodEnum<["improving", "stable", "declining", "integrative"]>>;
+    adaptation_trajectory: z.ZodNullable<z.ZodEnum<["improving", "stable", "declining", "integrative", "emerging"]>>;
 }, "strip", z.ZodTypeAny, {
     emotional_weight: number;
     emotional_density: "low" | "high" | "medium" | null;
@@ -185,7 +185,7 @@ export declare const GravitySchema: z.ZodObject<{
     strength_score: number;
     temporal_decay: "moderate" | "fast" | "slow" | null;
     resilience_markers: string[] | null;
-    adaptation_trajectory: "improving" | "stable" | "declining" | "integrative" | null;
+    adaptation_trajectory: "emerging" | "improving" | "stable" | "declining" | "integrative" | null;
 }, {
     emotional_weight: number;
     emotional_density: "low" | "high" | "medium" | null;
@@ -201,7 +201,7 @@ export declare const GravitySchema: z.ZodObject<{
     strength_score: number;
     temporal_decay: "moderate" | "fast" | "slow" | null;
     resilience_markers: string[] | null;
-    adaptation_trajectory: "improving" | "stable" | "declining" | "integrative" | null;
+    adaptation_trajectory: "emerging" | "improving" | "stable" | "declining" | "integrative" | null;
 }>;
 export declare const ImpulseSchema: z.ZodObject<{
     primary_energy: z.ZodNullable<z.ZodString>;
@@ -736,7 +736,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         strength_score: z.ZodNumber;
         temporal_decay: z.ZodNullable<z.ZodEnum<["fast", "moderate", "slow"]>>;
         resilience_markers: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
-        adaptation_trajectory: z.ZodNullable<z.ZodEnum<["improving", "stable", "declining", "integrative"]>>;
+        adaptation_trajectory: z.ZodNullable<z.ZodEnum<["improving", "stable", "declining", "integrative", "emerging"]>>;
     }, "strip", z.ZodTypeAny, {
         emotional_weight: number;
         emotional_density: "low" | "high" | "medium" | null;
@@ -752,7 +752,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
-        adaptation_trajectory: "improving" | "stable" | "declining" | "integrative" | null;
+        adaptation_trajectory: "emerging" | "improving" | "stable" | "declining" | "integrative" | null;
     }, {
         emotional_weight: number;
         emotional_density: "low" | "high" | "medium" | null;
@@ -768,7 +768,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
-        adaptation_trajectory: "improving" | "stable" | "declining" | "integrative" | null;
+        adaptation_trajectory: "emerging" | "improving" | "stable" | "declining" | "integrative" | null;
     }>;
     impulse: z.ZodObject<{
         primary_energy: z.ZodNullable<z.ZodString>;
@@ -1091,7 +1091,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
-        adaptation_trajectory: "improving" | "stable" | "declining" | "integrative" | null;
+        adaptation_trajectory: "emerging" | "improving" | "stable" | "declining" | "integrative" | null;
     };
     impulse: {
         primary_energy: string | null;
@@ -1228,7 +1228,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
-        adaptation_trajectory: "improving" | "stable" | "declining" | "integrative" | null;
+        adaptation_trajectory: "emerging" | "improving" | "stable" | "declining" | "integrative" | null;
     };
     impulse: {
         primary_energy: string | null;
@@ -1415,7 +1415,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         strength_score: z.ZodNumber;
         temporal_decay: z.ZodNullable<z.ZodEnum<["fast", "moderate", "slow"]>>;
         resilience_markers: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
-        adaptation_trajectory: z.ZodNullable<z.ZodEnum<["improving", "stable", "declining", "integrative"]>>;
+        adaptation_trajectory: z.ZodNullable<z.ZodEnum<["improving", "stable", "declining", "integrative", "emerging"]>>;
     }, "strip", z.ZodTypeAny, {
         emotional_weight: number;
         emotional_density: "low" | "high" | "medium" | null;
@@ -1431,7 +1431,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
-        adaptation_trajectory: "improving" | "stable" | "declining" | "integrative" | null;
+        adaptation_trajectory: "emerging" | "improving" | "stable" | "declining" | "integrative" | null;
     }, {
         emotional_weight: number;
         emotional_density: "low" | "high" | "medium" | null;
@@ -1447,7 +1447,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
-        adaptation_trajectory: "improving" | "stable" | "declining" | "integrative" | null;
+        adaptation_trajectory: "emerging" | "improving" | "stable" | "declining" | "integrative" | null;
     }>;
     impulse: z.ZodObject<{
         primary_energy: z.ZodNullable<z.ZodString>;
@@ -1541,7 +1541,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
-        adaptation_trajectory: "improving" | "stable" | "declining" | "integrative" | null;
+        adaptation_trajectory: "emerging" | "improving" | "stable" | "declining" | "integrative" | null;
     };
     impulse: {
         primary_energy: string | null;
@@ -1609,7 +1609,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
-        adaptation_trajectory: "improving" | "stable" | "declining" | "integrative" | null;
+        adaptation_trajectory: "emerging" | "improving" | "stable" | "declining" | "integrative" | null;
     };
     impulse: {
         primary_energy: string | null;
