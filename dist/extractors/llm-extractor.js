@@ -82,7 +82,7 @@ Schema
     "tone_shift": ""                 // e.g., loss to gratitude (or null)
   },
   "gravity": {
-    "emotional_weight": 0.0,         // 0.0–1.0 (felt intensity)
+    "emotional_weight": 0.0,         // 0.0–1.0 (felt intensity IN THE MOMENT)
     "emotional_density": "",         // STRICT ENUM: low | medium | high (pick ONE or null)
     "valence": "",                   // STRICT ENUM: positive | negative | mixed (pick ONE or null)
     "viscosity": "",                 // STRICT ENUM: low | medium | high | enduring | fluid (pick ONE or null)
@@ -93,7 +93,7 @@ Schema
     "nearby_themes": [],             // adjacent concepts
     "legacy_embed": false,
     "recurrence_pattern": "",        // STRICT ENUM: cyclical | isolated | chronic | emerging (pick ONE or null)
-    "strength_score": 0.0,           // 0.0–1.0 (binding strength)
+    "strength_score": 0.0,           // 0.0–1.0 (how BOUND/STUCK this memory is)
     "temporal_decay": "",            // STRICT ENUM: fast | moderate | slow (pick ONE or null)
     "resilience_markers": [],        // 1–3 (e.g., acceptance, optimism, continuity)
     "adaptation_trajectory": ""      // STRICT ENUM: improving | stable | declining | integrative | emerging (pick ONE or null)
@@ -155,6 +155,15 @@ Schema
   //   - If the story involves confronting something, use "overcoming" (challenge faced and resolved)
   //     or "transformation" (fundamental change through conflict)
   //   - "confront" belongs in drive_state or coping_style, NOT in narrative_arc
+  //
+  // emotional_weight vs strength_score (CRITICAL - different concepts):
+  //   - emotional_weight: The felt INTENSITY of the experience in the moment.
+  //     A heated argument = high weight (0.8). A routine check-in = low weight (0.2).
+  //   - strength_score: How BOUND/STUCK this memory is — through association, ritual, retelling, or identity.
+  //     A childhood memory retold for decades = high strength (0.9) even if emotional weight was moderate.
+  //     A customer complaint = may have high weight (0.8) but low strength (0.3) — intense but fades quickly.
+  //   - These should NOT always correlate.
+  //     Ask: "How heavy does this feel RIGHT NOW?" (weight) vs "How stuck/persistent is this memory?" (strength)
 }
 `;
 /**
