@@ -57,7 +57,7 @@ Schema
     "narrative": ""          // 3–5 sentences; include ≥1 sensory detail, ≥1 temporal cue, and a symbolic callback; faithful and concise
   },
   "constellation": {
-    "emotion_primary": "",           // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing (pick best-fit from these 12 ONLY)
+    "emotion_primary": "",           // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope (pick best-fit from these 13 ONLY)
     "emotion_subtone": [],           // 2–4 short words (e.g., bittersweet, grateful) — free text array
     "higher_order_emotion": "",      // free text: e.g., awe, forgiveness, pride, moral_elevation (or null)
     "meta_emotional_state": "",      // free text: e.g., acceptance, confusion, curiosity (or null)
@@ -147,7 +147,7 @@ Schema
   //   - "confront" is valid in BOTH - use drive_state for action impulse, coping_style for emotion management
   //
   // emotion_primary (STRICT ENUM) vs higher_order_emotion (free text):
-  //   - emotion_primary MUST be one of the 12 listed values ONLY
+  //   - emotion_primary MUST be one of the 13 listed values ONLY
   //   - Do NOT put free-text emotions like "compassion", "reflection", "frustration" in emotion_primary
   //   - Use higher_order_emotion for complex emotions not in the primary list
 }

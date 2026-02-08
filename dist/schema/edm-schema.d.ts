@@ -78,7 +78,7 @@ export declare const CoreSchema: z.ZodObject<{
     narrative: string | null;
 }>;
 export declare const ConstellationSchema: z.ZodObject<{
-    emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing"]>>;
+    emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope"]>>;
     emotion_subtone: z.ZodArray<z.ZodString, "many">;
     higher_order_emotion: z.ZodNullable<z.ZodString>;
     meta_emotional_state: z.ZodNullable<z.ZodString>;
@@ -97,7 +97,7 @@ export declare const ConstellationSchema: z.ZodObject<{
     transformational_pivot: z.ZodBoolean;
     somatic_signature: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | null;
+    emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
     emotion_subtone: string[];
     higher_order_emotion: string | null;
     meta_emotional_state: string | null;
@@ -116,7 +116,7 @@ export declare const ConstellationSchema: z.ZodObject<{
     transformational_pivot: boolean;
     somatic_signature: string | null;
 }, {
-    emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | null;
+    emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
     emotion_subtone: string[];
     higher_order_emotion: string | null;
     meta_emotional_state: string | null;
@@ -645,7 +645,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         narrative: string | null;
     }>;
     constellation: z.ZodObject<{
-        emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing"]>>;
+        emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope"]>>;
         emotion_subtone: z.ZodArray<z.ZodString, "many">;
         higher_order_emotion: z.ZodNullable<z.ZodString>;
         meta_emotional_state: z.ZodNullable<z.ZodString>;
@@ -664,7 +664,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         transformational_pivot: z.ZodBoolean;
         somatic_signature: z.ZodNullable<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
@@ -683,7 +683,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         transformational_pivot: boolean;
         somatic_signature: string | null;
     }, {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
@@ -1050,7 +1050,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         narrative: string | null;
     };
     constellation: {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
@@ -1187,7 +1187,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         narrative: string | null;
     };
     constellation: {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
@@ -1324,7 +1324,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         narrative: string | null;
     }>;
     constellation: z.ZodObject<{
-        emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing"]>>;
+        emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope"]>>;
         emotion_subtone: z.ZodArray<z.ZodString, "many">;
         higher_order_emotion: z.ZodNullable<z.ZodString>;
         meta_emotional_state: z.ZodNullable<z.ZodString>;
@@ -1343,7 +1343,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         transformational_pivot: z.ZodBoolean;
         somatic_signature: z.ZodNullable<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
@@ -1362,7 +1362,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         transformational_pivot: boolean;
         somatic_signature: string | null;
     }, {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
@@ -1500,7 +1500,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         narrative: string | null;
     };
     constellation: {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
@@ -1568,7 +1568,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         narrative: string | null;
     };
     constellation: {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;

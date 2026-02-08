@@ -62,7 +62,7 @@ export const CoreSchema = z.object({
 // =============================================================================
 export const ConstellationSchema = z.object({
   emotion_primary: z
-    .enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing"])
+    .enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope"])
     .nullable()
     .describe("Dominant emotional quality"),
   emotion_subtone: z
