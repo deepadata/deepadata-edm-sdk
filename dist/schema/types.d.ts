@@ -31,7 +31,7 @@ export interface ExtractionInput {
     imageMediaType?: "image/jpeg" | "image/png" | "image/gif" | "image/webp";
 }
 export interface ExtractionMetadata {
-    /** Owner identifier (AuraID recommended) */
+    /** Owner identifier (VitaPass recommended) */
     subjectId?: string;
     /** Regulatory jurisdiction */
     jurisdiction?: Governance["jurisdiction"];

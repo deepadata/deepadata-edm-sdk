@@ -22,7 +22,7 @@ const artifact = await extractFromContent({
     text: "Looking at this old photograph brings back so many memories of summer afternoons at grandmother's house...",
   },
   metadata: {
-    subjectId: "auraid-123",
+    subjectId: "vp-01HZ3GKWP7XTJY9QN4RD",
     jurisdiction: "GDPR",
     consentBasis: "consent",
   },
@@ -66,7 +66,7 @@ const artifact = await extractFromContent({
     imageMediaType: "image/jpeg",  // optional
   },
   metadata: {
-    subjectId: "auraid-123",      // optional, null in stateless
+    subjectId: "vp-01HZ3GKWP7XTJY9QN4RD",      // optional, null in stateless
     jurisdiction: "GDPR",          // optional
     consentBasis: "consent",       // required
     locale: "en-us",               // optional

@@ -67,7 +67,7 @@ export interface ExtractionInput {
 }
 
 export interface ExtractionMetadata {
-  /** Owner identifier (AuraID recommended) */
+  /** Owner identifier (VitaPass recommended) */
   subjectId?: string;
   /** Regulatory jurisdiction */
   jurisdiction?: Governance["jurisdiction"];

@@ -31,7 +31,7 @@ describe("createMeta", () => {
 
   it("should use provided metadata values", () => {
     const metadata: ExtractionMetadata = {
-      subjectId: "auraid-123",
+      subjectId: "vp-01HZ3GKWP7XTJY9QN4RD",
       jurisdiction: "GDPR",
       consentBasis: "consent",
       locale: "en-us",
@@ -41,7 +41,7 @@ describe("createMeta", () => {
     };
     const meta = createMeta(metadata, "mixed");
 
-    expect(meta.owner_user_id).toBe("auraid-123");
+    expect(meta.owner_user_id).toBe("vp-01HZ3GKWP7XTJY9QN4RD");
     expect(meta.locale).toBe("en-us");
     expect(meta.visibility).toBe("shared");
     expect(meta.pii_tier).toBe("high");
