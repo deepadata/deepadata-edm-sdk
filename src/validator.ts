@@ -7,7 +7,7 @@ import { EdmArtifactSchema } from "./schema/edm-schema.js";
 import type { EdmArtifact, ValidationResult, ValidationError } from "./schema/types.js";
 
 /**
- * Validate an EDM artifact against the v0.4.0 schema
+ * Validate an EDM artifact against the v0.5.0 schema
  */
 export function validateEDM(artifact: unknown): ValidationResult {
   const result = EdmArtifactSchema.safeParse(artifact);

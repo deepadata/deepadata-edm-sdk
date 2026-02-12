@@ -1,6 +1,6 @@
 import type { EdmArtifact, ValidationResult } from "./schema/types.js";
 /**
- * Validate an EDM artifact against the v0.4.0 schema
+ * Validate an EDM artifact against the v0.5.0 schema
  */
 export declare function validateEDM(artifact: unknown): ValidationResult;
 /**

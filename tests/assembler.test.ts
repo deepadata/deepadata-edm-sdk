@@ -23,9 +23,9 @@ describe("createEmptyArtifact", () => {
     expect(artifact).toHaveProperty("crosswalks");
   });
 
-  it("should set version to 0.4.0", () => {
+  it("should set version to 0.5.0", () => {
     const artifact = createEmptyArtifact();
-    expect(artifact.meta.version).toBe("0.4.0");
+    expect(artifact.meta.version).toBe("0.5.0");
   });
 
   it("should have valid created_at timestamp", () => {

@@ -1,5 +1,5 @@
 /**
- * EDM v0.4.0 Zod Schema
+ * EDM v0.5.0 Zod Schema
  * Generated from canonical JSON schema at deepadata-edm-spec
  */
 import { z } from "zod";
@@ -15,7 +15,7 @@ export const MetaSchema = z.object({
     .describe("Unique identifier for the EDM artifact"),
   version: z
     .string()
-    .regex(/^0\.4\.[0-9]+$/)
+    .regex(/^0\.5\.[0-9]+$/)
     .describe("EDM schema version"),
   created_at: z.string().datetime().describe("Extraction timestamp"),
   updated_at: z.string().datetime().nullable().optional().describe("Post-extraction update timestamp"),

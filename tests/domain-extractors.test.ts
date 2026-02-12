@@ -19,7 +19,7 @@ describe("createMeta", () => {
     };
     const meta = createMeta(metadata, "text");
 
-    expect(meta.version).toBe("0.4.0");
+    expect(meta.version).toBe("0.5.0");
     expect(meta.consent_basis).toBe("consent");
     expect(meta.source_type).toBe("text");
     expect(meta.visibility).toBe("private");

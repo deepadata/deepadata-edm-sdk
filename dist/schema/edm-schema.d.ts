@@ -1,5 +1,5 @@
 /**
- * EDM v0.4.0 Zod Schema
+ * EDM v0.5.0 Zod Schema
  * Generated from canonical JSON schema at deepadata-edm-spec
  */
 import { z } from "zod";
