@@ -78,17 +78,17 @@ export declare const CoreSchema: z.ZodObject<{
     narrative: string | null;
 }>;
 export declare const ConstellationSchema: z.ZodObject<{
-    emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope"]>>;
+    emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"]>>;
     emotion_subtone: z.ZodArray<z.ZodString, "many">;
     higher_order_emotion: z.ZodNullable<z.ZodString>;
     meta_emotional_state: z.ZodNullable<z.ZodString>;
     interpersonal_affect: z.ZodNullable<z.ZodString>;
     narrative_arc: z.ZodNullable<z.ZodEnum<["overcoming", "transformation", "connection", "reflection", "closure"]>>;
-    relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "grandparent_grandchild", "romantic_partnership", "sibling_bond", "family", "friendship", "friend", "companionship", "colleague", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
+    relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "grandparent_grandchild", "romantic_partnership", "couple", "sibling_bond", "family", "friendship", "friend", "companionship", "colleague", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
     temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
     memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
     media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
-    narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
+    narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "orphan", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
     symbolic_anchor: z.ZodNullable<z.ZodString>;
     relational_perspective: z.ZodNullable<z.ZodEnum<["self", "partner", "family", "friends", "community", "humanity"]>>;
     temporal_rhythm: z.ZodNullable<z.ZodEnum<["still", "sudden", "rising", "fading", "recurring", "spiraling", "dragging", "suspended", "looping", "cyclic"]>>;
@@ -97,17 +97,17 @@ export declare const ConstellationSchema: z.ZodObject<{
     transformational_pivot: z.ZodBoolean;
     somatic_signature: z.ZodNullable<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
+    emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
     emotion_subtone: string[];
     higher_order_emotion: string | null;
     meta_emotional_state: string | null;
     interpersonal_affect: string | null;
     narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-    relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+    relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
     temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
     memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
     media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-    narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+    narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
     symbolic_anchor: string | null;
     relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
     temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -116,17 +116,17 @@ export declare const ConstellationSchema: z.ZodObject<{
     transformational_pivot: boolean;
     somatic_signature: string | null;
 }, {
-    emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
+    emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
     emotion_subtone: string[];
     higher_order_emotion: string | null;
     meta_emotional_state: string | null;
     interpersonal_affect: string | null;
     narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-    relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+    relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
     temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
     memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
     media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-    narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+    narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
     symbolic_anchor: string | null;
     relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
     temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -160,7 +160,7 @@ export declare const GravitySchema: z.ZodObject<{
     valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
     viscosity: z.ZodNullable<z.ZodEnum<["low", "medium", "high", "enduring", "fluid"]>>;
     gravity_type: z.ZodNullable<z.ZodString>;
-    tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition"]>>;
+    tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity"]>>;
     recall_triggers: z.ZodArray<z.ZodString, "many">;
     retrieval_keys: z.ZodArray<z.ZodString, "many">;
     nearby_themes: z.ZodArray<z.ZodString, "many">;
@@ -176,7 +176,7 @@ export declare const GravitySchema: z.ZodObject<{
     valence: "mixed" | "positive" | "negative" | null;
     viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
     gravity_type: string | null;
-    tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | null;
+    tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
     recall_triggers: string[];
     retrieval_keys: string[];
     nearby_themes: string[];
@@ -192,7 +192,7 @@ export declare const GravitySchema: z.ZodObject<{
     valence: "mixed" | "positive" | "negative" | null;
     viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
     gravity_type: string | null;
-    tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | null;
+    tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
     recall_triggers: string[];
     retrieval_keys: string[];
     nearby_themes: string[];
@@ -206,7 +206,7 @@ export declare const GravitySchema: z.ZodObject<{
 export declare const ImpulseSchema: z.ZodObject<{
     primary_energy: z.ZodNullable<z.ZodString>;
     drive_state: z.ZodNullable<z.ZodEnum<["explore", "approach", "avoid", "repair", "persevere", "share", "confront", "protect", "process"]>>;
-    motivational_orientation: z.ZodNullable<z.ZodEnum<["belonging", "safety", "mastery", "meaning", "autonomy"]>>;
+    motivational_orientation: z.ZodNullable<z.ZodEnum<["belonging", "safety", "mastery", "meaning", "autonomy", "authenticity"]>>;
     temporal_focus: z.ZodNullable<z.ZodEnum<["past", "present", "future"]>>;
     directionality: z.ZodNullable<z.ZodEnum<["inward", "outward", "transcendent"]>>;
     social_visibility: z.ZodNullable<z.ZodEnum<["private", "relational", "collective"]>>;
@@ -219,7 +219,7 @@ export declare const ImpulseSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     primary_energy: string | null;
     drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-    motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
+    motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
     temporal_focus: "future" | "past" | "present" | null;
     directionality: "inward" | "outward" | "transcendent" | null;
     social_visibility: "private" | "relational" | "collective" | null;
@@ -232,7 +232,7 @@ export declare const ImpulseSchema: z.ZodObject<{
 }, {
     primary_energy: string | null;
     drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-    motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
+    motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
     temporal_focus: "future" | "past" | "present" | null;
     directionality: "inward" | "outward" | "transcendent" | null;
     social_visibility: "private" | "relational" | "collective" | null;
@@ -645,17 +645,17 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         narrative: string | null;
     }>;
     constellation: z.ZodObject<{
-        emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope"]>>;
+        emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"]>>;
         emotion_subtone: z.ZodArray<z.ZodString, "many">;
         higher_order_emotion: z.ZodNullable<z.ZodString>;
         meta_emotional_state: z.ZodNullable<z.ZodString>;
         interpersonal_affect: z.ZodNullable<z.ZodString>;
         narrative_arc: z.ZodNullable<z.ZodEnum<["overcoming", "transformation", "connection", "reflection", "closure"]>>;
-        relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "grandparent_grandchild", "romantic_partnership", "sibling_bond", "family", "friendship", "friend", "companionship", "colleague", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
+        relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "grandparent_grandchild", "romantic_partnership", "couple", "sibling_bond", "family", "friendship", "friend", "companionship", "colleague", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
         temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
         memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
         media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
-        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
+        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "orphan", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
         symbolic_anchor: z.ZodNullable<z.ZodString>;
         relational_perspective: z.ZodNullable<z.ZodEnum<["self", "partner", "family", "friends", "community", "humanity"]>>;
         temporal_rhythm: z.ZodNullable<z.ZodEnum<["still", "sudden", "rising", "fading", "recurring", "spiraling", "dragging", "suspended", "looping", "cyclic"]>>;
@@ -664,17 +664,17 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         transformational_pivot: z.ZodBoolean;
         somatic_signature: z.ZodNullable<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -683,17 +683,17 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         transformational_pivot: boolean;
         somatic_signature: string | null;
     }, {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -727,7 +727,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
         viscosity: z.ZodNullable<z.ZodEnum<["low", "medium", "high", "enduring", "fluid"]>>;
         gravity_type: z.ZodNullable<z.ZodString>;
-        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition"]>>;
+        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity"]>>;
         recall_triggers: z.ZodArray<z.ZodString, "many">;
         retrieval_keys: z.ZodArray<z.ZodString, "many">;
         nearby_themes: z.ZodArray<z.ZodString, "many">;
@@ -743,7 +743,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | null;
+        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -759,7 +759,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | null;
+        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -773,7 +773,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     impulse: z.ZodObject<{
         primary_energy: z.ZodNullable<z.ZodString>;
         drive_state: z.ZodNullable<z.ZodEnum<["explore", "approach", "avoid", "repair", "persevere", "share", "confront", "protect", "process"]>>;
-        motivational_orientation: z.ZodNullable<z.ZodEnum<["belonging", "safety", "mastery", "meaning", "autonomy"]>>;
+        motivational_orientation: z.ZodNullable<z.ZodEnum<["belonging", "safety", "mastery", "meaning", "autonomy", "authenticity"]>>;
         temporal_focus: z.ZodNullable<z.ZodEnum<["past", "present", "future"]>>;
         directionality: z.ZodNullable<z.ZodEnum<["inward", "outward", "transcendent"]>>;
         social_visibility: z.ZodNullable<z.ZodEnum<["private", "relational", "collective"]>>;
@@ -786,7 +786,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
+        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -799,7 +799,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     }, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
+        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1050,17 +1050,17 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         narrative: string | null;
     };
     constellation: {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1082,7 +1082,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | null;
+        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1096,7 +1096,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     impulse: {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
+        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1187,17 +1187,17 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         narrative: string | null;
     };
     constellation: {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1219,7 +1219,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | null;
+        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1233,7 +1233,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     impulse: {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
+        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1324,17 +1324,17 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         narrative: string | null;
     }>;
     constellation: z.ZodObject<{
-        emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope"]>>;
+        emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"]>>;
         emotion_subtone: z.ZodArray<z.ZodString, "many">;
         higher_order_emotion: z.ZodNullable<z.ZodString>;
         meta_emotional_state: z.ZodNullable<z.ZodString>;
         interpersonal_affect: z.ZodNullable<z.ZodString>;
         narrative_arc: z.ZodNullable<z.ZodEnum<["overcoming", "transformation", "connection", "reflection", "closure"]>>;
-        relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "grandparent_grandchild", "romantic_partnership", "sibling_bond", "family", "friendship", "friend", "companionship", "colleague", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
+        relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "grandparent_grandchild", "romantic_partnership", "couple", "sibling_bond", "family", "friendship", "friend", "companionship", "colleague", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
         temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
         memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
         media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
-        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
+        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "orphan", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
         symbolic_anchor: z.ZodNullable<z.ZodString>;
         relational_perspective: z.ZodNullable<z.ZodEnum<["self", "partner", "family", "friends", "community", "humanity"]>>;
         temporal_rhythm: z.ZodNullable<z.ZodEnum<["still", "sudden", "rising", "fading", "recurring", "spiraling", "dragging", "suspended", "looping", "cyclic"]>>;
@@ -1343,17 +1343,17 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         transformational_pivot: z.ZodBoolean;
         somatic_signature: z.ZodNullable<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1362,17 +1362,17 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         transformational_pivot: boolean;
         somatic_signature: string | null;
     }, {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1406,7 +1406,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
         viscosity: z.ZodNullable<z.ZodEnum<["low", "medium", "high", "enduring", "fluid"]>>;
         gravity_type: z.ZodNullable<z.ZodString>;
-        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition"]>>;
+        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity"]>>;
         recall_triggers: z.ZodArray<z.ZodString, "many">;
         retrieval_keys: z.ZodArray<z.ZodString, "many">;
         nearby_themes: z.ZodArray<z.ZodString, "many">;
@@ -1422,7 +1422,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | null;
+        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1438,7 +1438,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | null;
+        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1452,7 +1452,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
     impulse: z.ZodObject<{
         primary_energy: z.ZodNullable<z.ZodString>;
         drive_state: z.ZodNullable<z.ZodEnum<["explore", "approach", "avoid", "repair", "persevere", "share", "confront", "protect", "process"]>>;
-        motivational_orientation: z.ZodNullable<z.ZodEnum<["belonging", "safety", "mastery", "meaning", "autonomy"]>>;
+        motivational_orientation: z.ZodNullable<z.ZodEnum<["belonging", "safety", "mastery", "meaning", "autonomy", "authenticity"]>>;
         temporal_focus: z.ZodNullable<z.ZodEnum<["past", "present", "future"]>>;
         directionality: z.ZodNullable<z.ZodEnum<["inward", "outward", "transcendent"]>>;
         social_visibility: z.ZodNullable<z.ZodEnum<["private", "relational", "collective"]>>;
@@ -1465,7 +1465,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
+        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1478,7 +1478,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
     }, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
+        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1500,17 +1500,17 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         narrative: string | null;
     };
     constellation: {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1532,7 +1532,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | null;
+        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1546,7 +1546,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
     impulse: {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
+        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1568,17 +1568,17 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         narrative: string | null;
     };
     constellation: {
-        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | null;
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
         emotion_subtone: string[];
         higher_order_emotion: string | null;
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1600,7 +1600,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | null;
+        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1614,7 +1614,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
     impulse: {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
+        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;

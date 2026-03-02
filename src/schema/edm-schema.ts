@@ -62,7 +62,7 @@ export const CoreSchema = z.object({
 // =============================================================================
 export const ConstellationSchema = z.object({
   emotion_primary: z
-    .enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope"])
+    .enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"])
     .nullable()
     .describe("Dominant emotional quality"),
   emotion_subtone: z
@@ -82,6 +82,7 @@ export const ConstellationSchema = z.object({
       "parent_child",
       "grandparent_grandchild",
       "romantic_partnership",
+      "couple",
       "sibling_bond",
       "family",
       "friendship",
@@ -121,6 +122,7 @@ export const ConstellationSchema = z.object({
       "lover",
       "outlaw",
       "innocent",
+      "orphan",
       "magician",
       "creator",
       "everyman",
@@ -183,7 +185,7 @@ export const GravitySchema = z.object({
     .describe("Emotion persistence"),
   gravity_type: z.string().nullable().describe("Nature of emotional pull"),
   tether_type: z
-    .enum(["person", "symbol", "event", "place", "ritual", "object", "tradition"])
+    .enum(["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity"])
     .nullable()
     .describe("Anchor element type"),
   recall_triggers: z.array(z.string()).describe("Sensory/symbolic cues"),
@@ -213,7 +215,7 @@ export const ImpulseSchema = z.object({
     .nullable()
     .describe("Behavioral direction"),
   motivational_orientation: z
-    .enum(["belonging", "safety", "mastery", "meaning", "autonomy"])
+    .enum(["belonging", "safety", "mastery", "meaning", "autonomy", "authenticity"])
     .nullable()
     .describe("Foundational motivation"),
   temporal_focus: z.enum(["past", "present", "future"]).nullable().describe("Temporal orientation"),
