@@ -80,6 +80,7 @@ export const ConstellationSchema = z.object({
   relational_dynamics: z
     .enum([
       "parent_child",
+      "grandparent_grandchild",
       "romantic_partnership",
       "sibling_bond",
       "family",

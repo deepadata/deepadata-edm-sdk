@@ -84,7 +84,7 @@ export declare const ConstellationSchema: z.ZodObject<{
     meta_emotional_state: z.ZodNullable<z.ZodString>;
     interpersonal_affect: z.ZodNullable<z.ZodString>;
     narrative_arc: z.ZodNullable<z.ZodEnum<["overcoming", "transformation", "connection", "reflection", "closure"]>>;
-    relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "romantic_partnership", "sibling_bond", "family", "friendship", "companionship", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
+    relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "grandparent_grandchild", "romantic_partnership", "sibling_bond", "family", "friendship", "companionship", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
     temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
     memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
     media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
@@ -103,7 +103,7 @@ export declare const ConstellationSchema: z.ZodObject<{
     meta_emotional_state: string | null;
     interpersonal_affect: string | null;
     narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-    relational_dynamics: "parent_child" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+    relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
     temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
     memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
     media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
@@ -122,7 +122,7 @@ export declare const ConstellationSchema: z.ZodObject<{
     meta_emotional_state: string | null;
     interpersonal_affect: string | null;
     narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-    relational_dynamics: "parent_child" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+    relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
     temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
     memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
     media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
@@ -651,7 +651,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         meta_emotional_state: z.ZodNullable<z.ZodString>;
         interpersonal_affect: z.ZodNullable<z.ZodString>;
         narrative_arc: z.ZodNullable<z.ZodEnum<["overcoming", "transformation", "connection", "reflection", "closure"]>>;
-        relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "romantic_partnership", "sibling_bond", "family", "friendship", "companionship", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
+        relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "grandparent_grandchild", "romantic_partnership", "sibling_bond", "family", "friendship", "companionship", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
         temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
         memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
         media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
@@ -670,7 +670,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
@@ -689,7 +689,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
@@ -1056,7 +1056,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
@@ -1193,7 +1193,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
@@ -1330,7 +1330,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         meta_emotional_state: z.ZodNullable<z.ZodString>;
         interpersonal_affect: z.ZodNullable<z.ZodString>;
         narrative_arc: z.ZodNullable<z.ZodEnum<["overcoming", "transformation", "connection", "reflection", "closure"]>>;
-        relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "romantic_partnership", "sibling_bond", "family", "friendship", "companionship", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
+        relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "grandparent_grandchild", "romantic_partnership", "sibling_bond", "family", "friendship", "companionship", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
         temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
         memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
         media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
@@ -1349,7 +1349,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
@@ -1368,7 +1368,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
@@ -1506,7 +1506,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
@@ -1574,7 +1574,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         meta_emotional_state: string | null;
         interpersonal_affect: string | null;
         narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
-        relational_dynamics: "parent_child" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "sibling_bond" | "family" | "friendship" | "companionship" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
