@@ -89,7 +89,7 @@ Schema
     "valence": "",                   // STRICT ENUM: positive | negative | mixed (pick ONE or null)
     "viscosity": "",                 // STRICT ENUM: low | medium | high | enduring | fluid (pick ONE or null)
     "gravity_type": "",              // short phrase (e.g., symbolic resonance)
-    "tether_type": "",               // STRICT ENUM: person | symbol | event | place | ritual | object | tradition (pick ONE or null)
+    "tether_type": "",               // STRICT ENUM: person | symbol | event | place | ritual | object | tradition | identity | self (pick ONE or null)
     "recall_triggers": [],           // sensory or symbolic cues (lowercase tokens)
     "retrieval_keys": [],            // compact hooks (3–6 tokens recommended)
     "nearby_themes": [],             // adjacent concepts

@@ -180,7 +180,7 @@ export const GravitySchema = z.object({
         .describe("Emotion persistence"),
     gravity_type: z.string().nullable().describe("Nature of emotional pull"),
     tether_type: z
-        .enum(["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity"])
+        .enum(["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"])
         .nullable()
         .describe("Anchor element type"),
     recall_triggers: z.array(z.string()).describe("Sensory/symbolic cues"),

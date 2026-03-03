@@ -160,7 +160,7 @@ export declare const GravitySchema: z.ZodObject<{
     valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
     viscosity: z.ZodNullable<z.ZodEnum<["low", "medium", "high", "enduring", "fluid"]>>;
     gravity_type: z.ZodNullable<z.ZodString>;
-    tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity"]>>;
+    tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>>;
     recall_triggers: z.ZodArray<z.ZodString, "many">;
     retrieval_keys: z.ZodArray<z.ZodString, "many">;
     nearby_themes: z.ZodArray<z.ZodString, "many">;
@@ -176,7 +176,7 @@ export declare const GravitySchema: z.ZodObject<{
     valence: "mixed" | "positive" | "negative" | null;
     viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
     gravity_type: string | null;
-    tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+    tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
     recall_triggers: string[];
     retrieval_keys: string[];
     nearby_themes: string[];
@@ -192,7 +192,7 @@ export declare const GravitySchema: z.ZodObject<{
     valence: "mixed" | "positive" | "negative" | null;
     viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
     gravity_type: string | null;
-    tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+    tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
     recall_triggers: string[];
     retrieval_keys: string[];
     nearby_themes: string[];
@@ -727,7 +727,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
         viscosity: z.ZodNullable<z.ZodEnum<["low", "medium", "high", "enduring", "fluid"]>>;
         gravity_type: z.ZodNullable<z.ZodString>;
-        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity"]>>;
+        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>>;
         recall_triggers: z.ZodArray<z.ZodString, "many">;
         retrieval_keys: z.ZodArray<z.ZodString, "many">;
         nearby_themes: z.ZodArray<z.ZodString, "many">;
@@ -743,7 +743,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -759,7 +759,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1082,7 +1082,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1219,7 +1219,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1406,7 +1406,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
         viscosity: z.ZodNullable<z.ZodEnum<["low", "medium", "high", "enduring", "fluid"]>>;
         gravity_type: z.ZodNullable<z.ZodString>;
-        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity"]>>;
+        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>>;
         recall_triggers: z.ZodArray<z.ZodString, "many">;
         retrieval_keys: z.ZodArray<z.ZodString, "many">;
         nearby_themes: z.ZodArray<z.ZodString, "many">;
@@ -1422,7 +1422,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1438,7 +1438,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1532,7 +1532,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
@@ -1600,7 +1600,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
