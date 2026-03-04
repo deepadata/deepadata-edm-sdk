@@ -164,6 +164,10 @@ Schema
   //     A customer complaint = may have high weight (0.8) but low strength (0.3) — intense but fades quickly.
   //   - These should NOT always correlate.
   //     Ask: "How heavy does this feel RIGHT NOW?" (weight) vs "How stuck/persistent is this memory?" (strength)
+  //
+  // SYNONYM CORRECTIONS (use the canonical form):
+  //   - drive_state: Use "process" NOT "reflect". The enum value is "process" for internal processing/reflection.
+  //   - narrative_archetype: Use "caregiver" NOT "caretaker". The Jungian archetype label is "caregiver".
 }
 `;
 /**
