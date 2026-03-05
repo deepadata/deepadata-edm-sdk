@@ -48,7 +48,7 @@ Schema
   "core": {
     "anchor": "",            // central theme (e.g., "dad's toolbox", "nana's traditions")
     "spark": "",             // what triggered the memory (e.g., "finding the cassette", "first snow")
-    "wound": "",             // emotional pain present (e.g., "loss", "regret", "distance")
+    "wound": "",             // The specific vulnerability, loss, or pain present — NOT generic labels like 'loss' or 'grief' but what exactly was lost or why it hurts. Examples: 'unlived travel dream', 'war silence never spoken', 'father died before I knew him', 'shame of not fitting in'. If no wound is present, use null.
     "fuel": "",              // what energized the experience (e.g., "shared laughter", "curiosity")
     "bridge": "",            // connection between past and present (e.g., "replaying old tape", "returning to the porch")
     "echo": "",              // what still resonates (e.g., "her laugh", "smell of oil", "city lights on water")
