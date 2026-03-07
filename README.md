@@ -1,6 +1,6 @@
 # deepadata-edm-sdk
 
-SDK for assembling EDM v0.4.0 artifacts from user content. LLM-assisted extraction with interpretation constraints (not inference). Supports text + image input, stateless mode, and integrates with deepadata-ddna-tools for sealing.
+SDK for assembling EDM v0.6.0 artifacts from user content. LLM-assisted extraction with interpretation constraints (not inference). Supports text + image input, profile-aware extraction, stateless mode, and integrates with deepadata-ddna-tools for sealing.
 
 ## Installation
 
@@ -43,12 +43,48 @@ console.log(JSON.stringify(artifact, null, 2));
 
 ## Features
 
-- **LLM-Assisted Extraction**: Uses Claude to extract emotional data from text and images
-- **EDM v0.4.0 Compliant**: Full support for all 10 EDM domains
+- **LLM-Assisted Extraction**: Uses Claude, OpenAI, or Kimi to extract emotional data from text and images
+- **EDM v0.6.0 Compliant**: Full support for all 10 EDM domains
+- **Profile Support**: Core (~20 fields), Extended (~45 fields), or Full (all fields)
 - **Text + Image Fusion**: Combines text narrative with image context
 - **Stateless Mode**: Privacy-preserving mode for session use
 - **Schema Validation**: Comprehensive Zod-based validation
 - **Crosswalk Mapping**: Automatic mapping to Plutchik and HMD taxonomies
+
+## Profiles
+
+EDM v0.6.0 introduces profile-aware extraction. Choose the profile that matches your use case:
+
+| Profile | Fields | Use Case |
+|---------|--------|----------|
+| **core** | ~20 | Memory platforms, agent frameworks, AI assistants |
+| **extended** | ~45 | Journaling apps, companion AI, workplace wellness |
+| **full** | 96 | Therapy tools, clinical applications, research |
+
+```typescript
+// Core profile - minimal extraction
+const artifact = await extractFromContent({
+  content: { text: "..." },
+  metadata: { consentBasis: "consent" },
+  profile: "core",
+});
+
+// Extended profile - balanced extraction
+const artifact = await extractFromContent({
+  content: { text: "..." },
+  metadata: { consentBasis: "consent" },
+  profile: "extended",
+});
+
+// Full profile - all fields (default)
+const artifact = await extractFromContent({
+  content: { text: "..." },
+  metadata: { consentBasis: "consent" },
+  profile: "full",
+});
+```
+
+See [examples/](examples/) for complete profile artifacts.
 
 ## API Reference
 
@@ -75,6 +111,8 @@ const artifact = await extractFromContent({
     tags: ["family", "memory"],    // optional
   },
   model: "claude-sonnet-4-20250514", // optional
+  provider: "anthropic",             // optional: "anthropic" | "openai" | "kimi"
+  profile: "full",                   // optional: "core" | "extended" | "full"
 });
 ```
 
@@ -189,12 +227,13 @@ This SDK is designed for compliance with the EU AI Act. Emotional data extractio
 
 ## Schema Version
 
-This SDK implements EDM v0.4.0. Key changes from v0.3:
+This SDK implements EDM v0.6.0. Key changes from v0.5:
 
-- Removed 6 fields (session_id, affective_clarity, active_motivational_state, media_context, memory_layers, tether_target)
-- Split META domain: 6 fields moved to new GOVERNANCE domain
-- Added somatic_signature field
-- Field renames: archetype_energy→narrative_archetype, meaning_inference→expressed_insight, transcendent_moment→transformational_pivot
+- Added `meta.profile` field for conformance level declaration
+- Profile-aware extraction with tailored system prompts
+- Profile-aware confidence scoring
+- Three conformance profiles: core (~20 fields), extended (~45 fields), full (96 fields)
+- Added Kimi K2 extractor support via MoonshotAI API
 
 ## License
 

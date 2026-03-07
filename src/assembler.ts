@@ -1,9 +1,10 @@
 /**
- * EDM Artifact Assembler
+ * EDM Artifact Assembler v0.6.0
  * Combines LLM-extracted fields with metadata to create complete artifacts
+ * Supports profile-aware extraction (core/extended/full)
  */
 import Anthropic from "@anthropic-ai/sdk";
-import type { EdmArtifact, ExtractionOptions, LlmExtractedFields } from "./schema/types.js";
+import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile } from "./schema/types.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
 import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 import { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
@@ -18,26 +19,30 @@ import {
 
 /**
  * Extract a complete EDM artifact from content
+ *
+ * @param options - Extraction options including profile
+ * @returns Complete EDM artifact
  */
 export async function extractFromContent(options: ExtractionOptions): Promise<EdmArtifact> {
-  const { content, metadata, model, provider = "anthropic", temperature } = options;
+  const { content, metadata, model, provider = "anthropic", temperature, profile = "full" } = options;
 
   let llmResult;
   if (provider === "openai") {
     const client = createOpenAIClient();
-    llmResult = await extractWithOpenAI(client, content, model, temperature);
+    llmResult = await extractWithOpenAI(client, content, model, temperature, profile);
   } else if (provider === "kimi") {
     const client = createKimiClient();
-    llmResult = await extractWithKimi(client, content, model ?? getKimiModelId());
+    llmResult = await extractWithKimi(client, content, model ?? getKimiModelId(), profile);
   } else {
     const client = createAnthropicClient();
-    llmResult = await extractWithLlm(client, content, model);
+    llmResult = await extractWithLlm(client, content, model, profile);
   }
 
-  // Assemble complete artifact
+  // Assemble complete artifact with profile
   return assembleArtifact(llmResult.extracted, metadata, {
     confidence: llmResult.confidence,
     model: llmResult.model,
+    profile: llmResult.profile,
     notes: llmResult.notes,
     hasText: !!content.text,
     hasImage: !!content.image,
@@ -69,6 +74,7 @@ export async function extractFromContentWithClient(
 interface AssemblyContext {
   confidence: number;
   model: string;
+  profile: EdmProfile;
   notes: string | null;
   hasText: boolean;
   hasImage: boolean;
@@ -85,7 +91,7 @@ export function assembleArtifact(
   const sourceType = detectSourceType(context.hasText, context.hasImage);
 
   return {
-    meta: createMeta(metadata, sourceType),
+    meta: createMeta(metadata, sourceType, context.profile),
     core: extracted.core,
     constellation: extracted.constellation,
     milky_way: extracted.milky_way,

@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "id": "c3e1d6a7-8f2b-410a-9d3c-5e6f7a8b9c0d",
+    "version": "0.6.0-alpha",
+    "profile": "full",
+    "created_at": "2026-03-01T10:00:00Z",
+    "updated_at": null,
+    "locale": "en-au",
+    "owner_user_id": "vp-01HZ3GKWP7XTJY9QN4RD",
+    "parent_id": null,
+    "visibility": "public",
+    "pii_tier": "low",
+    "source_type": "text",
+    "source_context": "user_generated_post",
+    "consent_basis": "consent",
+    "consent_scope": "memory",
+    "consent_revoked_at": null,
+    "tags": []
+  },
+  "core": {
+    "anchor": "physie competitions",
+    "spark": "receiving photos",
+    "wound": "psoriatic arthritis",
+    "fuel": "supportive community",
+    "bridge": "returning to dance",
+    "echo": "feeling youthful",
+    "narrative": "After receiving photos from the physie competition, I felt a renewed sense of connection to the community that has always supported me. Even though psoriatic arthritis limits my movement, being part of the event reminded me of my strength and identity. Returning to dance, even symbolically, restored a sense of youthfulness and belonging. It left me feeling grateful, grounded, and more hopeful about what movement still means in my life."
+  },
+  "constellation": {
+    "emotion_primary": "joy",
+    "emotion_subtone": ["grateful", "energized"],
+    "higher_order_emotion": "pride",
+    "meta_emotional_state": "acceptance",
+    "interpersonal_affect": "warmth",
+    "narrative_arc": "transformation",
+    "relational_dynamics": "community_ritual",
+    "temporal_context": "recent",
+    "memory_type": "reflection",
+    "media_format": "photo_with_story",
+    "narrative_archetype": "seeker",
+    "symbolic_anchor": "dance",
+    "relational_perspective": "self",
+    "temporal_rhythm": "recurring",
+    "identity_thread": "dance anchors personal wellbeing",
+    "expressed_insight": "movement and community sustain health",
+    "transformational_pivot": false,
+    "somatic_signature": "limited movement"
+  },
+  "milky_way": {
+    "event_type": "competition",
+    "location_context": "Quay Centre",
+    "associated_people": ["Jason", "Pose_PA kids", "The Point Physie Club"],
+    "visibility_context": "shared_publicly",
+    "tone_shift": null
+  },
+  "gravity": {
+    "emotional_weight": 0.8,
+    "emotional_density": "high",
+    "valence": "positive",
+    "viscosity": "enduring",
+    "gravity_type": null,
+    "tether_type": "tradition",
+    "recall_triggers": ["dance", "competition"],
+    "retrieval_keys": ["arthritis", "supportive women", "youthful feeling"],
+    "nearby_themes": ["self_care", "community", "resilience"],
+    "legacy_embed": false,
+    "recurrence_pattern": "cyclical",
+    "strength_score": 0.9,
+    "temporal_decay": "slow",
+    "resilience_markers": ["continuity", "optimism"],
+    "adaptation_trajectory": "integrative"
+  },
+  "impulse": {
+    "primary_energy": "compassion",
+    "drive_state": "approach",
+    "motivational_orientation": "belonging",
+    "temporal_focus": "present",
+    "directionality": "outward",
+    "social_visibility": "collective",
+    "urgency": "elevated",
+    "risk_posture": "balanced",
+    "agency_level": "high",
+    "regulation_state": "regulated",
+    "attachment_style": "secure",
+    "coping_style": "ritualize"
+  },
+  "governance": {
+    "jurisdiction": "GDPR",
+    "retention_policy": {
+      "basis": "user_defined",
+      "ttl_days": null,
+      "on_expiry": "soft_delete"
+    },
+    "subject_rights": {
+      "portable": true,
+      "erasable": true,
+      "explainable": false
+    },
+    "exportability": "allowed",
+    "k_anonymity": {
+      "k": null,
+      "groups": []
+    },
+    "policy_labels": ["none"],
+    "masking_rules": []
+  },
+  "telemetry": {
+    "entry_confidence": 0.96,
+    "extraction_model": "claude-sonnet-4-20250514",
+    "extraction_notes": "Full profile extraction - all domains populated",
+    "alignment_delta": null
+  },
+  "system": {
+    "embeddings": [
+      {
+        "provider": "openai",
+        "sector": "emotional",
+        "dim": 1536,
+        "quantized": false,
+        "vector_ref": "vs:physie_2025_001"
+      }
+    ],
+    "indices": {
+      "waypoint_ids": [],
+      "sector_weights": {
+        "episodic": 0.2,
+        "semantic": 0.1,
+        "procedural": 0,
+        "emotional": 0.5,
+        "reflective": 0.2
+      }
+    }
+  },
+  "crosswalks": {
+    "plutchik_primary": "joy",
+    "geneva_emotion_wheel": "elation",
+    "DSM5_specifiers": null,
+    "HMD_v2_memory_type": "reflection",
+    "ISO_27557_labels": "positive_activation"
+  }
+}

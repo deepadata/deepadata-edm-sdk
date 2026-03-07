@@ -1,6 +1,7 @@
 /**
- * Domain Extractors for EDM v0.5.0
+ * Domain Extractors for EDM v0.6.0
  * Populates domains not handled by LLM extraction
+ * Supports profile-aware artifact assembly
  */
 import { randomUUID } from "crypto";
 import type {
@@ -11,15 +12,21 @@ import type {
   Crosswalks,
   ExtractionMetadata,
   LlmExtractedFields,
+  EdmProfile,
 } from "../schema/types.js";
 
 // =============================================================================
 // META Domain
 // =============================================================================
-export function createMeta(metadata: ExtractionMetadata, sourceType: Meta["source_type"]): Meta {
+export function createMeta(
+  metadata: ExtractionMetadata,
+  sourceType: Meta["source_type"],
+  profile: EdmProfile = "full"
+): Meta {
   return {
     id: randomUUID(),
-    version: "0.5.0",
+    version: "0.6.0-alpha",
+    profile,
     created_at: new Date().toISOString(),
     updated_at: null,
     locale: metadata.locale ?? null,
