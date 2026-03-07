@@ -24,7 +24,7 @@ import {
  * @returns Complete EDM artifact
  */
 export async function extractFromContent(options: ExtractionOptions): Promise<EdmArtifact> {
-  const { content, metadata, model, provider = "anthropic", temperature, profile = "full" } = options;
+  const { content, metadata, model, provider = "kimi", temperature, profile = "full" } = options;
 
   let llmResult;
   if (provider === "openai") {
@@ -43,6 +43,7 @@ export async function extractFromContent(options: ExtractionOptions): Promise<Ed
     confidence: llmResult.confidence,
     model: llmResult.model,
     profile: llmResult.profile,
+    provider,
     notes: llmResult.notes,
     hasText: !!content.text,
     hasImage: !!content.image,
@@ -56,15 +57,17 @@ export async function extractFromContentWithClient(
   client: Anthropic,
   options: ExtractionOptions
 ): Promise<EdmArtifact> {
-  const { content, metadata, model } = options;
+  const { content, metadata, model, profile = "full" } = options;
 
   // Extract with LLM
-  const llmResult = await extractWithLlm(client, content, model);
+  const llmResult = await extractWithLlm(client, content, model, profile);
 
-  // Assemble complete artifact
+  // Assemble complete artifact (always Anthropic when using provided client)
   return assembleArtifact(llmResult.extracted, metadata, {
     confidence: llmResult.confidence,
     model: llmResult.model,
+    profile: llmResult.profile,
+    provider: 'anthropic',
     notes: llmResult.notes,
     hasText: !!content.text,
     hasImage: !!content.image,
@@ -75,6 +78,7 @@ interface AssemblyContext {
   confidence: number;
   model: string;
   profile: EdmProfile;
+  provider?: 'anthropic' | 'openai' | 'kimi';
   notes: string | null;
   hasText: boolean;
   hasImage: boolean;
@@ -98,7 +102,7 @@ export function assembleArtifact(
     gravity: extracted.gravity,
     impulse: extracted.impulse,
     governance: createGovernance(metadata),
-    telemetry: createTelemetry(context.confidence, context.model, context.notes),
+    telemetry: createTelemetry(context.confidence, context.model, context.notes, context.provider),
     system: createSystem(),
     crosswalks: createCrosswalks(extracted),
   };
@@ -209,6 +213,7 @@ export function createEmptyArtifact(): EdmArtifact {
     telemetry: {
       entry_confidence: 0,
       extraction_model: null,
+      extraction_provider: null,
       extraction_notes: null,
       alignment_delta: null,
     },

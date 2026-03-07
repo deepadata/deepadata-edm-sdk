@@ -124,11 +124,13 @@ function determinePolicyLabels(
 export function createTelemetry(
   confidence: number,
   model: string,
-  notes: string | null
+  notes: string | null,
+  provider?: 'anthropic' | 'openai' | 'kimi' | null
 ): Telemetry {
   return {
     entry_confidence: confidence,
     extraction_model: model,
+    extraction_provider: provider ?? null,
     extraction_notes: notes,
     alignment_delta: null, // Populated by downstream systems
   };

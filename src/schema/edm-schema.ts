@@ -289,6 +289,7 @@ export const GovernanceSchema = z.object({
 export const TelemetrySchema = z.object({
   entry_confidence: z.number().min(0).max(1).describe("Extraction accuracy confidence"),
   extraction_model: z.string().nullable().describe("Model/engine identifier"),
+  extraction_provider: z.enum(['anthropic', 'openai', 'kimi']).nullable().optional().describe("LLM provider used for extraction"),
   extraction_notes: z.string().nullable().describe("Quality notes"),
   alignment_delta: z.number().min(-1).max(1).nullable().describe("Affective alignment deviation"),
 });
