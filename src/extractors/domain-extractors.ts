@@ -25,7 +25,7 @@ export function createMeta(
 ): Meta {
   return {
     id: randomUUID(),
-    version: "0.6.0-alpha",
+    version: "0.6.0",
     profile,
     created_at: new Date().toISOString(),
     updated_at: null,

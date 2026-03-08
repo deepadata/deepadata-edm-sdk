@@ -1,5 +1,5 @@
 /**
- * EDM v0.4.0 TypeScript Types
+ * EDM v0.6.0 TypeScript Types
  * Inferred from Zod schemas
  */
 import { z } from "zod";
@@ -89,7 +89,7 @@ export interface ExtractionMetadata {
  * EDM Implementation Profile
  * - core: ~20 required fields, minimal extraction for memory platforms
  * - extended: ~45 fields, adds full Constellation and key Gravity fields
- * - full: all 96 fields, current v0.5.0 behaviour
+ * - full: all 96 fields, current v0.6.0 behaviour
  */
 export type EdmProfile = 'core' | 'extended' | 'full';
 

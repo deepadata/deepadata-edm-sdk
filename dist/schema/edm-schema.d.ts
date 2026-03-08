@@ -1,12 +1,12 @@
 /**
- * EDM v0.5.0 Zod Schema
+ * EDM v0.6.0 Zod Schema
  * Generated from canonical JSON schema at deepadata-edm-spec
  */
 import { z } from "zod";
 export declare const MetaSchema: z.ZodObject<{
     id: z.ZodNullable<z.ZodString>;
     version: z.ZodString;
-    profile: z.ZodOptional<z.ZodEnum<["core", "extended", "full"]>>;
+    profile: z.ZodEnum<["core", "extended", "full"]>;
     created_at: z.ZodString;
     updated_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     locale: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -23,13 +23,13 @@ export declare const MetaSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string | null;
     version: string;
+    profile: "core" | "extended" | "full";
     created_at: string;
     owner_user_id: string | null;
     visibility: "private" | "shared" | "public";
     pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
     source_type: "text" | "audio" | "image" | "video" | "mixed";
     consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
-    profile?: "core" | "extended" | "full" | undefined;
     updated_at?: string | null | undefined;
     locale?: string | null | undefined;
     parent_id?: string | null | undefined;
@@ -40,13 +40,13 @@ export declare const MetaSchema: z.ZodObject<{
 }, {
     id: string | null;
     version: string;
+    profile: "core" | "extended" | "full";
     created_at: string;
     owner_user_id: string | null;
     visibility: "private" | "shared" | "public";
     pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
     source_type: "text" | "audio" | "image" | "video" | "mixed";
     consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
-    profile?: "core" | "extended" | "full" | undefined;
     updated_at?: string | null | undefined;
     locale?: string | null | undefined;
     parent_id?: string | null | undefined;
@@ -579,7 +579,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     meta: z.ZodObject<{
         id: z.ZodNullable<z.ZodString>;
         version: z.ZodString;
-        profile: z.ZodOptional<z.ZodEnum<["core", "extended", "full"]>>;
+        profile: z.ZodEnum<["core", "extended", "full"]>;
         created_at: z.ZodString;
         updated_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         locale: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -596,13 +596,13 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id: string | null;
         version: string;
+        profile: "core" | "extended" | "full";
         created_at: string;
         owner_user_id: string | null;
         visibility: "private" | "shared" | "public";
         pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
         source_type: "text" | "audio" | "image" | "video" | "mixed";
         consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
-        profile?: "core" | "extended" | "full" | undefined;
         updated_at?: string | null | undefined;
         locale?: string | null | undefined;
         parent_id?: string | null | undefined;
@@ -613,13 +613,13 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     }, {
         id: string | null;
         version: string;
+        profile: "core" | "extended" | "full";
         created_at: string;
         owner_user_id: string | null;
         visibility: "private" | "shared" | "public";
         pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
         source_type: "text" | "audio" | "image" | "video" | "mixed";
         consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
-        profile?: "core" | "extended" | "full" | undefined;
         updated_at?: string | null | undefined;
         locale?: string | null | undefined;
         parent_id?: string | null | undefined;
@@ -1047,13 +1047,13 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     meta: {
         id: string | null;
         version: string;
+        profile: "core" | "extended" | "full";
         created_at: string;
         owner_user_id: string | null;
         visibility: "private" | "shared" | "public";
         pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
         source_type: "text" | "audio" | "image" | "video" | "mixed";
         consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
-        profile?: "core" | "extended" | "full" | undefined;
         updated_at?: string | null | undefined;
         locale?: string | null | undefined;
         parent_id?: string | null | undefined;
@@ -1186,13 +1186,13 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     meta: {
         id: string | null;
         version: string;
+        profile: "core" | "extended" | "full";
         created_at: string;
         owner_user_id: string | null;
         visibility: "private" | "shared" | "public";
         pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
         source_type: "text" | "audio" | "image" | "video" | "mixed";
         consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
-        profile?: "core" | "extended" | "full" | undefined;
         updated_at?: string | null | undefined;
         locale?: string | null | undefined;
         parent_id?: string | null | undefined;

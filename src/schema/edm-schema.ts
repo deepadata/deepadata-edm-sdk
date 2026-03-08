@@ -1,5 +1,5 @@
 /**
- * EDM v0.5.0 Zod Schema
+ * EDM v0.6.0 Zod Schema
  * Generated from canonical JSON schema at deepadata-edm-spec
  */
 import { z } from "zod";
@@ -19,7 +19,6 @@ export const MetaSchema = z.object({
     .describe("EDM schema version"),
   profile: z
     .enum(["core", "extended", "full"])
-    .optional()
     .describe("Implementation profile (core/extended/full)"),
   created_at: z.string().datetime().describe("Extraction timestamp"),
   updated_at: z.string().datetime().nullable().optional().describe("Post-extraction update timestamp"),
