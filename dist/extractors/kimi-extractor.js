@@ -1,7 +1,7 @@
 /**
  * Kimi K2 Extractor for EDM v0.6.0
  * Uses MoonshotAI's Kimi K2 model via OpenAI-compatible API
- * Supports profile-aware extraction (core/extended/full)
+ * Supports profile-aware extraction (essential/extended/full)
  */
 import OpenAI from "openai";
 import { LlmExtractedFieldsSchema } from "../schema/edm-schema.js";

@@ -1,7 +1,7 @@
 /**
  * EDM Artifact Assembler v0.6.0
  * Combines LLM-extracted fields with metadata to create complete artifacts
- * Supports profile-aware extraction (core/extended/full)
+ * Supports profile-aware extraction (essential/extended/full)
  */
 import Anthropic from "@anthropic-ai/sdk";
 import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile } from "./schema/types.js";

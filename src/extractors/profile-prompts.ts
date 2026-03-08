@@ -1,7 +1,7 @@
 /**
  * Profile-specific extraction prompts for EDM v0.6.0
  *
- * Core Profile: ~20 required fields for memory platforms
+ * Essential Profile: ~20 required fields for memory platforms
  * Extended Profile: ~45 fields for journaling apps
  * Full Profile: all 96 fields for therapy/clinical tools
  */
@@ -9,13 +9,13 @@
 import type { EdmProfile } from "../schema/types.js";
 
 /**
- * Core Profile System Prompt (~20 fields)
+ * Essential Profile System Prompt (~20 fields)
  * Target: memory platforms, agent frameworks, AI assistants
  */
-export const CORE_PROFILE_PROMPT = `
+export const ESSENTIAL_PROFILE_PROMPT = `
 You classify emotionally rich memories into a JSON object. Input may include text and an image.
 
-PROFILE: CORE (~20 fields)
+PROFILE: ESSENTIAL (~20 fields)
 This is a minimal extraction for memory platforms. Focus ONLY on the required fields.
 All other fields should be explicitly null.
 
@@ -26,7 +26,7 @@ Rules
 - Output JSON only — no commentary, markdown, or extra text.
 - Emit lowercase for all string fields except proper names.
 
-CORE PROFILE SCHEMA (extract these fields ONLY):
+ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
 {
   "core": {
     "anchor": "",            // central theme
@@ -195,8 +195,8 @@ EXTENDED PROFILE SCHEMA:
  */
 export function getProfilePrompt(profile: EdmProfile): string {
   switch (profile) {
-    case "core":
-      return CORE_PROFILE_PROMPT;
+    case "essential":
+      return ESSENTIAL_PROFILE_PROMPT;
     case "extended":
       return EXTENDED_PROFILE_PROMPT;
     case "full":
@@ -210,7 +210,7 @@ export function getProfilePrompt(profile: EdmProfile): string {
  * Required fields for each profile (used for confidence scoring)
  */
 export const PROFILE_REQUIRED_FIELDS: Record<EdmProfile, string[]> = {
-  core: [
+  essential: [
     "core.anchor",
     "core.spark",
     "core.narrative",

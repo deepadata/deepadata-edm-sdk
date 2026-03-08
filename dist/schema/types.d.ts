@@ -50,11 +50,11 @@ export interface ExtractionMetadata {
 }
 /**
  * EDM Implementation Profile
- * - core: ~20 required fields, minimal extraction for memory platforms
+ * - essential: ~20 required fields, minimal extraction for memory platforms
  * - extended: ~45 fields, adds full Constellation and key Gravity fields
  * - full: all 96 fields, current v0.6.0 behaviour
  */
-export type EdmProfile = 'core' | 'extended' | 'full';
+export type EdmProfile = 'essential' | 'extended' | 'full';
 export interface ExtractionOptions {
     /** Content to extract from */
     content: ExtractionInput;
@@ -62,7 +62,7 @@ export interface ExtractionOptions {
     metadata: ExtractionMetadata;
     /**
      * EDM profile to extract (default: 'full')
-     * - core: ~20 fields, for memory platforms and agent frameworks
+     * - essential: ~20 fields, for memory platforms and agent frameworks
      * - extended: ~45 fields, for journaling and companion AI
      * - full: all 96 fields, for therapy and regulated systems
      */

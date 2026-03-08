@@ -1,7 +1,7 @@
 /**
  * OpenAI Extractor for EDM v0.6.0
  * Uses OpenAI GPT models to extract emotional data from content
- * Supports profile-aware extraction (core/extended/full)
+ * Supports profile-aware extraction (essential/extended/full)
  */
 import OpenAI from "openai";
 import type { ExtractionInput, EdmProfile } from "../schema/types.js";

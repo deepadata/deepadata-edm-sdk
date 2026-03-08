@@ -18,8 +18,8 @@ export const MetaSchema = z.object({
     .regex(/^0\.[5-6]\.[0-9]+(-alpha)?$/)
     .describe("EDM schema version"),
   profile: z
-    .enum(["core", "extended", "full"])
-    .describe("Implementation profile (core/extended/full)"),
+    .enum(["essential", "extended", "full"])
+    .describe("Implementation profile (essential/extended/full)"),
   created_at: z.string().datetime().describe("Extraction timestamp"),
   updated_at: z.string().datetime().nullable().optional().describe("Post-extraction update timestamp"),
   locale: z

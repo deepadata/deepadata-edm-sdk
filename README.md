@@ -45,7 +45,7 @@ console.log(JSON.stringify(artifact, null, 2));
 
 - **LLM-Assisted Extraction**: Uses Claude, OpenAI, or Kimi to extract emotional data from text and images
 - **EDM v0.6.0 Compliant**: Full support for all 10 EDM domains
-- **Profile Support**: Core (~20 fields), Extended (~45 fields), or Full (all fields)
+- **Profile Support**: Essential (~20 fields), Extended (~45 fields), or Full (all fields)
 - **Text + Image Fusion**: Combines text narrative with image context
 - **Stateless Mode**: Privacy-preserving mode for session use
 - **Schema Validation**: Comprehensive Zod-based validation
@@ -57,16 +57,16 @@ EDM v0.6.0 introduces profile-aware extraction. Choose the profile that matches 
 
 | Profile | Fields | Use Case |
 |---------|--------|----------|
-| **core** | ~20 | Memory platforms, agent frameworks, AI assistants |
+| **essential** | ~20 | Memory platforms, agent frameworks, AI assistants |
 | **extended** | ~45 | Journaling apps, companion AI, workplace wellness |
 | **full** | 96 | Therapy tools, clinical applications, research |
 
 ```typescript
-// Core profile - minimal extraction
+// Essential profile - minimal extraction
 const artifact = await extractFromContent({
   content: { text: "..." },
   metadata: { consentBasis: "consent" },
-  profile: "core",
+  profile: "essential",
 });
 
 // Extended profile - balanced extraction
@@ -112,7 +112,7 @@ const artifact = await extractFromContent({
   },
   model: "claude-sonnet-4-20250514", // optional
   provider: "anthropic",             // optional: "anthropic" | "openai" | "kimi"
-  profile: "full",                   // optional: "core" | "extended" | "full"
+  profile: "full",                   // optional: "essential" | "extended" | "full"
 });
 ```
 
@@ -232,7 +232,7 @@ This SDK implements EDM v0.6.0. Key changes from v0.5:
 - Added `meta.profile` field for conformance level declaration
 - Profile-aware extraction with tailored system prompts
 - Profile-aware confidence scoring
-- Three conformance profiles: core (~20 fields), extended (~45 fields), full (96 fields)
+- Three conformance profiles: essential (~20 fields), extended (~45 fields), full (96 fields)
 - Added Kimi K2 extractor support via MoonshotAI API
 
 ## License

@@ -1,7 +1,7 @@
 /**
  * LLM Extractor for EDM v0.6.0
  * Uses Anthropic Claude to extract emotional data from content
- * Supports profile-aware extraction (core/extended/full)
+ * Supports profile-aware extraction (essential/extended/full)
  */
 import Anthropic from "@anthropic-ai/sdk";
 import type { LlmExtractedFields, ExtractionInput, EdmProfile } from "../schema/types.js";
