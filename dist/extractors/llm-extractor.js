@@ -1,10 +1,11 @@
 /**
- * LLM Extractor for EDM v0.4.0
+ * LLM Extractor for EDM v0.6.0
  * Uses Anthropic Claude to extract emotional data from content
- * Based on proven extraction logic from system-prompt-B.ts, reconciled with canonical schema
+ * Supports profile-aware extraction (core/extended/full)
  */
 import Anthropic from "@anthropic-ai/sdk";
 import { LlmExtractedFieldsSchema } from "../schema/edm-schema.js";
+import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 /**
  * System prompt for EDM extraction - Updated for v0.4.0 canonical schema
  * Reconciled field names from system-prompt-B.ts:
@@ -172,8 +173,13 @@ Schema
 `;
 /**
  * Extract EDM fields from content using Anthropic Claude
+ *
+ * @param client - Anthropic client
+ * @param input - Content to extract from
+ * @param model - Model to use (default: claude-sonnet-4-20250514)
+ * @param profile - EDM profile (default: 'full')
  */
-export async function extractWithLlm(client, input, model = "claude-sonnet-4-20250514") {
+export async function extractWithLlm(client, input, model = "claude-sonnet-4-20250514", profile = "full") {
     const userContent = [];
     // Add text content
     if (input.text) {
@@ -193,10 +199,13 @@ export async function extractWithLlm(client, input, model = "claude-sonnet-4-202
             },
         });
     }
+    // Select profile-specific prompt or use full extraction prompt
+    const profilePrompt = getProfilePrompt(profile);
+    const systemPrompt = profilePrompt || EXTRACTION_SYSTEM_PROMPT;
     const response = await client.messages.create({
         model,
         max_tokens: 4096,
-        system: EXTRACTION_SYSTEM_PROMPT,
+        system: systemPrompt,
         messages: [
             {
                 role: "user",
@@ -230,12 +239,13 @@ export async function extractWithLlm(client, input, model = "claude-sonnet-4-202
             .join("; ");
         throw new Error(`LLM response failed schema validation: ${errorDetails}`);
     }
-    // Calculate confidence based on field population
-    const confidence = calculateConfidence(result.data);
+    // Calculate profile-aware confidence
+    const confidence = calculateProfileConfidence(result.data, profile);
     return {
         extracted: result.data,
         confidence,
         model,
+        profile,
         notes: null,
     };
 }

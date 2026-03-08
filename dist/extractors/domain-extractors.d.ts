@@ -1,7 +1,7 @@
-import type { Meta, Governance, Telemetry, System, Crosswalks, ExtractionMetadata, LlmExtractedFields } from "../schema/types.js";
-export declare function createMeta(metadata: ExtractionMetadata, sourceType: Meta["source_type"]): Meta;
+import type { Meta, Governance, Telemetry, System, Crosswalks, ExtractionMetadata, LlmExtractedFields, EdmProfile } from "../schema/types.js";
+export declare function createMeta(metadata: ExtractionMetadata, sourceType: Meta["source_type"], profile?: EdmProfile): Meta;
 export declare function createGovernance(metadata: ExtractionMetadata): Governance;
-export declare function createTelemetry(confidence: number, model: string, notes: string | null): Telemetry;
+export declare function createTelemetry(confidence: number, model: string, notes: string | null, provider?: 'anthropic' | 'openai' | 'kimi' | null): Telemetry;
 export declare function createSystem(): System;
 export declare function createCrosswalks(extracted: LlmExtractedFields): Crosswalks;
 export declare function detectSourceType(hasText: boolean, hasImage: boolean): Meta["source_type"];

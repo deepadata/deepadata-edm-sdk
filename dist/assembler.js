@@ -4,26 +4,31 @@ import { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/
 import { createMeta, createGovernance, createTelemetry, createSystem, createCrosswalks, detectSourceType, } from "./extractors/domain-extractors.js";
 /**
  * Extract a complete EDM artifact from content
+ *
+ * @param options - Extraction options including profile
+ * @returns Complete EDM artifact
  */
 export async function extractFromContent(options) {
-    const { content, metadata, model, provider = "anthropic", temperature } = options;
+    const { content, metadata, model, provider = "kimi", temperature, profile = "full" } = options;
     let llmResult;
     if (provider === "openai") {
         const client = createOpenAIClient();
-        llmResult = await extractWithOpenAI(client, content, model, temperature);
+        llmResult = await extractWithOpenAI(client, content, model, temperature, profile);
     }
     else if (provider === "kimi") {
         const client = createKimiClient();
-        llmResult = await extractWithKimi(client, content, model ?? getKimiModelId());
+        llmResult = await extractWithKimi(client, content, model ?? getKimiModelId(), profile);
     }
     else {
         const client = createAnthropicClient();
-        llmResult = await extractWithLlm(client, content, model);
+        llmResult = await extractWithLlm(client, content, model, profile);
     }
-    // Assemble complete artifact
+    // Assemble complete artifact with profile
     return assembleArtifact(llmResult.extracted, metadata, {
         confidence: llmResult.confidence,
         model: llmResult.model,
+        profile: llmResult.profile,
+        provider,
         notes: llmResult.notes,
         hasText: !!content.text,
         hasImage: !!content.image,
@@ -33,13 +38,15 @@ export async function extractFromContent(options) {
  * Extract from content with a provided Anthropic client
  */
 export async function extractFromContentWithClient(client, options) {
-    const { content, metadata, model } = options;
+    const { content, metadata, model, profile = "full" } = options;
     // Extract with LLM
-    const llmResult = await extractWithLlm(client, content, model);
-    // Assemble complete artifact
+    const llmResult = await extractWithLlm(client, content, model, profile);
+    // Assemble complete artifact (always Anthropic when using provided client)
     return assembleArtifact(llmResult.extracted, metadata, {
         confidence: llmResult.confidence,
         model: llmResult.model,
+        profile: llmResult.profile,
+        provider: 'anthropic',
         notes: llmResult.notes,
         hasText: !!content.text,
         hasImage: !!content.image,
@@ -51,14 +58,14 @@ export async function extractFromContentWithClient(client, options) {
 export function assembleArtifact(extracted, metadata, context) {
     const sourceType = detectSourceType(context.hasText, context.hasImage);
     return {
-        meta: createMeta(metadata, sourceType),
+        meta: createMeta(metadata, sourceType, context.profile),
         core: extracted.core,
         constellation: extracted.constellation,
         milky_way: extracted.milky_way,
         gravity: extracted.gravity,
         impulse: extracted.impulse,
         governance: createGovernance(metadata),
-        telemetry: createTelemetry(context.confidence, context.model, context.notes),
+        telemetry: createTelemetry(context.confidence, context.model, context.notes, context.provider),
         system: createSystem(),
         crosswalks: createCrosswalks(extracted),
     };
@@ -168,6 +175,7 @@ export function createEmptyArtifact() {
         telemetry: {
             entry_confidence: 0,
             extraction_model: null,
+            extraction_provider: null,
             extraction_notes: null,
             alignment_delta: null,
         },

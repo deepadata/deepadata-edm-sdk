@@ -1,11 +1,15 @@
 /**
- * EDM Artifact Assembler
+ * EDM Artifact Assembler v0.6.0
  * Combines LLM-extracted fields with metadata to create complete artifacts
+ * Supports profile-aware extraction (core/extended/full)
  */
 import Anthropic from "@anthropic-ai/sdk";
-import type { EdmArtifact, ExtractionOptions, LlmExtractedFields } from "./schema/types.js";
+import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile } from "./schema/types.js";
 /**
  * Extract a complete EDM artifact from content
+ *
+ * @param options - Extraction options including profile
+ * @returns Complete EDM artifact
  */
 export declare function extractFromContent(options: ExtractionOptions): Promise<EdmArtifact>;
 /**
@@ -15,6 +19,8 @@ export declare function extractFromContentWithClient(client: Anthropic, options:
 interface AssemblyContext {
     confidence: number;
     model: string;
+    profile: EdmProfile;
+    provider?: 'anthropic' | 'openai' | 'kimi';
     notes: string | null;
     hasText: boolean;
     hasImage: boolean;

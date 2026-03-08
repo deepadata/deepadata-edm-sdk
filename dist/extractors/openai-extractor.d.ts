@@ -1,15 +1,15 @@
 /**
- * OpenAI Extractor for EDM v0.4.0
+ * OpenAI Extractor for EDM v0.6.0
  * Uses OpenAI GPT models to extract emotional data from content
- * Shares system prompt and validation with the Anthropic extractor
+ * Supports profile-aware extraction (core/extended/full)
  */
 import OpenAI from "openai";
-import type { ExtractionInput } from "../schema/types.js";
+import type { ExtractionInput, EdmProfile } from "../schema/types.js";
 import { type LlmExtractionResult } from "./llm-extractor.js";
 /**
  * Extract EDM fields from content using OpenAI
  */
-export declare function extractWithOpenAI(client: OpenAI, input: ExtractionInput, model?: string, temperature?: number): Promise<LlmExtractionResult>;
+export declare function extractWithOpenAI(client: OpenAI, input: ExtractionInput, model?: string, temperature?: number, profile?: EdmProfile): Promise<LlmExtractionResult>;
 /**
  * Create an OpenAI client
  */

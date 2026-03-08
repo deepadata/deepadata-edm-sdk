@@ -1,15 +1,17 @@
 /**
- * Domain Extractors for EDM v0.5.0
+ * Domain Extractors for EDM v0.6.0
  * Populates domains not handled by LLM extraction
+ * Supports profile-aware artifact assembly
  */
 import { randomUUID } from "crypto";
 // =============================================================================
 // META Domain
 // =============================================================================
-export function createMeta(metadata, sourceType) {
+export function createMeta(metadata, sourceType, profile = "full") {
     return {
         id: randomUUID(),
-        version: "0.5.0",
+        version: "0.6.0-alpha",
+        profile,
         created_at: new Date().toISOString(),
         updated_at: null,
         locale: metadata.locale ?? null,
@@ -92,10 +94,11 @@ function determinePolicyLabels(piiTier) {
 // =============================================================================
 // TELEMETRY Domain
 // =============================================================================
-export function createTelemetry(confidence, model, notes) {
+export function createTelemetry(confidence, model, notes, provider) {
     return {
         entry_confidence: confidence,
         extraction_model: model,
+        extraction_provider: provider ?? null,
         extraction_notes: notes,
         alignment_delta: null, // Populated by downstream systems
     };

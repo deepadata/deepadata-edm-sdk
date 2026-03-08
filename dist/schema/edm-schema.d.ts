@@ -6,6 +6,7 @@ import { z } from "zod";
 export declare const MetaSchema: z.ZodObject<{
     id: z.ZodNullable<z.ZodString>;
     version: z.ZodString;
+    profile: z.ZodOptional<z.ZodEnum<["core", "extended", "full"]>>;
     created_at: z.ZodString;
     updated_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     locale: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -28,6 +29,7 @@ export declare const MetaSchema: z.ZodObject<{
     pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
     source_type: "text" | "audio" | "image" | "video" | "mixed";
     consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
+    profile?: "core" | "extended" | "full" | undefined;
     updated_at?: string | null | undefined;
     locale?: string | null | undefined;
     parent_id?: string | null | undefined;
@@ -44,6 +46,7 @@ export declare const MetaSchema: z.ZodObject<{
     pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
     source_type: "text" | "audio" | "image" | "video" | "mixed";
     consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
+    profile?: "core" | "extended" | "full" | undefined;
     updated_at?: string | null | undefined;
     locale?: string | null | undefined;
     parent_id?: string | null | undefined;
@@ -362,6 +365,7 @@ export declare const GovernanceSchema: z.ZodObject<{
 export declare const TelemetrySchema: z.ZodObject<{
     entry_confidence: z.ZodNumber;
     extraction_model: z.ZodNullable<z.ZodString>;
+    extraction_provider: z.ZodOptional<z.ZodNullable<z.ZodEnum<["anthropic", "openai", "kimi"]>>>;
     extraction_notes: z.ZodNullable<z.ZodString>;
     alignment_delta: z.ZodNullable<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
@@ -369,11 +373,13 @@ export declare const TelemetrySchema: z.ZodObject<{
     extraction_model: string | null;
     extraction_notes: string | null;
     alignment_delta: number | null;
+    extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
 }, {
     entry_confidence: number;
     extraction_model: string | null;
     extraction_notes: string | null;
     alignment_delta: number | null;
+    extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
 }>;
 export declare const EmbeddingRefSchema: z.ZodObject<{
     provider: z.ZodString;
@@ -573,6 +579,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     meta: z.ZodObject<{
         id: z.ZodNullable<z.ZodString>;
         version: z.ZodString;
+        profile: z.ZodOptional<z.ZodEnum<["core", "extended", "full"]>>;
         created_at: z.ZodString;
         updated_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         locale: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -595,6 +602,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
         source_type: "text" | "audio" | "image" | "video" | "mixed";
         consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
+        profile?: "core" | "extended" | "full" | undefined;
         updated_at?: string | null | undefined;
         locale?: string | null | undefined;
         parent_id?: string | null | undefined;
@@ -611,6 +619,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
         source_type: "text" | "audio" | "image" | "video" | "mixed";
         consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
+        profile?: "core" | "extended" | "full" | undefined;
         updated_at?: string | null | undefined;
         locale?: string | null | undefined;
         parent_id?: string | null | undefined;
@@ -893,6 +902,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     telemetry: z.ZodObject<{
         entry_confidence: z.ZodNumber;
         extraction_model: z.ZodNullable<z.ZodString>;
+        extraction_provider: z.ZodOptional<z.ZodNullable<z.ZodEnum<["anthropic", "openai", "kimi"]>>>;
         extraction_notes: z.ZodNullable<z.ZodString>;
         alignment_delta: z.ZodNullable<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
@@ -900,11 +910,13 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         extraction_model: string | null;
         extraction_notes: string | null;
         alignment_delta: number | null;
+        extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
     }, {
         entry_confidence: number;
         extraction_model: string | null;
         extraction_notes: string | null;
         alignment_delta: number | null;
+        extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
     }>;
     system: z.ZodObject<{
         embeddings: z.ZodArray<z.ZodObject<{
@@ -1023,6 +1035,15 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         ISO_27557_labels: string | null;
     }>;
 }, "strip", z.ZodTypeAny, {
+    core: {
+        anchor: string | null;
+        spark: string | null;
+        wound: string | null;
+        fuel: string | null;
+        bridge: string | null;
+        echo: string | null;
+        narrative: string | null;
+    };
     meta: {
         id: string | null;
         version: string;
@@ -1032,6 +1053,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
         source_type: "text" | "audio" | "image" | "video" | "mixed";
         consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
+        profile?: "core" | "extended" | "full" | undefined;
         updated_at?: string | null | undefined;
         locale?: string | null | undefined;
         parent_id?: string | null | undefined;
@@ -1039,15 +1061,6 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         consent_scope?: string | null | undefined;
         consent_revoked_at?: string | null | undefined;
         tags?: string[] | undefined;
-    };
-    core: {
-        anchor: string | null;
-        spark: string | null;
-        wound: string | null;
-        fuel: string | null;
-        bridge: string | null;
-        echo: string | null;
-        narrative: string | null;
     };
     constellation: {
         emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
@@ -1132,6 +1145,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         extraction_model: string | null;
         extraction_notes: string | null;
         alignment_delta: number | null;
+        extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
     };
     system: {
         embeddings: {
@@ -1160,6 +1174,15 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         ISO_27557_labels: string | null;
     };
 }, {
+    core: {
+        anchor: string | null;
+        spark: string | null;
+        wound: string | null;
+        fuel: string | null;
+        bridge: string | null;
+        echo: string | null;
+        narrative: string | null;
+    };
     meta: {
         id: string | null;
         version: string;
@@ -1169,6 +1192,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         pii_tier: "none" | "low" | "moderate" | "high" | "extreme";
         source_type: "text" | "audio" | "image" | "video" | "mixed";
         consent_basis: "none" | "consent" | "contract" | "legitimate_interest";
+        profile?: "core" | "extended" | "full" | undefined;
         updated_at?: string | null | undefined;
         locale?: string | null | undefined;
         parent_id?: string | null | undefined;
@@ -1176,15 +1200,6 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         consent_scope?: string | null | undefined;
         consent_revoked_at?: string | null | undefined;
         tags?: string[] | undefined;
-    };
-    core: {
-        anchor: string | null;
-        spark: string | null;
-        wound: string | null;
-        fuel: string | null;
-        bridge: string | null;
-        echo: string | null;
-        narrative: string | null;
     };
     constellation: {
         emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
@@ -1269,6 +1284,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         extraction_model: string | null;
         extraction_notes: string | null;
         alignment_delta: number | null;
+        extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
     };
     system: {
         embeddings: {

@@ -1,11 +1,12 @@
 /**
- * Kimi K2 Extractor for EDM v0.4.0
+ * Kimi K2 Extractor for EDM v0.6.0
  * Uses MoonshotAI's Kimi K2 model via OpenAI-compatible API
- * Shares system prompt and validation with other extractors
+ * Supports profile-aware extraction (core/extended/full)
  */
 import OpenAI from "openai";
 import { LlmExtractedFieldsSchema } from "../schema/edm-schema.js";
-import { EXTRACTION_SYSTEM_PROMPT, calculateConfidence, } from "./llm-extractor.js";
+import { EXTRACTION_SYSTEM_PROMPT, } from "./llm-extractor.js";
+import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 /**
  * Default Kimi K2 model identifier
  * MoonshotAI exposes this via their OpenAI-compatible endpoint
@@ -23,7 +24,7 @@ const OPENROUTER_KIMI_MODEL = "moonshotai/kimi-k2";
 /**
  * Extract EDM fields from content using Kimi K2
  */
-export async function extractWithKimi(client, input, model = DEFAULT_KIMI_MODEL) {
+export async function extractWithKimi(client, input, model = DEFAULT_KIMI_MODEL, profile = "full") {
     const userContent = [];
     // Add text content
     if (input.text) {
@@ -42,13 +43,16 @@ export async function extractWithKimi(client, input, model = DEFAULT_KIMI_MODEL)
             },
         });
     }
+    // Select profile-specific prompt or use full extraction prompt
+    const profilePrompt = getProfilePrompt(profile);
+    const systemPrompt = profilePrompt || EXTRACTION_SYSTEM_PROMPT;
     const response = await client.chat.completions.create({
         model,
         max_tokens: 4096,
         messages: [
             {
                 role: "system",
-                content: EXTRACTION_SYSTEM_PROMPT,
+                content: systemPrompt,
             },
             {
                 role: "user",
@@ -82,12 +86,13 @@ export async function extractWithKimi(client, input, model = DEFAULT_KIMI_MODEL)
             .join("; ");
         throw new Error(`Kimi response failed schema validation: ${errorDetails}`);
     }
-    // Calculate confidence based on field population
-    const confidence = calculateConfidence(result.data);
+    // Calculate profile-aware confidence
+    const confidence = calculateProfileConfidence(result.data, profile);
     return {
         extracted: result.data,
         confidence,
         model,
+        profile,
         notes: null,
     };
 }

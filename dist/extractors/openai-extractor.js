@@ -1,15 +1,16 @@
 /**
- * OpenAI Extractor for EDM v0.4.0
+ * OpenAI Extractor for EDM v0.6.0
  * Uses OpenAI GPT models to extract emotional data from content
- * Shares system prompt and validation with the Anthropic extractor
+ * Supports profile-aware extraction (core/extended/full)
  */
 import OpenAI from "openai";
 import { LlmExtractedFieldsSchema } from "../schema/edm-schema.js";
-import { EXTRACTION_SYSTEM_PROMPT, calculateConfidence, } from "./llm-extractor.js";
+import { EXTRACTION_SYSTEM_PROMPT, } from "./llm-extractor.js";
+import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 /**
  * Extract EDM fields from content using OpenAI
  */
-export async function extractWithOpenAI(client, input, model = "gpt-4o-mini", temperature = 0) {
+export async function extractWithOpenAI(client, input, model = "gpt-4o-mini", temperature = 0, profile = "full") {
     const userContent = [];
     // Add text content
     if (input.text) {
@@ -28,6 +29,9 @@ export async function extractWithOpenAI(client, input, model = "gpt-4o-mini", te
             },
         });
     }
+    // Select profile-specific prompt or use full extraction prompt
+    const profilePrompt = getProfilePrompt(profile);
+    const systemPrompt = profilePrompt || EXTRACTION_SYSTEM_PROMPT;
     const response = await client.chat.completions.create({
         model,
         max_tokens: 4096,
@@ -36,7 +40,7 @@ export async function extractWithOpenAI(client, input, model = "gpt-4o-mini", te
         messages: [
             {
                 role: "system",
-                content: EXTRACTION_SYSTEM_PROMPT,
+                content: systemPrompt,
             },
             {
                 role: "user",
@@ -70,12 +74,13 @@ export async function extractWithOpenAI(client, input, model = "gpt-4o-mini", te
             .join("; ");
         throw new Error(`OpenAI response failed schema validation: ${errorDetails}`);
     }
-    // Calculate confidence based on field population
-    const confidence = calculateConfidence(result.data);
+    // Calculate profile-aware confidence
+    const confidence = calculateProfileConfidence(result.data, profile);
     return {
         extracted: result.data,
         confidence,
         model,
+        profile,
         notes: null,
     };
 }

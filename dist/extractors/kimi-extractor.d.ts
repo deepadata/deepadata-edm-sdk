@@ -1,15 +1,15 @@
 /**
- * Kimi K2 Extractor for EDM v0.4.0
+ * Kimi K2 Extractor for EDM v0.6.0
  * Uses MoonshotAI's Kimi K2 model via OpenAI-compatible API
- * Shares system prompt and validation with other extractors
+ * Supports profile-aware extraction (core/extended/full)
  */
 import OpenAI from "openai";
-import type { ExtractionInput } from "../schema/types.js";
+import type { ExtractionInput, EdmProfile } from "../schema/types.js";
 import { type LlmExtractionResult } from "./llm-extractor.js";
 /**
  * Extract EDM fields from content using Kimi K2
  */
-export declare function extractWithKimi(client: OpenAI, input: ExtractionInput, model?: string): Promise<LlmExtractionResult>;
+export declare function extractWithKimi(client: OpenAI, input: ExtractionInput, model?: string, profile?: EdmProfile): Promise<LlmExtractionResult>;
 /**
  * Create a Kimi client using MoonshotAI's direct API
  * Falls back to OpenRouter if direct API key is not available

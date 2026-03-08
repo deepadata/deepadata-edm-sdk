@@ -5,9 +5,6 @@
  * Extended Profile: ~45 fields for journaling apps
  * Full Profile: all 96 fields for therapy/clinical tools
  */
-
-import type { EdmProfile } from "../schema/types.js";
-
 /**
  * Core Profile System Prompt (~20 fields)
  * Target: memory platforms, agent frameworks, AI assistants
@@ -98,7 +95,6 @@ CORE PROFILE SCHEMA (extract these fields ONLY):
   }
 }
 `;
-
 /**
  * Extended Profile System Prompt (~45 fields)
  * Target: journaling apps, companion AI, workplace wellness
@@ -189,104 +185,99 @@ EXTENDED PROFILE SCHEMA:
   }
 }
 `;
-
 /**
  * Get the appropriate system prompt for a profile
  */
-export function getProfilePrompt(profile: EdmProfile): string {
-  switch (profile) {
-    case "core":
-      return CORE_PROFILE_PROMPT;
-    case "extended":
-      return EXTENDED_PROFILE_PROMPT;
-    case "full":
-    default:
-      // Full profile uses the existing comprehensive prompt
-      return null as unknown as string; // Signal to use default
-  }
+export function getProfilePrompt(profile) {
+    switch (profile) {
+        case "core":
+            return CORE_PROFILE_PROMPT;
+        case "extended":
+            return EXTENDED_PROFILE_PROMPT;
+        case "full":
+        default:
+            // Full profile uses the existing comprehensive prompt
+            return null; // Signal to use default
+    }
 }
-
 /**
  * Required fields for each profile (used for confidence scoring)
  */
-export const PROFILE_REQUIRED_FIELDS: Record<EdmProfile, string[]> = {
-  core: [
-    "core.anchor",
-    "core.spark",
-    "core.narrative",
-    "constellation.emotion_primary",
-    "constellation.emotion_subtone",
-    "constellation.narrative_arc",
-  ],
-  extended: [
-    "core.anchor",
-    "core.spark",
-    "core.narrative",
-    "constellation.emotion_primary",
-    "constellation.emotion_subtone",
-    "constellation.narrative_arc",
-    "constellation.relational_dynamics",
-    "constellation.temporal_context",
-    "constellation.memory_type",
-    "milky_way.event_type",
-    "gravity.emotional_weight",
-    "gravity.valence",
-    "gravity.tether_type",
-    "gravity.recurrence_pattern",
-    "gravity.strength_score",
-  ],
-  full: [
-    "core.anchor",
-    "core.spark",
-    "core.narrative",
-    "constellation.emotion_primary",
-    "constellation.emotion_subtone",
-    "constellation.narrative_arc",
-    "constellation.relational_dynamics",
-    "constellation.temporal_context",
-    "constellation.memory_type",
-    "constellation.narrative_archetype",
-    "milky_way.event_type",
-    "milky_way.associated_people",
-    "gravity.emotional_weight",
-    "gravity.valence",
-    "gravity.tether_type",
-    "gravity.recall_triggers",
-    "gravity.retrieval_keys",
-    "gravity.recurrence_pattern",
-    "gravity.strength_score",
-    "impulse.drive_state",
-    "impulse.motivational_orientation",
-  ],
+export const PROFILE_REQUIRED_FIELDS = {
+    core: [
+        "core.anchor",
+        "core.spark",
+        "core.narrative",
+        "constellation.emotion_primary",
+        "constellation.emotion_subtone",
+        "constellation.narrative_arc",
+    ],
+    extended: [
+        "core.anchor",
+        "core.spark",
+        "core.narrative",
+        "constellation.emotion_primary",
+        "constellation.emotion_subtone",
+        "constellation.narrative_arc",
+        "constellation.relational_dynamics",
+        "constellation.temporal_context",
+        "constellation.memory_type",
+        "milky_way.event_type",
+        "gravity.emotional_weight",
+        "gravity.valence",
+        "gravity.tether_type",
+        "gravity.recurrence_pattern",
+        "gravity.strength_score",
+    ],
+    full: [
+        "core.anchor",
+        "core.spark",
+        "core.narrative",
+        "constellation.emotion_primary",
+        "constellation.emotion_subtone",
+        "constellation.narrative_arc",
+        "constellation.relational_dynamics",
+        "constellation.temporal_context",
+        "constellation.memory_type",
+        "constellation.narrative_archetype",
+        "milky_way.event_type",
+        "milky_way.associated_people",
+        "gravity.emotional_weight",
+        "gravity.valence",
+        "gravity.tether_type",
+        "gravity.recall_triggers",
+        "gravity.retrieval_keys",
+        "gravity.recurrence_pattern",
+        "gravity.strength_score",
+        "impulse.drive_state",
+        "impulse.motivational_orientation",
+    ],
 };
-
 /**
  * Calculate profile-aware confidence score
  * Only scores required fields for the declared profile
  */
-export function calculateProfileConfidence(
-  extracted: Record<string, Record<string, unknown>>,
-  profile: EdmProfile
-): number {
-  const requiredFields = PROFILE_REQUIRED_FIELDS[profile];
-  let populated = 0;
-
-  for (const fieldPath of requiredFields) {
-    const parts = fieldPath.split(".");
-    const domain = parts[0];
-    const field = parts[1];
-    if (!domain || !field) continue;
-    const value = extracted[domain]?.[field];
-
-    // Check if field is populated
-    if (value !== null && value !== undefined && value !== "") {
-      if (Array.isArray(value)) {
-        if (value.length > 0) populated++;
-      } else {
-        populated++;
-      }
+export function calculateProfileConfidence(extracted, profile) {
+    const requiredFields = PROFILE_REQUIRED_FIELDS[profile];
+    let populated = 0;
+    for (const fieldPath of requiredFields) {
+        const parts = fieldPath.split(".");
+        const domain = parts[0];
+        const field = parts[1];
+        if (!domain || !field)
+            continue;
+        const value = extracted[domain]?.[field];
+        // Check if field is populated
+        if (value !== null && value !== undefined && value !== "") {
+            if (Array.isArray(value)) {
+                if (value.length > 0)
+                    populated++;
+            }
+            else {
+                populated++;
+            }
+        }
     }
-  }
-
-  return Math.round((populated / requiredFields.length) * 100) / 100;
+    return Math.round((populated / requiredFields.length) * 100) / 100;
 }
+//# sourceMappingURL=profile-prompts.js.map

@@ -1,10 +1,10 @@
 /**
- * LLM Extractor for EDM v0.4.0
+ * LLM Extractor for EDM v0.6.0
  * Uses Anthropic Claude to extract emotional data from content
- * Based on proven extraction logic from system-prompt-B.ts, reconciled with canonical schema
+ * Supports profile-aware extraction (core/extended/full)
  */
 import Anthropic from "@anthropic-ai/sdk";
-import type { LlmExtractedFields, ExtractionInput } from "../schema/types.js";
+import type { LlmExtractedFields, ExtractionInput, EdmProfile } from "../schema/types.js";
 /**
  * System prompt for EDM extraction - Updated for v0.4.0 canonical schema
  * Reconciled field names from system-prompt-B.ts:
@@ -20,12 +20,18 @@ export interface LlmExtractionResult {
     extracted: LlmExtractedFields;
     confidence: number;
     model: string;
+    profile: EdmProfile;
     notes: string | null;
 }
 /**
  * Extract EDM fields from content using Anthropic Claude
+ *
+ * @param client - Anthropic client
+ * @param input - Content to extract from
+ * @param model - Model to use (default: claude-sonnet-4-20250514)
+ * @param profile - EDM profile (default: 'full')
  */
-export declare function extractWithLlm(client: Anthropic, input: ExtractionInput, model?: string): Promise<LlmExtractionResult>;
+export declare function extractWithLlm(client: Anthropic, input: ExtractionInput, model?: string, profile?: EdmProfile): Promise<LlmExtractionResult>;
 /**
  * Calculate extraction confidence based on field population
  */
