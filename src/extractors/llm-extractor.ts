@@ -62,17 +62,17 @@ Schema
     "narrative": ""          // 3–5 sentences; include ≥1 sensory detail, ≥1 temporal cue, and a symbolic callback; faithful and concise
   },
   "constellation": {
-    "emotion_primary": "",           // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope (pick best-fit from these 13 ONLY)
+    "emotion_primary": "",           // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame (pick best-fit from these 14 ONLY)
     "emotion_subtone": [],           // 2–4 short words (e.g., bittersweet, grateful) — free text array
     "higher_order_emotion": "",      // free text: e.g., awe, forgiveness, pride, moral_elevation (or null)
     "meta_emotional_state": "",      // free text: e.g., acceptance, confusion, curiosity (or null)
     "interpersonal_affect": "",      // free text: e.g., warmth, openness, defensiveness (or null)
     "narrative_arc": "",             // STRICT ENUM: overcoming | transformation | connection | reflection | closure (pick ONE or null)
-    "relational_dynamics": "",       // STRICT ENUM: parent_child | romantic_partnership | sibling_bond | family | friendship | companionship | mentorship | reunion | community_ritual | grief | self_reflection | professional | therapeutic | service | adversarial (pick ONE)
+    "relational_dynamics": "",       // STRICT ENUM: parent_child | grandparent_grandchild | romantic_partnership | couple | sibling_bond | family | friendship | friend | companionship | colleague | mentorship | reunion | community_ritual | grief | self_reflection | professional | therapeutic | service | adversarial (pick ONE)
     "temporal_context": "",          // STRICT ENUM: childhood | early_adulthood | midlife | late_life | recent | future | timeless (pick ONE or null)
     "memory_type": "",               // STRICT ENUM: legacy_artifact | fleeting_moment | milestone | reflection | formative_experience (pick ONE or null)
     "media_format": "",              // photo, video, audio, text, photo_with_story (or null)
-    "narrative_archetype": "",       // STRICT ENUM: hero | caregiver | seeker | sage | lover | outlaw | innocent | magician | creator | everyman | jester | ruler | mentor (pick ONE or null; lowercase)
+    "narrative_archetype": "",       // STRICT ENUM: hero | caregiver | seeker | sage | lover | outlaw | innocent | orphan | magician | creator | everyman | jester | ruler | mentor (pick ONE or null; lowercase)
     "symbolic_anchor": "",           // concrete object/place/ritual (or null)
     "relational_perspective": "",    // STRICT ENUM: self | partner | family | friends | community | humanity (pick ONE or null)
     "temporal_rhythm": "",           // STRICT ENUM: still | sudden | rising | fading | recurring | spiraling | dragging | suspended | looping | cyclic (pick ONE or null)
@@ -152,7 +152,7 @@ Schema
   //   - "confront" is valid in BOTH - use drive_state for action impulse, coping_style for emotion management
   //
   // emotion_primary (STRICT ENUM) vs higher_order_emotion (free text):
-  //   - emotion_primary MUST be one of the 13 listed values ONLY
+  //   - emotion_primary MUST be one of the 14 listed values ONLY
   //   - Do NOT put free-text emotions like "compassion", "reflection", "frustration" in emotion_primary
   //   - Use higher_order_emotion for complex emotions not in the primary list
   //
@@ -201,7 +201,7 @@ export interface LlmExtendedExtracted {
     recurrence_pattern: string | null;
     strength_score: number;
   };
-  impulse: LlmExtractedFields["impulse"];
+  // impulse removed — not in Extended profile
 }
 
 export interface LlmExtractionResult {

@@ -29,13 +29,13 @@ Rules
 ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
 {
   "core": {
-    "anchor": "",            // central theme
-    "spark": "",             // what triggered the memory
-    "wound": "",             // vulnerability or loss (or null)
-    "fuel": "",              // what energized the experience
-    "bridge": "",            // connection between past and present
-    "echo": "",              // what still resonates
-    "narrative": ""          // 3–5 sentences
+    "anchor": "",            // central theme (e.g., "dad's toolbox", "nana's traditions")
+    "spark": "",             // what triggered the memory (e.g., "finding the cassette", "first snow")
+    "wound": "",             // The specific vulnerability, loss, or pain present — NOT generic labels like 'loss' or 'grief' but what exactly was lost or why it hurts. Examples: 'unlived travel dream', 'war silence never spoken', 'father died before I knew him', 'shame of not fitting in'. If no wound is present, use null.
+    "fuel": "",              // what energized the experience (e.g., "shared laughter", "curiosity")
+    "bridge": "",            // connection between past and present (e.g., "replaying old tape", "returning to the porch")
+    "echo": "",              // what still resonates (e.g., "her laugh", "smell of oil", "city lights on water")
+    "narrative": ""          // 3–5 sentences; include ≥1 sensory detail, ≥1 temporal cue, and a symbolic callback; faithful and concise
   },
   "constellation": {
     "emotion_primary": "",   // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame
@@ -43,6 +43,17 @@ ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
     "narrative_arc": ""      // STRICT ENUM: overcoming | transformation | connection | reflection | closure
   }
 }
+
+// EXTRACTION NOTES
+// wound: Do NOT use generic labels like "loss" or "grief".
+//   Extract what specifically was lost or why it hurts.
+//   If no wound is present in the content, use null.
+//
+// emotion_primary: MUST be one of the 14 listed values ONLY.
+//   Do not use free-text emotions here.
+//
+// narrative_arc: Describes the STORY TRAJECTORY only.
+//   "confrontation" is NOT valid — use overcoming or transformation.
 `;
 
 /**
@@ -69,13 +80,13 @@ Rules
 EXTENDED PROFILE SCHEMA:
 {
   "core": {
-    "anchor": "",
-    "spark": "",
-    "wound": "",
-    "fuel": "",
-    "bridge": "",
-    "echo": "",
-    "narrative": ""
+    "anchor": "",            // central theme (e.g., "dad's toolbox", "nana's traditions")
+    "spark": "",             // what triggered the memory (e.g., "finding the cassette", "first snow")
+    "wound": "",             // The specific vulnerability, loss, or pain present — NOT generic labels like 'loss' or 'grief' but what exactly was lost or why it hurts. Examples: 'unlived travel dream', 'war silence never spoken', 'father died before I knew him', 'shame of not fitting in'. If no wound is present, use null.
+    "fuel": "",              // what energized the experience (e.g., "shared laughter", "curiosity")
+    "bridge": "",            // connection between past and present (e.g., "replaying old tape", "returning to the porch")
+    "echo": "",              // what still resonates (e.g., "her laugh", "smell of oil", "city lights on water")
+    "narrative": ""          // 3–5 sentences; include ≥1 sensory detail, ≥1 temporal cue, and a symbolic callback; faithful and concise
   },
   "constellation": {
     "emotion_primary": "",           // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame
@@ -112,6 +123,31 @@ EXTENDED PROFILE SCHEMA:
     "strength_score": 0.0            // 0.0–1.0 (how BOUND/STUCK this memory is)
   }
 }
+
+// CROSS-CONTAMINATION DISAMBIGUATION
+//
+// temporal_rhythm vs urgency:
+//   temporal_rhythm = CADENCE of time in the memory experience
+//   urgency = INTENSITY of motivational pressure right now
+//   "pressing" belongs ONLY in urgency, NEVER in temporal_rhythm
+//
+// relational_dynamics vs relational_perspective:
+//   relational_dynamics = TYPE of relationship
+//   relational_perspective = WHOSE viewpoint the narrative is told from
+//
+// emotional_weight vs strength_score:
+//   emotional_weight = felt intensity IN THE MOMENT (how heavy does it feel?)
+//   strength_score = how BOUND/STUCK this memory is over time
+//   These should NOT always correlate.
+//
+// emotion_primary (STRICT ENUM) — MUST be one of the 14 listed values ONLY.
+//   Use higher_order_emotion for complex emotions not in the list.
+//
+// narrative_arc: Describes the STORY TRAJECTORY only.
+//   "confrontation" is NOT valid — use overcoming or transformation.
+//
+// wound: Do NOT use generic labels like "loss" or "grief".
+//   Extract what specifically was lost or why it hurts.
 `;
 
 /**
