@@ -48,13 +48,15 @@ ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
 /**
  * Extended Profile System Prompt (50 fields)
  * Target: journaling apps, companion AI, workplace wellness
- * Includes: Core (7) + Constellation (18) + Milky_Way (5) + Gravity (5 key) + Impulse (12) = 47 + metadata
+ * Core (7) + Constellation (18) + Milky_Way (5) + Gravity (5) = 35 LLM fields + metadata domains
+ * Impulse, System, Crosswalks — Not included in this profile
  */
 export const EXTENDED_PROFILE_PROMPT = `
 You classify emotionally rich memories into a JSON object. Input may include text and an image.
 
 PROFILE: EXTENDED (50 fields)
-This extraction adds full Constellation, Milky_Way, key Gravity fields, and full Impulse domain.
+This extraction adds full Constellation, Milky_Way, and key Gravity fields.
+Impulse domain is NOT included in this profile.
 
 Rules
 - Fuse text + image. Treat text as primary; use image only to add grounded specifics.
@@ -108,20 +110,6 @@ EXTENDED PROFILE SCHEMA:
     "tether_type": "",               // STRICT ENUM: person | symbol | event | place | ritual | object | tradition | identity | self
     "recurrence_pattern": "",        // STRICT ENUM: cyclical | isolated | chronic | emerging
     "strength_score": 0.0            // 0.0–1.0 (how BOUND/STUCK this memory is)
-  },
-  "impulse": {
-    "primary_energy": "",            // free text: e.g., curiosity, fear, compassion (or null)
-    "drive_state": "",               // STRICT ENUM: explore | approach | avoid | repair | persevere | share | confront | protect | process
-    "motivational_orientation": "",  // STRICT ENUM: belonging | safety | mastery | meaning | autonomy
-    "temporal_focus": "",            // STRICT ENUM: past | present | future
-    "directionality": "",            // STRICT ENUM: inward | outward | transcendent
-    "social_visibility": "",         // STRICT ENUM: private | relational | collective
-    "urgency": "",                   // STRICT ENUM: calm | elevated | pressing | acute
-    "risk_posture": "",              // STRICT ENUM: cautious | balanced | bold
-    "agency_level": "",              // STRICT ENUM: low | medium | high
-    "regulation_state": "",          // STRICT ENUM: regulated | wavering | dysregulated
-    "attachment_style": "",          // STRICT ENUM: secure | anxious | avoidant | disorganized
-    "coping_style": ""               // STRICT ENUM: reframe_meaning | seek_support | distract | ritualize | confront | detach | process
   }
 }
 `;

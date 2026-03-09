@@ -392,14 +392,14 @@ export const LlmEssentialFieldsSchema = z.object({
 
 /**
  * Extended Profile LLM Extraction Schema
- * Core (7) + Constellation (18) + Milky_Way (5) + Gravity (5) + Impulse (12) = 47 LLM-extracted fields
+ * Core (7) + Constellation (18) + Milky_Way (5) + Gravity (5) = 35 LLM-extracted fields
+ * Impulse domain is NOT included in Extended profile
  */
 export const LlmExtendedFieldsSchema = z.object({
   core: CoreSchema,
   constellation: ConstellationSchema,
   milky_way: MilkyWaySchema,
   gravity: GravityExtendedSchema,
-  impulse: ImpulseSchema,
 });
 
 /**

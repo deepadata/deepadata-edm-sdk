@@ -1313,6 +1313,337 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         ISO_27557_labels: string | null;
     };
 }>;
+/**
+ * Essential Profile Constellation (3 fields only)
+ */
+export declare const ConstellationEssentialSchema: z.ZodObject<{
+    emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"]>>;
+    emotion_subtone: z.ZodArray<z.ZodString, "many">;
+    narrative_arc: z.ZodNullable<z.ZodEnum<["overcoming", "transformation", "connection", "reflection", "closure"]>>;
+}, "strip", z.ZodTypeAny, {
+    emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
+    emotion_subtone: string[];
+    narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
+}, {
+    emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
+    emotion_subtone: string[];
+    narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
+}>;
+/**
+ * Extended Profile Gravity (5 fields only)
+ */
+export declare const GravityExtendedSchema: z.ZodObject<{
+    emotional_weight: z.ZodNumber;
+    valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
+    tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>>;
+    recurrence_pattern: z.ZodNullable<z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>>;
+    strength_score: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    emotional_weight: number;
+    valence: "mixed" | "positive" | "negative" | null;
+    tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+    recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+    strength_score: number;
+}, {
+    emotional_weight: number;
+    valence: "mixed" | "positive" | "negative" | null;
+    tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+    recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+    strength_score: number;
+}>;
+/**
+ * Essential Profile LLM Extraction Schema
+ * Core (7 fields) + Constellation (3 fields) = 10 LLM-extracted fields
+ */
+export declare const LlmEssentialFieldsSchema: z.ZodObject<{
+    core: z.ZodObject<{
+        anchor: z.ZodNullable<z.ZodString>;
+        spark: z.ZodNullable<z.ZodString>;
+        wound: z.ZodNullable<z.ZodString>;
+        fuel: z.ZodNullable<z.ZodString>;
+        bridge: z.ZodNullable<z.ZodString>;
+        echo: z.ZodNullable<z.ZodString>;
+        narrative: z.ZodNullable<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        anchor: string | null;
+        spark: string | null;
+        wound: string | null;
+        fuel: string | null;
+        bridge: string | null;
+        echo: string | null;
+        narrative: string | null;
+    }, {
+        anchor: string | null;
+        spark: string | null;
+        wound: string | null;
+        fuel: string | null;
+        bridge: string | null;
+        echo: string | null;
+        narrative: string | null;
+    }>;
+    constellation: z.ZodObject<{
+        emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"]>>;
+        emotion_subtone: z.ZodArray<z.ZodString, "many">;
+        narrative_arc: z.ZodNullable<z.ZodEnum<["overcoming", "transformation", "connection", "reflection", "closure"]>>;
+    }, "strip", z.ZodTypeAny, {
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
+        emotion_subtone: string[];
+        narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
+    }, {
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
+        emotion_subtone: string[];
+        narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
+    }>;
+}, "strip", z.ZodTypeAny, {
+    core: {
+        anchor: string | null;
+        spark: string | null;
+        wound: string | null;
+        fuel: string | null;
+        bridge: string | null;
+        echo: string | null;
+        narrative: string | null;
+    };
+    constellation: {
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
+        emotion_subtone: string[];
+        narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
+    };
+}, {
+    core: {
+        anchor: string | null;
+        spark: string | null;
+        wound: string | null;
+        fuel: string | null;
+        bridge: string | null;
+        echo: string | null;
+        narrative: string | null;
+    };
+    constellation: {
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
+        emotion_subtone: string[];
+        narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
+    };
+}>;
+/**
+ * Extended Profile LLM Extraction Schema
+ * Core (7) + Constellation (18) + Milky_Way (5) + Gravity (5) = 35 LLM-extracted fields
+ * Impulse domain is NOT included in Extended profile
+ */
+export declare const LlmExtendedFieldsSchema: z.ZodObject<{
+    core: z.ZodObject<{
+        anchor: z.ZodNullable<z.ZodString>;
+        spark: z.ZodNullable<z.ZodString>;
+        wound: z.ZodNullable<z.ZodString>;
+        fuel: z.ZodNullable<z.ZodString>;
+        bridge: z.ZodNullable<z.ZodString>;
+        echo: z.ZodNullable<z.ZodString>;
+        narrative: z.ZodNullable<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        anchor: string | null;
+        spark: string | null;
+        wound: string | null;
+        fuel: string | null;
+        bridge: string | null;
+        echo: string | null;
+        narrative: string | null;
+    }, {
+        anchor: string | null;
+        spark: string | null;
+        wound: string | null;
+        fuel: string | null;
+        bridge: string | null;
+        echo: string | null;
+        narrative: string | null;
+    }>;
+    constellation: z.ZodObject<{
+        emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"]>>;
+        emotion_subtone: z.ZodArray<z.ZodString, "many">;
+        higher_order_emotion: z.ZodNullable<z.ZodString>;
+        meta_emotional_state: z.ZodNullable<z.ZodString>;
+        interpersonal_affect: z.ZodNullable<z.ZodString>;
+        narrative_arc: z.ZodNullable<z.ZodEnum<["overcoming", "transformation", "connection", "reflection", "closure"]>>;
+        relational_dynamics: z.ZodNullable<z.ZodEnum<["parent_child", "grandparent_grandchild", "romantic_partnership", "couple", "sibling_bond", "family", "friendship", "friend", "companionship", "colleague", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"]>>;
+        temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
+        memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
+        media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
+        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "orphan", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
+        symbolic_anchor: z.ZodNullable<z.ZodString>;
+        relational_perspective: z.ZodNullable<z.ZodEnum<["self", "partner", "family", "friends", "community", "humanity"]>>;
+        temporal_rhythm: z.ZodNullable<z.ZodEnum<["still", "sudden", "rising", "fading", "recurring", "spiraling", "dragging", "suspended", "looping", "cyclic"]>>;
+        identity_thread: z.ZodNullable<z.ZodString>;
+        expressed_insight: z.ZodNullable<z.ZodString>;
+        transformational_pivot: z.ZodBoolean;
+        somatic_signature: z.ZodNullable<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
+        emotion_subtone: string[];
+        higher_order_emotion: string | null;
+        meta_emotional_state: string | null;
+        interpersonal_affect: string | null;
+        narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
+        memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
+        media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        symbolic_anchor: string | null;
+        relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
+        temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
+        identity_thread: string | null;
+        expressed_insight: string | null;
+        transformational_pivot: boolean;
+        somatic_signature: string | null;
+    }, {
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
+        emotion_subtone: string[];
+        higher_order_emotion: string | null;
+        meta_emotional_state: string | null;
+        interpersonal_affect: string | null;
+        narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
+        memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
+        media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        symbolic_anchor: string | null;
+        relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
+        temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
+        identity_thread: string | null;
+        expressed_insight: string | null;
+        transformational_pivot: boolean;
+        somatic_signature: string | null;
+    }>;
+    milky_way: z.ZodObject<{
+        event_type: z.ZodNullable<z.ZodString>;
+        location_context: z.ZodNullable<z.ZodString>;
+        associated_people: z.ZodArray<z.ZodString, "many">;
+        visibility_context: z.ZodNullable<z.ZodEnum<["private", "family_only", "shared_publicly"]>>;
+        tone_shift: z.ZodNullable<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        event_type: string | null;
+        location_context: string | null;
+        associated_people: string[];
+        visibility_context: "private" | "family_only" | "shared_publicly" | null;
+        tone_shift: string | null;
+    }, {
+        event_type: string | null;
+        location_context: string | null;
+        associated_people: string[];
+        visibility_context: "private" | "family_only" | "shared_publicly" | null;
+        tone_shift: string | null;
+    }>;
+    gravity: z.ZodObject<{
+        emotional_weight: z.ZodNumber;
+        valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
+        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>>;
+        recurrence_pattern: z.ZodNullable<z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>>;
+        strength_score: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        emotional_weight: number;
+        valence: "mixed" | "positive" | "negative" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        strength_score: number;
+    }, {
+        emotional_weight: number;
+        valence: "mixed" | "positive" | "negative" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        strength_score: number;
+    }>;
+}, "strip", z.ZodTypeAny, {
+    core: {
+        anchor: string | null;
+        spark: string | null;
+        wound: string | null;
+        fuel: string | null;
+        bridge: string | null;
+        echo: string | null;
+        narrative: string | null;
+    };
+    constellation: {
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
+        emotion_subtone: string[];
+        higher_order_emotion: string | null;
+        meta_emotional_state: string | null;
+        interpersonal_affect: string | null;
+        narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
+        memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
+        media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        symbolic_anchor: string | null;
+        relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
+        temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
+        identity_thread: string | null;
+        expressed_insight: string | null;
+        transformational_pivot: boolean;
+        somatic_signature: string | null;
+    };
+    milky_way: {
+        event_type: string | null;
+        location_context: string | null;
+        associated_people: string[];
+        visibility_context: "private" | "family_only" | "shared_publicly" | null;
+        tone_shift: string | null;
+    };
+    gravity: {
+        emotional_weight: number;
+        valence: "mixed" | "positive" | "negative" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        strength_score: number;
+    };
+}, {
+    core: {
+        anchor: string | null;
+        spark: string | null;
+        wound: string | null;
+        fuel: string | null;
+        bridge: string | null;
+        echo: string | null;
+        narrative: string | null;
+    };
+    constellation: {
+        emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
+        emotion_subtone: string[];
+        higher_order_emotion: string | null;
+        meta_emotional_state: string | null;
+        interpersonal_affect: string | null;
+        narrative_arc: "overcoming" | "transformation" | "connection" | "reflection" | "closure" | null;
+        relational_dynamics: "parent_child" | "grandparent_grandchild" | "romantic_partnership" | "couple" | "sibling_bond" | "family" | "friendship" | "friend" | "companionship" | "colleague" | "mentorship" | "reunion" | "community_ritual" | "grief" | "self_reflection" | "professional" | "therapeutic" | "service" | "adversarial" | null;
+        temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
+        memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
+        media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        symbolic_anchor: string | null;
+        relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
+        temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
+        identity_thread: string | null;
+        expressed_insight: string | null;
+        transformational_pivot: boolean;
+        somatic_signature: string | null;
+    };
+    milky_way: {
+        event_type: string | null;
+        location_context: string | null;
+        associated_people: string[];
+        visibility_context: "private" | "family_only" | "shared_publicly" | null;
+        tone_shift: string | null;
+    };
+    gravity: {
+        emotional_weight: number;
+        valence: "mixed" | "positive" | "negative" | null;
+        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        strength_score: number;
+    };
+}>;
+/**
+ * Full Profile LLM Extraction Schema (all LLM-extracted domains)
+ */
 export declare const LlmExtractedFieldsSchema: z.ZodObject<{
     core: z.ZodObject<{
         anchor: z.ZodNullable<z.ZodString>;

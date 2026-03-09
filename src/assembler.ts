@@ -29,13 +29,18 @@ export const ESSENTIAL_PROFILE_FIELDS = {
   meta: ["id", "version", "profile", "created_at", "owner_user_id", "consent_basis", "visibility", "pii_tier"],
   core: ["anchor", "spark", "wound", "fuel", "bridge", "echo", "narrative"],
   constellation: ["emotion_primary", "emotion_subtone", "narrative_arc"],
-  governance: ["jurisdiction", "retention_policy", "subject_rights", "exportability"],
+  governance: ["jurisdiction", "retention_policy", "subject_rights"],
   telemetry: ["entry_confidence", "extraction_model"],
 } as const;
 
 /**
  * Extended Profile: 8 domains, ~50 fields
  * Target: journaling apps, companion AI, workplace wellness
+ */
+/**
+ * Extended Profile: 7 domains, 50 fields
+ * Target: journaling apps, companion AI, workplace wellness
+ * Impulse domain is NOT included in Extended profile
  */
 export const EXTENDED_PROFILE_FIELDS = {
   meta: ["id", "version", "profile", "created_at", "owner_user_id", "consent_basis", "visibility", "pii_tier"],
@@ -49,12 +54,7 @@ export const EXTENDED_PROFILE_FIELDS = {
   ],
   milky_way: ["event_type", "location_context", "associated_people", "visibility_context", "tone_shift"],
   gravity: ["emotional_weight", "valence", "tether_type", "recurrence_pattern", "strength_score"],
-  impulse: [
-    "primary_energy", "drive_state", "motivational_orientation", "temporal_focus",
-    "directionality", "social_visibility", "urgency", "risk_posture",
-    "agency_level", "regulation_state", "attachment_style", "coping_style"
-  ],
-  governance: ["jurisdiction", "retention_policy", "subject_rights", "exportability"],
+  governance: ["jurisdiction", "retention_policy", "subject_rights"],
   telemetry: ["entry_confidence", "extraction_model"],
 } as const;
 
