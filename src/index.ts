@@ -1,24 +1,26 @@
 /**
- * DeepAData EDM SDK v0.4.0
+ * DeepAData EDM SDK v0.6.0
  *
  * SDK for assembling EDM artifacts from user content using LLM-assisted extraction.
  * Follows interpretation constraints (extraction, not inference) for EU AI Act compliance.
+ * Enforces exact field-level profile filtering per EDM v0.6.0 spec.
  *
  * @example
  * ```typescript
  * import { extractFromContent, createStatelessArtifact, validateEDM } from 'deepadata-edm-sdk';
  *
- * // Extract with LLM
+ * // Extract with LLM - profile filtering is automatic
  * const artifact = await extractFromContent({
  *   content: { text: "User's narrative..." },
- *   metadata: { consentBasis: "consent" }
+ *   metadata: { consentBasis: "consent" },
+ *   profile: "essential"  // Returns only essential profile fields
  * });
  *
  * // For session use: create stateless version
  * const stateless = createStatelessArtifact(artifact);
  *
- * // Validate
- * const validation = validateEDM(artifact);
+ * // Validate profile conformance
+ * const validation = validateProfileConformance(artifact);
  * ```
  */
 
@@ -30,6 +32,13 @@ export {
   extractFromContentWithClient,
   assembleArtifact,
   createEmptyArtifact,
+  // Profile field definitions
+  ESSENTIAL_PROFILE_FIELDS,
+  EXTENDED_PROFILE_FIELDS,
+  FULL_PROFILE_FIELDS,
+  getProfileFields,
+  getProfileDomains,
+  filterByProfile,
 } from "./assembler.js";
 
 // =============================================================================
@@ -47,6 +56,8 @@ export {
 export {
   validateEDM,
   validateEDMStrict,
+  validateEDMWithProfile,
+  validateProfileConformance,
   validateDomain,
   validateCompleteness,
 } from "./validator.js";
@@ -155,4 +166,9 @@ export {
 export type { StatelessValidation } from "./stateless.js";
 
 // Validation types from validator
-export type { CompletenessResult, DomainName } from "./validator.js";
+export type {
+  CompletenessResult,
+  DomainName,
+  ProfileConformanceResult,
+  ProfileConformanceError,
+} from "./validator.js";
