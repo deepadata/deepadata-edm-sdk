@@ -48,13 +48,13 @@ ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
 /**
  * Extended Profile System Prompt (50 fields)
  * Target: journaling apps, companion AI, workplace wellness
+ * Includes: Core (7) + Constellation (18) + Milky_Way (5) + Gravity (5 key) + Impulse (12) = 47 + metadata
  */
 export const EXTENDED_PROFILE_PROMPT = `
 You classify emotionally rich memories into a JSON object. Input may include text and an image.
 
 PROFILE: EXTENDED (50 fields)
-This extraction adds full Constellation and key Gravity/Milky_Way fields.
-Impulse domain is not included in this profile.
+This extraction adds full Constellation, Milky_Way, key Gravity fields, and full Impulse domain.
 
 Rules
 - Fuse text + image. Treat text as primary; use image only to add grounded specifics.
@@ -85,7 +85,7 @@ EXTENDED PROFILE SCHEMA:
     "relational_dynamics": "",       // STRICT ENUM: parent_child | grandparent_grandchild | romantic_partnership | couple | sibling_bond | family | friendship | friend | companionship | colleague | mentorship | reunion | community_ritual | grief | self_reflection | professional | therapeutic | service | adversarial
     "temporal_context": "",          // STRICT ENUM: childhood | early_adulthood | midlife | late_life | recent | future | timeless
     "memory_type": "",               // STRICT ENUM: legacy_artifact | fleeting_moment | milestone | reflection | formative_experience
-    "media_format": "",
+    "media_format": "",              // STRICT ENUM: photo | video | audio | text | photo_with_story
     "narrative_archetype": "",       // STRICT ENUM: hero | caregiver | seeker | sage | lover | outlaw | innocent | orphan | magician | creator | everyman | jester | ruler | mentor
     "symbolic_anchor": "",
     "relational_perspective": "",    // STRICT ENUM: self | partner | family | friends | community | humanity
@@ -103,21 +103,25 @@ EXTENDED PROFILE SCHEMA:
     "tone_shift": ""
   },
   "gravity": {
-    "emotional_weight": 0.0,         // 0.0–1.0
-    "emotional_density": null,
+    "emotional_weight": 0.0,         // 0.0–1.0 (felt intensity IN THE MOMENT)
     "valence": "",                   // STRICT ENUM: positive | negative | mixed
-    "viscosity": null,
-    "gravity_type": null,
     "tether_type": "",               // STRICT ENUM: person | symbol | event | place | ritual | object | tradition | identity | self
-    "recall_triggers": [],
-    "retrieval_keys": [],
-    "nearby_themes": [],
-    "legacy_embed": false,
     "recurrence_pattern": "",        // STRICT ENUM: cyclical | isolated | chronic | emerging
-    "strength_score": 0.0,
-    "temporal_decay": null,
-    "resilience_markers": null,
-    "adaptation_trajectory": null
+    "strength_score": 0.0            // 0.0–1.0 (how BOUND/STUCK this memory is)
+  },
+  "impulse": {
+    "primary_energy": "",            // free text: e.g., curiosity, fear, compassion (or null)
+    "drive_state": "",               // STRICT ENUM: explore | approach | avoid | repair | persevere | share | confront | protect | process
+    "motivational_orientation": "",  // STRICT ENUM: belonging | safety | mastery | meaning | autonomy
+    "temporal_focus": "",            // STRICT ENUM: past | present | future
+    "directionality": "",            // STRICT ENUM: inward | outward | transcendent
+    "social_visibility": "",         // STRICT ENUM: private | relational | collective
+    "urgency": "",                   // STRICT ENUM: calm | elevated | pressing | acute
+    "risk_posture": "",              // STRICT ENUM: cautious | balanced | bold
+    "agency_level": "",              // STRICT ENUM: low | medium | high
+    "regulation_state": "",          // STRICT ENUM: regulated | wavering | dysregulated
+    "attachment_style": "",          // STRICT ENUM: secure | anxious | avoidant | disorganized
+    "coping_style": ""               // STRICT ENUM: reframe_meaning | seek_support | distract | ritualize | confront | detach | process
   }
 }
 `;

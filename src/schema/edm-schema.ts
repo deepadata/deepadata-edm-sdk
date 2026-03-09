@@ -350,8 +350,61 @@ export const EdmArtifactSchema = z.object({
 });
 
 // =============================================================================
-// LLM Extraction Schema (subset for LLM extraction)
+// LLM Extraction Schemas (profile-specific)
 // =============================================================================
+
+/**
+ * Essential Profile Constellation (3 fields only)
+ */
+export const ConstellationEssentialSchema = z.object({
+  emotion_primary: z
+    .enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"])
+    .nullable(),
+  emotion_subtone: z.array(z.string()).min(0).max(4),
+  narrative_arc: z
+    .enum(["overcoming", "transformation", "connection", "reflection", "closure"])
+    .nullable(),
+});
+
+/**
+ * Extended Profile Gravity (5 fields only)
+ */
+export const GravityExtendedSchema = z.object({
+  emotional_weight: z.number().min(0).max(1),
+  valence: z.enum(["positive", "negative", "mixed"]).nullable(),
+  tether_type: z
+    .enum(["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"])
+    .nullable(),
+  recurrence_pattern: z
+    .enum(["cyclical", "isolated", "chronic", "emerging"])
+    .nullable(),
+  strength_score: z.number().min(0).max(1),
+});
+
+/**
+ * Essential Profile LLM Extraction Schema
+ * Core (7 fields) + Constellation (3 fields) = 10 LLM-extracted fields
+ */
+export const LlmEssentialFieldsSchema = z.object({
+  core: CoreSchema,
+  constellation: ConstellationEssentialSchema,
+});
+
+/**
+ * Extended Profile LLM Extraction Schema
+ * Core (7) + Constellation (18) + Milky_Way (5) + Gravity (5) + Impulse (12) = 47 LLM-extracted fields
+ */
+export const LlmExtendedFieldsSchema = z.object({
+  core: CoreSchema,
+  constellation: ConstellationSchema,
+  milky_way: MilkyWaySchema,
+  gravity: GravityExtendedSchema,
+  impulse: ImpulseSchema,
+});
+
+/**
+ * Full Profile LLM Extraction Schema (all LLM-extracted domains)
+ */
 export const LlmExtractedFieldsSchema = z.object({
   core: CoreSchema,
   constellation: ConstellationSchema,

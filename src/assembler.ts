@@ -219,6 +219,11 @@ export function filterByProfile(
 // =============================================================================
 
 /**
+ * Profile-specific extracted fields (union type)
+ */
+type ProfileExtractedFields = Record<string, unknown>;
+
+/**
  * Extract a complete EDM artifact from content
  *
  * @param options - Extraction options including profile
@@ -239,19 +244,22 @@ export async function extractFromContent(options: ExtractionOptions): Promise<Re
     llmResult = await extractWithLlm(client, content, model, profile);
   }
 
-  // Assemble complete artifact then filter to profile
-  const fullArtifact = assembleArtifact(llmResult.extracted, metadata, {
-    confidence: llmResult.confidence,
-    model: llmResult.model,
-    profile: llmResult.profile,
-    provider,
-    notes: llmResult.notes,
-    hasText: !!content.text,
-    hasImage: !!content.image,
-  });
+  // Assemble profile-specific artifact
+  const artifact = assembleProfileArtifact(
+    llmResult.extracted as ProfileExtractedFields,
+    metadata,
+    {
+      confidence: llmResult.confidence,
+      model: llmResult.model,
+      profile: llmResult.profile,
+      provider,
+      notes: llmResult.notes,
+      hasText: !!content.text,
+      hasImage: !!content.image,
+    }
+  );
 
-  // Apply profile filtering to return only declared fields
-  return filterByProfile(fullArtifact as unknown as Record<string, unknown>, profile);
+  return artifact;
 }
 
 /**
@@ -266,19 +274,22 @@ export async function extractFromContentWithClient(
   // Extract with LLM
   const llmResult = await extractWithLlm(client, content, model, profile);
 
-  // Assemble complete artifact then filter to profile
-  const fullArtifact = assembleArtifact(llmResult.extracted, metadata, {
-    confidence: llmResult.confidence,
-    model: llmResult.model,
-    profile: llmResult.profile,
-    provider: 'anthropic',
-    notes: llmResult.notes,
-    hasText: !!content.text,
-    hasImage: !!content.image,
-  });
+  // Assemble profile-specific artifact
+  const artifact = assembleProfileArtifact(
+    llmResult.extracted as ProfileExtractedFields,
+    metadata,
+    {
+      confidence: llmResult.confidence,
+      model: llmResult.model,
+      profile: llmResult.profile,
+      provider: 'anthropic',
+      notes: llmResult.notes,
+      hasText: !!content.text,
+      hasImage: !!content.image,
+    }
+  );
 
-  // Apply profile filtering
-  return filterByProfile(fullArtifact as unknown as Record<string, unknown>, profile);
+  return artifact;
 }
 
 interface AssemblyContext {
@@ -292,8 +303,56 @@ interface AssemblyContext {
 }
 
 /**
+ * Assemble a profile-specific EDM artifact from extracted fields and metadata
+ * Returns only the domains defined for the declared profile
+ */
+export function assembleProfileArtifact(
+  extracted: ProfileExtractedFields,
+  metadata: ExtractionOptions["metadata"],
+  context: AssemblyContext
+): Record<string, unknown> {
+  const sourceType = detectSourceType(context.hasText, context.hasImage);
+  const profile = context.profile;
+  const profileFields = getProfileFields(profile);
+
+  // Create metadata domains
+  const meta = createMeta(metadata, sourceType, profile);
+  const governance = createGovernance(metadata);
+  const telemetry = createTelemetry(context.confidence, context.model, context.notes, context.provider);
+
+  // Build artifact with only profile-specific domains
+  const artifact: Record<string, unknown> = {
+    meta: filterObjectFields(meta, profileFields.meta ?? []),
+    core: extracted.core,
+    constellation: extracted.constellation,
+    governance: filterGovernanceFields(governance as Record<string, unknown>, profileFields.governance ?? []),
+    telemetry: filterObjectFields(telemetry, profileFields.telemetry ?? []),
+  };
+
+  // Add extended/full domains if present in extracted data
+  if (extracted.milky_way) {
+    artifact.milky_way = extracted.milky_way;
+  }
+  if (extracted.gravity) {
+    artifact.gravity = extracted.gravity;
+  }
+  if (extracted.impulse) {
+    artifact.impulse = extracted.impulse;
+  }
+
+  // Add full-only domains
+  if (profile === "full") {
+    artifact.system = createSystem();
+    artifact.crosswalks = createCrosswalks(extracted as unknown as LlmExtractedFields);
+  }
+
+  return artifact;
+}
+
+/**
  * Assemble a complete EDM artifact from extracted fields and metadata
  * Note: Returns full artifact structure; use filterByProfile to strip out-of-profile fields
+ * @deprecated Use assembleProfileArtifact for profile-aware assembly
  */
 export function assembleArtifact(
   extracted: LlmExtractedFields,

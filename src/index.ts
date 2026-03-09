@@ -72,7 +72,11 @@ export {
   calculateConfidence,
 } from "./extractors/llm-extractor.js";
 
-export type { LlmExtractionResult } from "./extractors/llm-extractor.js";
+export type {
+  LlmExtractionResult,
+  LlmEssentialExtracted,
+  LlmExtendedExtracted,
+} from "./extractors/llm-extractor.js";
 
 export { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 
@@ -110,6 +114,11 @@ export {
   // Composite Schemas
   EdmArtifactSchema,
   LlmExtractedFieldsSchema,
+  // Profile-specific LLM Extraction Schemas
+  LlmEssentialFieldsSchema,
+  LlmExtendedFieldsSchema,
+  ConstellationEssentialSchema,
+  GravityExtendedSchema,
   // Nested Schemas
   RetentionPolicySchema,
   SubjectRightsSchema,

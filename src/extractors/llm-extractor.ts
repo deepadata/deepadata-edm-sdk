@@ -1,11 +1,15 @@
 /**
  * LLM Extractor for EDM v0.6.0
  * Uses Anthropic Claude to extract emotional data from content
- * Supports profile-aware extraction (essential/extended/full)
+ * Supports profile-aware extraction with profile-specific schema validation
  */
 import Anthropic from "@anthropic-ai/sdk";
 import type { LlmExtractedFields, ExtractionInput, EdmProfile } from "../schema/types.js";
-import { LlmExtractedFieldsSchema } from "../schema/edm-schema.js";
+import {
+  LlmExtractedFieldsSchema,
+  LlmEssentialFieldsSchema,
+  LlmExtendedFieldsSchema,
+} from "../schema/edm-schema.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 
 /**
@@ -174,12 +178,53 @@ Schema
 }
 `;
 
+/**
+ * Profile-specific extracted fields types
+ */
+export interface LlmEssentialExtracted {
+  core: LlmExtractedFields["core"];
+  constellation: {
+    emotion_primary: string | null;
+    emotion_subtone: string[];
+    narrative_arc: string | null;
+  };
+}
+
+export interface LlmExtendedExtracted {
+  core: LlmExtractedFields["core"];
+  constellation: LlmExtractedFields["constellation"];
+  milky_way: LlmExtractedFields["milky_way"];
+  gravity: {
+    emotional_weight: number;
+    valence: string | null;
+    tether_type: string | null;
+    recurrence_pattern: string | null;
+    strength_score: number;
+  };
+  impulse: LlmExtractedFields["impulse"];
+}
+
 export interface LlmExtractionResult {
-  extracted: LlmExtractedFields;
+  extracted: LlmExtractedFields | LlmEssentialExtracted | LlmExtendedExtracted;
   confidence: number;
   model: string;
   profile: EdmProfile;
   notes: string | null;
+}
+
+/**
+ * Get the appropriate schema for profile-specific validation
+ */
+function getProfileSchema(profile: EdmProfile) {
+  switch (profile) {
+    case "essential":
+      return LlmEssentialFieldsSchema;
+    case "extended":
+      return LlmExtendedFieldsSchema;
+    case "full":
+    default:
+      return LlmExtractedFieldsSchema;
+  }
 }
 
 /**
@@ -253,8 +298,9 @@ export async function extractWithLlm(
     throw new Error(`Failed to parse LLM response as JSON: ${textBlock.text.slice(0, 200)}...`);
   }
 
-  // Validate against schema
-  const result = LlmExtractedFieldsSchema.safeParse(parsed);
+  // Validate against profile-specific schema
+  const schema = getProfileSchema(profile);
+  const result = schema.safeParse(parsed);
   if (!result.success) {
     const errorDetails = result.error.errors
       .map((e) => `${e.path.join(".")}: ${e.message}`)
@@ -269,7 +315,7 @@ export async function extractWithLlm(
   );
 
   return {
-    extracted: result.data,
+    extracted: result.data as LlmExtractedFields | LlmEssentialExtracted | LlmExtendedExtracted,
     confidence,
     model,
     profile,
