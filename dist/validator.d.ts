@@ -1,4 +1,5 @@
 import type { EdmArtifact, ValidationResult, EdmProfile } from "./schema/types.js";
+export type DomainName = "meta" | "core" | "constellation" | "milky_way" | "gravity" | "impulse" | "governance" | "telemetry" | "system" | "crosswalks";
 export interface ProfileConformanceResult {
     conformant: boolean;
     profile: EdmProfile;
@@ -21,9 +22,15 @@ export interface ProfileConformanceError {
  */
 export declare function validateProfileConformance(artifact: unknown): ProfileConformanceResult;
 /**
- * Validate an EDM artifact against the v0.6.0 schema
- * Note: This validates against full schema. Use validateProfileConformance
- * for profile-specific validation.
+ * Validate an EDM artifact against its declared profile schema
+ *
+ * Profile-aware validation (EDM v0.6.0):
+ * - Detects meta.profile value (defaults to "full" if not specified)
+ * - Essential/Extended profiles: validates domain/field conformance only
+ * - Full profile: validates against complete Zod schema
+ *
+ * This ensures Essential (5 domains) and Extended (7 domains) artifacts
+ * pass validation without requiring all 10 domains.
  */
 export declare function validateEDM(artifact: unknown): ValidationResult;
 /**
@@ -39,7 +46,6 @@ export declare function validateEDMStrict(artifact: unknown): EdmArtifact;
 /**
  * Validate specific domain
  */
-export type DomainName = "meta" | "core" | "constellation" | "milky_way" | "gravity" | "impulse" | "governance" | "telemetry" | "system" | "crosswalks";
 export declare function validateDomain(domain: DomainName, data: unknown): ValidationResult;
 /**
  * Validate artifact completeness (non-null required fields)

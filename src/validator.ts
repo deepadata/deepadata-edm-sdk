@@ -4,7 +4,19 @@
  * Enforces exact profile field sets per EDM v0.6.0 spec
  */
 import { ZodError } from "zod";
-import { EdmArtifactSchema } from "./schema/edm-schema.js";
+import {
+  EdmArtifactSchema,
+  MetaSchema,
+  CoreSchema,
+  ConstellationSchema,
+  MilkyWaySchema,
+  GravitySchema,
+  ImpulseSchema,
+  GovernanceSchema,
+  TelemetrySchema,
+  SystemSchema,
+  CrosswalksSchema,
+} from "./schema/edm-schema.js";
 import type { EdmArtifact, ValidationResult, ValidationError, EdmProfile } from "./schema/types.js";
 import {
   getProfileFields,
@@ -13,6 +25,35 @@ import {
   EXTENDED_PROFILE_FIELDS,
   FULL_PROFILE_FIELDS,
 } from "./assembler.js";
+
+// =============================================================================
+// Domain Schema Registry
+// =============================================================================
+
+export type DomainName =
+  | "meta"
+  | "core"
+  | "constellation"
+  | "milky_way"
+  | "gravity"
+  | "impulse"
+  | "governance"
+  | "telemetry"
+  | "system"
+  | "crosswalks";
+
+const domainSchemas = {
+  meta: MetaSchema,
+  core: CoreSchema,
+  constellation: ConstellationSchema,
+  milky_way: MilkyWaySchema,
+  gravity: GravitySchema,
+  impulse: ImpulseSchema,
+  governance: GovernanceSchema,
+  telemetry: TelemetrySchema,
+  system: SystemSchema,
+  crosswalks: CrosswalksSchema,
+} as const;
 
 // =============================================================================
 // Profile Conformance Validation
@@ -220,11 +261,45 @@ function validateGovernanceNested(
 // =============================================================================
 
 /**
- * Validate an EDM artifact against the v0.6.0 schema
- * Note: This validates against full schema. Use validateProfileConformance
- * for profile-specific validation.
+ * Validate an EDM artifact against its declared profile schema
+ *
+ * Profile-aware validation (EDM v0.6.0):
+ * - Detects meta.profile value (defaults to "full" if not specified)
+ * - Essential/Extended profiles: validates domain/field conformance only
+ * - Full profile: validates against complete Zod schema
+ *
+ * This ensures Essential (5 domains) and Extended (7 domains) artifacts
+ * pass validation without requiring all 10 domains.
  */
 export function validateEDM(artifact: unknown): ValidationResult {
+  // Detect profile from artifact
+  const profile = detectProfile(artifact);
+
+  // For Essential and Extended profiles, use profile conformance validation
+  // (Zod schema expects all 10 domains which would fail for lighter profiles)
+  if (profile === "essential" || profile === "extended") {
+    const profileResult = validateProfileConformance(artifact);
+
+    if (profileResult.conformant) {
+      // Also validate the domains that ARE present using Zod
+      const domainErrors = validatePresentDomains(artifact, profile);
+      if (domainErrors.length > 0) {
+        return { valid: false, errors: domainErrors };
+      }
+      return { valid: true, errors: [] };
+    }
+
+    return {
+      valid: false,
+      errors: profileResult.errors.map(e => ({
+        path: e.field ? `${e.domain}.${e.field}` : e.domain,
+        message: e.message,
+        code: e.type,
+      })),
+    };
+  }
+
+  // Full profile: use complete Zod schema validation
   const result = EdmArtifactSchema.safeParse(artifact);
 
   if (result.success) {
@@ -238,6 +313,51 @@ export function validateEDM(artifact: unknown): ValidationResult {
     valid: false,
     errors: formatZodErrors(result.error),
   };
+}
+
+/**
+ * Detect profile from artifact's meta.profile field
+ */
+function detectProfile(artifact: unknown): EdmProfile {
+  if (!artifact || typeof artifact !== "object") {
+    return "full";
+  }
+  const obj = artifact as Record<string, unknown>;
+  const meta = obj.meta as Record<string, unknown> | undefined;
+  const profile = meta?.profile as string | undefined;
+
+  if (profile === "essential" || profile === "extended" || profile === "full") {
+    return profile;
+  }
+  return "full"; // Default to full if not specified or invalid
+}
+
+/**
+ * Validate present domains using their individual Zod schemas
+ * Used for Essential/Extended profiles where not all domains are present
+ */
+function validatePresentDomains(artifact: unknown, profile: EdmProfile): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const obj = artifact as Record<string, unknown>;
+  const profileDomains = getProfileDomains(profile);
+
+  for (const domain of profileDomains) {
+    const domainData = obj[domain];
+    if (domainData !== undefined) {
+      const schema = domainSchemas[domain as DomainName];
+      if (schema) {
+        const result = schema.safeParse(domainData);
+        if (!result.success) {
+          errors.push(...formatZodErrors(result.error).map(err => ({
+            ...err,
+            path: `${domain}.${err.path}`,
+          })));
+        }
+      }
+    }
+  }
+
+  return errors;
 }
 
 /**
@@ -289,44 +409,6 @@ function formatZodErrors(error: ZodError): ValidationError[] {
 /**
  * Validate specific domain
  */
-export type DomainName =
-  | "meta"
-  | "core"
-  | "constellation"
-  | "milky_way"
-  | "gravity"
-  | "impulse"
-  | "governance"
-  | "telemetry"
-  | "system"
-  | "crosswalks";
-
-import {
-  MetaSchema,
-  CoreSchema,
-  ConstellationSchema,
-  MilkyWaySchema,
-  GravitySchema,
-  ImpulseSchema,
-  GovernanceSchema,
-  TelemetrySchema,
-  SystemSchema,
-  CrosswalksSchema,
-} from "./schema/edm-schema.js";
-
-const domainSchemas = {
-  meta: MetaSchema,
-  core: CoreSchema,
-  constellation: ConstellationSchema,
-  milky_way: MilkyWaySchema,
-  gravity: GravitySchema,
-  impulse: ImpulseSchema,
-  governance: GovernanceSchema,
-  telemetry: TelemetrySchema,
-  system: SystemSchema,
-  crosswalks: CrosswalksSchema,
-} as const;
-
 export function validateDomain(domain: DomainName, data: unknown): ValidationResult {
   const schema = domainSchemas[domain];
   const result = schema.safeParse(data);
