@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "version": "0.6.0",
+    "profile": "essential",
+    "created_at": "2026-03-10T10:00:00Z",
+    "updated_at": null,
+    "locale": "en-au",
+    "owner_user_id": null,
+    "parent_id": null,
+    "visibility": "private",
+    "pii_tier": "low",
+    "source_type": "text",
+    "source_context": "user_memory",
+    "consent_basis": "consent",
+    "consent_scope": "memory",
+    "consent_revoked_at": null,
+    "tags": ["example", "essential"]
+  },
+  "core": {
+    "anchor": "grandmother's kitchen",
+    "spark": "smell of baking bread",
+    "wound": "her passing last year",
+    "fuel": "warmth of family traditions",
+    "bridge": "baking her recipes now",
+    "echo": "feeling her presence when I cook"
+  },
+  "constellation": {
+    "emotion_primary": "tenderness",
+    "emotion_subtone": ["grateful", "longing"],
+    "narrative_arc": "connection",
+    "higher_order_emotion": null,
+    "meta_emotional_state": null,
+    "interpersonal_affect": null,
+    "relational_dynamics": "grandparent_grandchild",
+    "temporal_context": "childhood",
+    "memory_type": "legacy_artifact",
+    "media_format": null,
+    "narrative_archetype": null,
+    "symbolic_anchor": null,
+    "relational_perspective": null,
+    "temporal_rhythm": null,
+    "identity_thread": null,
+    "expressed_insight": null,
+    "transformational_pivot": false,
+    "somatic_signature": null
+  },
+  "governance": {
+    "jurisdiction": "GDPR",
+    "retention_policy": {
+      "basis": "user_defined",
+      "ttl_days": null,
+      "on_expiry": "soft_delete"
+    },
+    "subject_rights": {
+      "portable": true,
+      "erasable": true,
+      "explainable": false
+    },
+    "k_anonymity": {
+      "k": null,
+      "groups": []
+    },
+    "policy_labels": [],
+    "masking_rules": []
+  },
+  "telemetry": {
+    "entry_confidence": 0.88,
+    "extraction_model": "claude-sonnet-4-20250514",
+    "extraction_notes": "Essential profile - 24 fields across 5 domains",
+    "alignment_delta": null
+  }
+}

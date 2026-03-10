@@ -148,7 +148,7 @@ Validate stateless compliance with detailed violations.
 
 #### `validateEDM(artifact)`
 
-Validate against the complete EDM v0.4.0 schema.
+Validate against the complete EDM v0.6.0 schema.
 
 ```typescript
 const result = validateEDM(artifact);
@@ -182,7 +182,7 @@ Create an empty artifact structure for manual population.
 
 Create an Anthropic client (uses `ANTHROPIC_API_KEY` env var if not provided).
 
-## EDM v0.4.0 Domains
+## EDM v0.6.0 Domains
 
 The SDK supports all 10 EDM domains:
 
