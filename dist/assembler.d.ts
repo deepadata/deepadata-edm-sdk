@@ -6,12 +6,12 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile } from "./schema/types.js";
 /**
- * Essential Profile: 5 domains, ~25 fields
+ * Essential Profile: 5 domains, 24 fields
  * Target: memory platforms, agent frameworks, AI assistants
  */
 export declare const ESSENTIAL_PROFILE_FIELDS: {
     readonly meta: readonly ["id", "version", "profile", "created_at", "owner_user_id", "consent_basis", "visibility", "pii_tier"];
-    readonly core: readonly ["anchor", "spark", "wound", "fuel", "bridge", "echo", "narrative"];
+    readonly core: readonly ["anchor", "spark", "wound", "fuel", "bridge", "echo"];
     readonly constellation: readonly ["emotion_primary", "emotion_subtone", "narrative_arc"];
     readonly governance: readonly ["jurisdiction", "retention_policy", "subject_rights"];
     readonly telemetry: readonly ["entry_confidence", "extraction_model"];

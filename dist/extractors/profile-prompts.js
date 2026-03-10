@@ -1,24 +1,25 @@
 /**
  * Profile-specific extraction prompts for EDM v0.6.0
  *
- * Essential Profile: 25 required fields for memory platforms
+ * Essential Profile: 24 required fields for memory platforms
  * Extended Profile: 50 fields for journaling apps
  * Full Profile: all 96 fields for therapy/clinical tools
  */
 /**
- * Essential Profile System Prompt (25 fields)
+ * Essential Profile System Prompt (24 fields)
  * Target: memory platforms, agent frameworks, AI assistants
+ * Core (6 fields) + Constellation (3 fields) = 9 LLM fields
  */
 export const ESSENTIAL_PROFILE_PROMPT = `
 You classify emotionally rich memories into a JSON object. Input may include text and an image.
 
-PROFILE: ESSENTIAL (25 fields)
+PROFILE: ESSENTIAL (24 fields)
 This is a minimal extraction for memory platforms. Focus ONLY on the required fields.
 Domains not listed below are not included in this profile.
 
 Rules
 - Fuse text + image. Treat text as primary; use image only to add grounded specifics.
-- Keep fields to single words or short phrases (1–3 words). Only "narrative" is multi-sentence (3–5).
+- Keep fields to single words or short phrases (1–3 words).
 - No invention. If not supported by input, use null.
 - Output JSON only — no commentary, markdown, or extra text.
 - Emit lowercase for all string fields except proper names.
@@ -31,8 +32,7 @@ ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
     "wound": "",             // The specific vulnerability, loss, or pain present — NOT generic labels like 'loss' or 'grief' but what exactly was lost or why it hurts. Examples: 'unlived travel dream', 'war silence never spoken', 'father died before I knew him', 'shame of not fitting in'. If no wound is present, use null.
     "fuel": "",              // what energized the experience (e.g., "shared laughter", "curiosity")
     "bridge": "",            // connection between past and present (e.g., "replaying old tape", "returning to the porch")
-    "echo": "",              // what still resonates (e.g., "her laugh", "smell of oil", "city lights on water")
-    "narrative": ""          // 3–5 sentences; include ≥1 sensory detail, ≥1 temporal cue, and a symbolic callback; faithful and concise
+    "echo": ""               // what still resonates (e.g., "her laugh", "smell of oil", "city lights on water")
   },
   "constellation": {
     "emotion_primary": "",   // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame
@@ -167,7 +167,6 @@ export const PROFILE_REQUIRED_FIELDS = {
     essential: [
         "core.anchor",
         "core.spark",
-        "core.narrative",
         "constellation.emotion_primary",
         "constellation.emotion_subtone",
         "constellation.narrative_arc",

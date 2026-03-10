@@ -80,6 +80,32 @@ export declare const CoreSchema: z.ZodObject<{
     echo: string | null;
     narrative: string | null;
 }>;
+/**
+ * Essential Profile Core Schema (6 fields, no narrative)
+ * Narrative synthesis belongs at Extended and above
+ */
+export declare const CoreEssentialSchema: z.ZodObject<{
+    anchor: z.ZodNullable<z.ZodString>;
+    spark: z.ZodNullable<z.ZodString>;
+    wound: z.ZodNullable<z.ZodString>;
+    fuel: z.ZodNullable<z.ZodString>;
+    bridge: z.ZodNullable<z.ZodString>;
+    echo: z.ZodNullable<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    anchor: string | null;
+    spark: string | null;
+    wound: string | null;
+    fuel: string | null;
+    bridge: string | null;
+    echo: string | null;
+}, {
+    anchor: string | null;
+    spark: string | null;
+    wound: string | null;
+    fuel: string | null;
+    bridge: string | null;
+    echo: string | null;
+}>;
 export declare const ConstellationSchema: z.ZodObject<{
     emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"]>>;
     emotion_subtone: z.ZodArray<z.ZodString, "many">;
@@ -1353,7 +1379,7 @@ export declare const GravityExtendedSchema: z.ZodObject<{
 }>;
 /**
  * Essential Profile LLM Extraction Schema
- * Core (7 fields) + Constellation (3 fields) = 10 LLM-extracted fields
+ * Core (6 fields) + Constellation (3 fields) = 9 LLM-extracted fields
  */
 export declare const LlmEssentialFieldsSchema: z.ZodObject<{
     core: z.ZodObject<{
@@ -1363,7 +1389,6 @@ export declare const LlmEssentialFieldsSchema: z.ZodObject<{
         fuel: z.ZodNullable<z.ZodString>;
         bridge: z.ZodNullable<z.ZodString>;
         echo: z.ZodNullable<z.ZodString>;
-        narrative: z.ZodNullable<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         anchor: string | null;
         spark: string | null;
@@ -1371,7 +1396,6 @@ export declare const LlmEssentialFieldsSchema: z.ZodObject<{
         fuel: string | null;
         bridge: string | null;
         echo: string | null;
-        narrative: string | null;
     }, {
         anchor: string | null;
         spark: string | null;
@@ -1379,7 +1403,6 @@ export declare const LlmEssentialFieldsSchema: z.ZodObject<{
         fuel: string | null;
         bridge: string | null;
         echo: string | null;
-        narrative: string | null;
     }>;
     constellation: z.ZodObject<{
         emotion_primary: z.ZodNullable<z.ZodEnum<["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"]>>;
@@ -1402,7 +1425,6 @@ export declare const LlmEssentialFieldsSchema: z.ZodObject<{
         fuel: string | null;
         bridge: string | null;
         echo: string | null;
-        narrative: string | null;
     };
     constellation: {
         emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;
@@ -1417,7 +1439,6 @@ export declare const LlmEssentialFieldsSchema: z.ZodObject<{
         fuel: string | null;
         bridge: string | null;
         echo: string | null;
-        narrative: string | null;
     };
     constellation: {
         emotion_primary: "joy" | "sadness" | "fear" | "anger" | "wonder" | "peace" | "tenderness" | "reverence" | "pride" | "anxiety" | "gratitude" | "longing" | "hope" | "shame" | null;

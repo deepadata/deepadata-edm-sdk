@@ -22,12 +22,12 @@ import {
 // =============================================================================
 
 /**
- * Essential Profile: 5 domains, ~25 fields
+ * Essential Profile: 5 domains, 24 fields
  * Target: memory platforms, agent frameworks, AI assistants
  */
 export const ESSENTIAL_PROFILE_FIELDS = {
   meta: ["id", "version", "profile", "created_at", "owner_user_id", "consent_basis", "visibility", "pii_tier"],
-  core: ["anchor", "spark", "wound", "fuel", "bridge", "echo", "narrative"],
+  core: ["anchor", "spark", "wound", "fuel", "bridge", "echo"],
   constellation: ["emotion_primary", "emotion_subtone", "narrative_arc"],
   governance: ["jurisdiction", "retention_policy", "subject_rights"],
   telemetry: ["entry_confidence", "extraction_model"],

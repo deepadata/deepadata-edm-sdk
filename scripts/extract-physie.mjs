@@ -54,7 +54,23 @@ async function main() {
   // Ensure output directory exists
   await mkdir(OUTPUT_DIR, { recursive: true });
 
-  const profiles = ['essential', 'extended', 'full'];
+  // Parse --profile argument
+  const args = process.argv.slice(2);
+  const profileArgIndex = args.indexOf('--profile');
+  let selectedProfiles = ['essential', 'extended', 'full'];
+
+  if (profileArgIndex !== -1 && args[profileArgIndex + 1]) {
+    const requestedProfile = args[profileArgIndex + 1].toLowerCase();
+    if (['essential', 'extended', 'full'].includes(requestedProfile)) {
+      selectedProfiles = [requestedProfile];
+      console.log(`Running single profile: ${requestedProfile}`);
+    } else {
+      console.error(`Invalid profile: ${requestedProfile}. Must be essential, extended, or full.`);
+      process.exit(1);
+    }
+  }
+
+  const profiles = selectedProfiles;
   const results = {};
 
   for (const profile of profiles) {

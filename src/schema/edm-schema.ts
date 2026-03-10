@@ -60,6 +60,19 @@ export const CoreSchema = z.object({
   narrative: z.string().nullable().describe("3-5 sentence compressed account"),
 });
 
+/**
+ * Essential Profile Core Schema (6 fields, no narrative)
+ * Narrative synthesis belongs at Extended and above
+ */
+export const CoreEssentialSchema = z.object({
+  anchor: z.string().nullable().describe("Central person, object, or theme"),
+  spark: z.string().nullable().describe("What triggered the emotional response"),
+  wound: z.string().nullable().describe("Emotional pain or vulnerability"),
+  fuel: z.string().nullable().describe("What energized the experience"),
+  bridge: z.string().nullable().describe("Connection between past and present"),
+  echo: z.string().nullable().describe("What continues to resonate"),
+});
+
 // =============================================================================
 // CONSTELLATION Domain
 // =============================================================================
@@ -383,10 +396,10 @@ export const GravityExtendedSchema = z.object({
 
 /**
  * Essential Profile LLM Extraction Schema
- * Core (7 fields) + Constellation (3 fields) = 10 LLM-extracted fields
+ * Core (6 fields) + Constellation (3 fields) = 9 LLM-extracted fields
  */
 export const LlmEssentialFieldsSchema = z.object({
-  core: CoreSchema,
+  core: CoreEssentialSchema,
   constellation: ConstellationEssentialSchema,
 });
 
