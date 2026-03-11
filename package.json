@@ -27,7 +27,7 @@
     "extraction"
   ],
   "author": "DeepAData",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
     "openai": "^6.17.0",

@@ -12,7 +12,22 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(npm install:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\deepadata-edm-spec\" log --oneline -10)",
+      "Bash(pip install:*)",
+      "Bash(python -c:*)",
+      "Bash(chcp 6500)",
+      "Bash(python:*)",
+      "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\deepadata-edm-spec\" status)",
+      "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\deepadata-edm-spec\" tag -l)",
+      "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\deepadata-edm-spec\" ls-remote --tags origin)",
+      "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\deepadata-edm-spec\" log --oneline ea0f01b -1)",
+      "Bash(git rm:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\deepadata-edm-spec\" log --oneline -3)",
+      "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\planning\" status)",
+      "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\planning\" log --oneline -3)"
     ]
   }
 }
