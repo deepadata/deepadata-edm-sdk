@@ -232,7 +232,7 @@ This SDK implements EDM v0.6.0. Key changes from v0.5:
 - Added `meta.profile` field for conformance level declaration
 - Profile-aware extraction with tailored system prompts
 - Profile-aware confidence scoring
-- Three conformance profiles: essential (~20 fields), extended (~45 fields), full (96 fields)
+- Three conformance profiles: essential (24 fields), extended (50 fields), full (96 fields)
 - Added Kimi K2 extractor support via MoonshotAI API
 
 ## License
