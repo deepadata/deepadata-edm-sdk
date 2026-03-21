@@ -259,6 +259,7 @@ EDM artifacts are format-agnostic episodic memory records. The structured fields
 - **Temporal knowledge graphs** — map associated_people and tether_type as graph nodes and edges; temporal_context and recurrence_pattern as edge properties
 - **Lexical search (BM25)** — recall_triggers and retrieval_keys are designed for activation-path matching against conversation fragments
 - **Hybrid retrieval** — combine any of the above; EDM fields give each axis a significance-weighted signal rather than raw text
+- **Significance activation** — the DeepaData activation API returns ranked artifact IDs for the current conversation moment (deepadata.com/docs/activation)
 
 EDM encodes the episodic layer. The retrieval architecture is yours.
 
