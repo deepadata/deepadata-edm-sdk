@@ -1,6 +1,22 @@
-# deepadata-edm-sdk
+# DeepaData EDM SDK
 
-SDK for assembling EDM v0.6.0 artifacts from user content. LLM-assisted extraction with interpretation constraints (not inference). Supports text + image input, profile-aware extraction, stateless mode, and integrates with deepadata-ddna-tools for sealing.
+The significance layer for AI memory.
+
+EDM artifacts encode what mattered at capture time — emotional weight, recall triggers, identity thread, arc type — so every memory architecture gets a richer signal to retrieve against.
+
+## Why EDM
+
+Most memory systems score relevance at retrieval time. EDM encodes significance at capture time.
+
+The difference: a raw conversation chunk tells your retrieval system what was said. An EDM artifact tells it what mattered — and why it might matter again.
+
+**What this enables:**
+- Retrieve by emotional significance, not just semantic similarity
+- Surface moments that keyword and vector search miss entirely
+- Give memory platforms five retrieval axes instead of one
+- Portable, governed artifacts that travel with the person across platforms
+
+The spec is MIT licensed and published on Zenodo. The SDK is the extraction layer.
 
 ## Installation
 
@@ -234,6 +250,19 @@ This SDK implements EDM v0.6.0. Key changes from v0.5:
 - Profile-aware confidence scoring
 - Three conformance profiles: essential (24 fields), extended (50 fields), full (96 fields)
 - Added Kimi K2 extractor support via MoonshotAI API
+
+## Retrieval Architecture
+
+EDM artifacts are designed to work with multi-channel retrieval:
+
+- **Vector channel** — embed core.narrative for semantic similarity
+- **Trigger channel** — match recall_triggers, retrieval_keys, identity_thread against conversation fragments
+- **Structured filter** — query emotional_weight, regulation_state, tether_type, arc_type
+- **Arc-aware reranking** — weight fields by detected query arc type
+
+Each channel surfaces different artifacts. The union finds what no single channel can.
+
+See deepadata.com/docs for integration guides.
 
 ## License
 
