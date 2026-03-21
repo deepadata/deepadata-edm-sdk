@@ -251,16 +251,16 @@ This SDK implements EDM v0.6.0. Key changes from v0.5:
 - Three conformance profiles: essential (24 fields), extended (50 fields), full (96 fields)
 - Added Kimi K2 extractor support via MoonshotAI API
 
-## Retrieval Architecture
+## Works With Your Memory Stack
 
-EDM artifacts are designed to work with multi-channel retrieval:
+EDM artifacts are format-agnostic episodic memory records. The structured fields integrate naturally with the retrieval infrastructure you already use:
 
-- **Vector channel** — embed core.narrative for semantic similarity
-- **Trigger channel** — match recall_triggers, retrieval_keys, identity_thread against conversation fragments
-- **Structured filter** — query emotional_weight, regulation_state, tether_type, arc_type
-- **Arc-aware reranking** — weight fields by detected query arc type
+- **Embedding-based retrieval** — embed core.narrative for semantic similarity search against any vector store
+- **Temporal knowledge graphs** — map associated_people and tether_type as graph nodes and edges; temporal_context and recurrence_pattern as edge properties
+- **Lexical search (BM25)** — recall_triggers and retrieval_keys are designed for activation-path matching against conversation fragments
+- **Hybrid retrieval** — combine any of the above; EDM fields give each axis a significance-weighted signal rather than raw text
 
-Each channel surfaces different artifacts. The union finds what no single channel can.
+EDM encodes the episodic layer. The retrieval architecture is yours.
 
 See deepadata.com/docs for integration guides.
 
