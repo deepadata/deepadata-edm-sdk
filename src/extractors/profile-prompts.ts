@@ -1,5 +1,5 @@
 /**
- * Profile-specific extraction prompts for EDM v0.6.0
+ * Profile-specific extraction prompts for EDM v0.7.0
  *
  * Essential Profile: 24 required fields for memory platforms
  * Extended Profile: 50 fields for journaling apps
@@ -26,6 +26,7 @@ Rules
 - No invention. If not supported by input, use null.
 - Output JSON only — no commentary, markdown, or extra text.
 - Emit lowercase for all string fields except proper names.
+- Use canonical values where they fit. If no canonical value accurately represents the content, use the most accurate free-text term. Accuracy takes precedence over canonical conformance.
 
 ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
 {
@@ -38,9 +39,9 @@ ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
     "echo": ""               // what still resonates (e.g., "her laugh", "smell of oil", "city lights on water")
   },
   "constellation": {
-    "emotion_primary": "",   // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame
+    "emotion_primary": "",   // CANONICAL: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame | disappointment | relief | frustration (free text accepted if none fits)
     "emotion_subtone": [],   // 2–4 short words
-    "narrative_arc": ""      // STRICT ENUM: overcoming | transformation | connection | reflection | closure
+    "narrative_arc": ""      // CANONICAL: overcoming | transformation | connection | reflection | closure | loss | confrontation (free text accepted if none fits)
   }
 }
 
@@ -49,11 +50,11 @@ ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
 //   Extract what specifically was lost or why it hurts.
 //   If no wound is present in the content, use null.
 //
-// emotion_primary: MUST be one of the 14 listed values ONLY.
-//   Do not use free-text emotions here.
+// emotion_primary: Prefer canonical values (17 listed). disappointment, relief, frustration are now canonical.
+//   If no canonical value fits accurately, use free text.
 //
-// narrative_arc: Describes the STORY TRAJECTORY only.
-//   "confrontation" is NOT valid — use overcoming or transformation.
+// narrative_arc: Describes the STORY TRAJECTORY. loss, confrontation are now canonical.
+//   Use free text if no canonical value fits accurately.
 `;
 
 /**
@@ -76,6 +77,7 @@ Rules
 - Output JSON only — no commentary, markdown, or extra text.
 - Emit lowercase for all string fields except proper names.
 - For array fields, use short tokens without punctuation; avoid duplicates.
+- Use canonical values where they fit. If no canonical value accurately represents the content, use the most accurate free-text term. Accuracy takes precedence over canonical conformance.
 
 EXTENDED PROFILE SCHEMA:
 {
@@ -89,13 +91,13 @@ EXTENDED PROFILE SCHEMA:
     "narrative": ""          // 3–5 sentences; include ≥1 sensory detail, ≥1 temporal cue, and a symbolic callback; faithful and concise
   },
   "constellation": {
-    "emotion_primary": "",           // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame
+    "emotion_primary": "",           // CANONICAL: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame | disappointment | relief | frustration (free text accepted if none fits)
     "emotion_subtone": [],
     "higher_order_emotion": "",
     "meta_emotional_state": "",
     "interpersonal_affect": "",
-    "narrative_arc": "",             // STRICT ENUM: overcoming | transformation | connection | reflection | closure
-    "relational_dynamics": "",       // STRICT ENUM: parent_child | grandparent_grandchild | romantic_partnership | couple | sibling_bond | family | friendship | friend | companionship | colleague | mentorship | reunion | community_ritual | grief | self_reflection | professional | therapeutic | service | adversarial
+    "narrative_arc": "",             // CANONICAL: overcoming | transformation | connection | reflection | closure | loss | confrontation (free text accepted if none fits)
+    "relational_dynamics": "",       // CANONICAL: parent_child | grandparent_grandchild | romantic_partnership | couple | sibling_bond | family | friendship | friend | companionship | colleague | mentorship | reunion | community_ritual | grief | self_reflection | professional | therapeutic | service | adversarial (free text accepted if none fits)
     "temporal_context": "",          // STRICT ENUM: childhood | early_adulthood | midlife | late_life | recent | future | timeless
     "memory_type": "",               // STRICT ENUM: legacy_artifact | fleeting_moment | milestone | reflection | formative_experience
     "media_format": "",              // STRICT ENUM: photo | video | audio | text | photo_with_story
@@ -106,7 +108,8 @@ EXTENDED PROFILE SCHEMA:
     "identity_thread": "",
     "expressed_insight": "",
     "transformational_pivot": false,
-    "somatic_signature": ""
+    "somatic_signature": "",
+    "arc_type": ""                   // CANONICAL: betrayal | liberation | grief | discovery | resistance | bond | moral_awakening | transformation | reconciliation | reckoning | threshold | exile (free text accepted if none fits)
   },
   "milky_way": {
     "event_type": "",
@@ -116,7 +119,7 @@ EXTENDED PROFILE SCHEMA:
     "tone_shift": ""
   },
   "gravity": {
-    "emotional_weight": 0.0,         // 0.0–1.0 (felt intensity IN THE MOMENT)
+    "emotional_weight": 0.0,         // 0.0–1.0 (felt intensity IN THE MOMENT). Calibration: 0.9+ life-altering irreversible moments; 0.7-0.9 significant personal events with strong emotional response; 0.4-0.7 meaningful but routine emotional experiences; 0.1-0.4 mild passing emotional content
     "valence": "",                   // STRICT ENUM: positive | negative | mixed
     "tether_type": "",               // STRICT ENUM: person | symbol | event | place | ritual | object | tradition | identity | self
     "recurrence_pattern": "",        // STRICT ENUM: cyclical | isolated | chronic | emerging
@@ -140,11 +143,14 @@ EXTENDED PROFILE SCHEMA:
 //   strength_score = how BOUND/STUCK this memory is over time
 //   These should NOT always correlate.
 //
-// emotion_primary (STRICT ENUM) — MUST be one of the 14 listed values ONLY.
+// emotion_primary: Prefer canonical values (17 listed). disappointment, relief, frustration are now canonical.
 //   Use higher_order_emotion for complex emotions not in the list.
+//   If no canonical value fits accurately, use free text.
 //
-// narrative_arc: Describes the STORY TRAJECTORY only.
-//   "confrontation" is NOT valid — use overcoming or transformation.
+// narrative_arc: Describes the STORY TRAJECTORY. loss, confrontation are now canonical.
+//   Use free text if no canonical value fits accurately.
+//
+// arc_type: Identify the structural arc pattern. Prefer canonical values: betrayal, liberation, grief, discovery, resistance, bond, moral_awakening, transformation, reconciliation, reckoning, threshold, exile. If none fits accurately, use the most accurate descriptive term.
 //
 // wound: Do NOT use generic labels like "loss" or "grief".
 //   Extract what specifically was lost or why it hurts.
