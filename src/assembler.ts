@@ -79,7 +79,7 @@ export const FULL_PROFILE_FIELDS = {
   milky_way: ["event_type", "location_context", "associated_people", "visibility_context", "tone_shift"],
   gravity: [
     "emotional_weight", "emotional_density", "valence", "viscosity", "gravity_type",
-    "tether_type", "recall_triggers", "retrieval_keys", "nearby_themes", "legacy_embed",
+    "tether_type", "recall_triggers", "retrieval_keys", "nearby_themes",
     "recurrence_pattern", "strength_score", "temporal_decay", "resilience_markers", "adaptation_trajectory"
   ],
   impulse: [
@@ -93,12 +93,12 @@ export const FULL_PROFILE_FIELDS = {
   ],
   telemetry: [
     "entry_confidence", "extraction_model", "extraction_provider",
-    "extraction_notes", "alignment_delta"
+    "extraction_notes"
   ],
   system: ["embeddings", "indices"],
   crosswalks: [
     "plutchik_primary", "geneva_emotion_wheel", "DSM5_specifiers",
-    "HMD_v2_memory_type", "ISO_27557_labels"
+    "ISO_27557_labels"
   ],
 } as const;
 
@@ -444,7 +444,6 @@ export function createEmptyArtifact(): EdmArtifact {
       recall_triggers: [],
       retrieval_keys: [],
       nearby_themes: [],
-      legacy_embed: false,
       recurrence_pattern: null,
       strength_score: 0,
       temporal_decay: null,
@@ -483,26 +482,17 @@ export function createEmptyArtifact(): EdmArtifact {
       extraction_model: null,
       extraction_provider: null,
       extraction_notes: null,
-      alignment_delta: null,
     },
     system: {
       embeddings: [],
       indices: {
         waypoint_ids: [],
-        sector_weights: {
-          episodic: 0,
-          semantic: 0,
-          procedural: 0,
-          emotional: 0,
-          reflective: 0,
-        },
       },
     },
     crosswalks: {
       plutchik_primary: null,
       geneva_emotion_wheel: null,
       DSM5_specifiers: null,
-      HMD_v2_memory_type: null,
       ISO_27557_labels: null,
     },
   };

@@ -124,7 +124,6 @@ export {
   SubjectRightsSchema,
   KAnonymitySchema,
   EmbeddingRefSchema,
-  SectorWeightsSchema,
   IndicesSchema,
 } from "./schema/edm-schema.js";
 
@@ -145,7 +144,6 @@ export type {
   SubjectRights,
   KAnonymity,
   EmbeddingRef,
-  SectorWeights,
   Indices,
   // Composite Types
   EdmArtifact,

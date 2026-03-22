@@ -3,7 +3,7 @@
  * Inferred from Zod schemas
  */
 import { z } from "zod";
-import { MetaSchema, CoreSchema, ConstellationSchema, MilkyWaySchema, GravitySchema, ImpulseSchema, GovernanceSchema, TelemetrySchema, SystemSchema, CrosswalksSchema, EdmArtifactSchema, LlmExtractedFieldsSchema, RetentionPolicySchema, SubjectRightsSchema, KAnonymitySchema, EmbeddingRefSchema, SectorWeightsSchema, IndicesSchema } from "./edm-schema.js";
+import { MetaSchema, CoreSchema, ConstellationSchema, MilkyWaySchema, GravitySchema, ImpulseSchema, GovernanceSchema, TelemetrySchema, SystemSchema, CrosswalksSchema, EdmArtifactSchema, LlmExtractedFieldsSchema, RetentionPolicySchema, SubjectRightsSchema, KAnonymitySchema, EmbeddingRefSchema, IndicesSchema } from "./edm-schema.js";
 export type Meta = z.infer<typeof MetaSchema>;
 export type Core = z.infer<typeof CoreSchema>;
 export type Constellation = z.infer<typeof ConstellationSchema>;
@@ -18,7 +18,6 @@ export type RetentionPolicy = z.infer<typeof RetentionPolicySchema>;
 export type SubjectRights = z.infer<typeof SubjectRightsSchema>;
 export type KAnonymity = z.infer<typeof KAnonymitySchema>;
 export type EmbeddingRef = z.infer<typeof EmbeddingRefSchema>;
-export type SectorWeights = z.infer<typeof SectorWeightsSchema>;
 export type Indices = z.infer<typeof IndicesSchema>;
 export type EdmArtifact = z.infer<typeof EdmArtifactSchema>;
 export type LlmExtractedFields = z.infer<typeof LlmExtractedFieldsSchema>;

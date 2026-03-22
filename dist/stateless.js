@@ -23,7 +23,6 @@ export function createStatelessArtifact(artifact) {
             embeddings: [],
             indices: {
                 waypoint_ids: [],
-                sector_weights: artifact.system.indices.sector_weights,
             },
         },
     };
@@ -53,7 +52,6 @@ function nullifyGravity(gravity) {
         viscosity: gravity.viscosity,
         gravity_type: gravity.gravity_type,
         tether_type: gravity.tether_type,
-        legacy_embed: gravity.legacy_embed,
         recurrence_pattern: gravity.recurrence_pattern,
         strength_score: gravity.strength_score,
         temporal_decay: gravity.temporal_decay,

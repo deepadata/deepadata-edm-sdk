@@ -1,5 +1,5 @@
 /**
- * EDM v0.6.0 Zod Schema
+ * EDM v0.7.0 Zod Schema
  * Generated from canonical JSON schema at deepadata-edm-spec
  */
 import { z } from "zod";
@@ -14,8 +14,9 @@ export const MetaSchema = z.object({
         .describe("Unique identifier for the EDM artifact"),
     version: z
         .string()
-        .regex(/^0\.[5-6]\.[0-9]+(-alpha)?$/)
+        .regex(/^0\.[5-7]\.[0-9]+(-alpha)?$/)
         .describe("EDM schema version"),
+    source_timestamp: z.string().nullable().optional().describe("Original source content timestamp"),
     profile: z
         .enum(["essential", "extended", "full"])
         .describe("Implementation profile (essential/extended/full)"),
@@ -74,7 +75,10 @@ export const CoreEssentialSchema = z.object({
 // =============================================================================
 export const ConstellationSchema = z.object({
     emotion_primary: z
-        .enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"])
+        .union([
+        z.enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame", "disappointment", "relief", "frustration"]),
+        z.string()
+    ])
         .nullable()
         .describe("Dominant emotional quality"),
     emotion_subtone: z
@@ -86,30 +90,36 @@ export const ConstellationSchema = z.object({
     meta_emotional_state: z.string().nullable().describe("How person relates to own emotions"),
     interpersonal_affect: z.string().nullable().describe("Emotional posture in relational context"),
     narrative_arc: z
-        .enum(["overcoming", "transformation", "connection", "reflection", "closure"])
+        .union([
+        z.enum(["overcoming", "transformation", "connection", "reflection", "closure", "loss", "confrontation"]),
+        z.string()
+    ])
         .nullable()
         .describe("Story trajectory"),
     relational_dynamics: z
-        .enum([
-        "parent_child",
-        "grandparent_grandchild",
-        "romantic_partnership",
-        "couple",
-        "sibling_bond",
-        "family",
-        "friendship",
-        "friend",
-        "companionship",
-        "colleague",
-        "mentorship",
-        "reunion",
-        "community_ritual",
-        "grief",
-        "self_reflection",
-        "professional",
-        "therapeutic",
-        "service",
-        "adversarial",
+        .union([
+        z.enum([
+            "parent_child",
+            "grandparent_grandchild",
+            "romantic_partnership",
+            "couple",
+            "sibling_bond",
+            "family",
+            "friendship",
+            "friend",
+            "companionship",
+            "colleague",
+            "mentorship",
+            "reunion",
+            "community_ritual",
+            "grief",
+            "self_reflection",
+            "professional",
+            "therapeutic",
+            "service",
+            "adversarial",
+        ]),
+        z.string()
     ])
         .nullable()
         .describe("Dominant relational configuration"),
@@ -168,6 +178,14 @@ export const ConstellationSchema = z.object({
     expressed_insight: z.string().nullable().describe("Explicit realization stated by subject"),
     transformational_pivot: z.boolean().describe("Life-changing experience flag"),
     somatic_signature: z.string().nullable().describe("Bodily sensations described"),
+    arc_type: z
+        .union([
+        z.enum(["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile"]),
+        z.string()
+    ])
+        .nullable()
+        .optional()
+        .describe("Structural emotional arc pattern"),
 });
 // =============================================================================
 // MILKY_WAY Domain
@@ -201,7 +219,6 @@ export const GravitySchema = z.object({
     recall_triggers: z.array(z.string()).describe("Sensory/symbolic cues"),
     retrieval_keys: z.array(z.string()).describe("Compact memory hooks"),
     nearby_themes: z.array(z.string()).describe("Adjacent concepts"),
-    legacy_embed: z.boolean().describe("Contributes to long-term identity"),
     recurrence_pattern: z
         .enum(["cyclical", "isolated", "chronic", "emerging"])
         .nullable()
@@ -291,7 +308,7 @@ export const TelemetrySchema = z.object({
     extraction_model: z.string().nullable().describe("Model/engine identifier"),
     extraction_provider: z.enum(['anthropic', 'openai', 'kimi']).nullable().optional().describe("LLM provider used for extraction"),
     extraction_notes: z.string().nullable().describe("Quality notes"),
-    alignment_delta: z.number().min(-1).max(1).nullable().describe("Affective alignment deviation"),
+    extraction_chunking_strategy: z.string().nullable().optional().describe("Segmentation strategy used at extraction"),
 });
 // =============================================================================
 // SYSTEM Domain
@@ -303,16 +320,8 @@ export const EmbeddingRefSchema = z.object({
     quantized: z.boolean(),
     vector_ref: z.string(),
 });
-export const SectorWeightsSchema = z.object({
-    episodic: z.number().min(0).max(1),
-    semantic: z.number().min(0).max(1),
-    procedural: z.number().min(0).max(1),
-    emotional: z.number().min(0).max(1),
-    reflective: z.number().min(0).max(1),
-});
 export const IndicesSchema = z.object({
     waypoint_ids: z.array(z.string()),
-    sector_weights: SectorWeightsSchema,
 });
 export const SystemSchema = z.object({
     embeddings: z.array(EmbeddingRefSchema),
@@ -325,7 +334,6 @@ export const CrosswalksSchema = z.object({
     plutchik_primary: z.string().nullable().describe("Plutchik emotion taxonomy"),
     geneva_emotion_wheel: z.string().nullable().describe("Geneva Emotion Wheel mapping"),
     DSM5_specifiers: z.string().nullable().describe("DSM-5 specifiers"),
-    HMD_v2_memory_type: z.string().nullable().describe("Human Memory Dynamics v2"),
     ISO_27557_labels: z.string().nullable().describe("ISO emotional data classification"),
 });
 // =============================================================================
@@ -342,6 +350,7 @@ export const EdmArtifactSchema = z.object({
     telemetry: TelemetrySchema,
     system: SystemSchema,
     crosswalks: CrosswalksSchema,
+    extensions: z.record(z.string(), z.object({}).passthrough()).optional().describe("Partner-namespaced semantic enrichments"),
 });
 // =============================================================================
 // LLM Extraction Schemas (profile-specific)
@@ -351,11 +360,17 @@ export const EdmArtifactSchema = z.object({
  */
 export const ConstellationEssentialSchema = z.object({
     emotion_primary: z
-        .enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame"])
+        .union([
+        z.enum(["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame", "disappointment", "relief", "frustration"]),
+        z.string()
+    ])
         .nullable(),
     emotion_subtone: z.array(z.string()).min(0).max(4),
     narrative_arc: z
-        .enum(["overcoming", "transformation", "connection", "reflection", "closure"])
+        .union([
+        z.enum(["overcoming", "transformation", "connection", "reflection", "closure", "loss", "confrontation"]),
+        z.string()
+    ])
         .nullable(),
 });
 /**

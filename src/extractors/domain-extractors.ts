@@ -132,7 +132,6 @@ export function createTelemetry(
     extraction_model: model,
     extraction_provider: provider ?? null,
     extraction_notes: notes,
-    alignment_delta: null, // Populated by downstream systems
   };
 }
 
@@ -146,13 +145,6 @@ export function createSystem(): System {
     embeddings: [],
     indices: {
       waypoint_ids: [],
-      sector_weights: {
-        episodic: 0,
-        semantic: 0,
-        procedural: 0,
-        emotional: 0,
-        reflective: 0,
-      },
     },
   };
 }
@@ -176,23 +168,10 @@ export function createCrosswalks(extracted: LlmExtractedFields): Crosswalks {
   const emotionPrimary = extracted.constellation.emotion_primary;
   const plutchikPrimary = emotionPrimary ? (plutchikMapping[emotionPrimary] ?? null) : null;
 
-  // Map memory_type to HMD_v2
-  const hmdMapping: Record<string, string> = {
-    legacy_artifact: "autobiographical",
-    fleeting_moment: "episodic",
-    milestone: "flashbulb",
-    reflection: "semantic",
-    formative_experience: "autobiographical",
-  };
-
-  const memoryType = extracted.constellation.memory_type;
-  const hmdType = memoryType ? (hmdMapping[memoryType] ?? null) : null;
-
   return {
     plutchik_primary: plutchikPrimary,
     geneva_emotion_wheel: null, // Requires more complex mapping
     DSM5_specifiers: null, // Should not be auto-populated
-    HMD_v2_memory_type: hmdType,
     ISO_27557_labels: null, // Future standard
   };
 }

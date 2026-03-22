@@ -59,7 +59,7 @@ EdmArtifactSchema, LlmExtractedFieldsSchema,
 // Profile-specific LLM Extraction Schemas
 LlmEssentialFieldsSchema, LlmExtendedFieldsSchema, ConstellationEssentialSchema, GravityExtendedSchema, 
 // Nested Schemas
-RetentionPolicySchema, SubjectRightsSchema, KAnonymitySchema, EmbeddingRefSchema, SectorWeightsSchema, IndicesSchema, } from "./schema/edm-schema.js";
+RetentionPolicySchema, SubjectRightsSchema, KAnonymitySchema, EmbeddingRefSchema, IndicesSchema, } from "./schema/edm-schema.js";
 // Enum constants
 export { EMOTION_PRIMARY, NARRATIVE_ARC, RELATIONAL_DYNAMICS, TEMPORAL_CONTEXT, MEMORY_TYPE, NARRATIVE_ARCHETYPE, DRIVE_STATE, MOTIVATIONAL_ORIENTATION, } from "./schema/types.js";
 //# sourceMappingURL=index.js.map
