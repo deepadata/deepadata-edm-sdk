@@ -382,7 +382,7 @@ export function createEmptyArtifact(): EdmArtifact {
   return {
     meta: {
       id: null,
-      version: "0.6.0",
+      version: "0.7.0",
       profile: "full",
       created_at: new Date().toISOString(),
       updated_at: null,

@@ -129,7 +129,7 @@ export async function extractWithKimi(
   );
 
   return {
-    extracted: result.data,
+    extracted: result.data as LlmExtractedFields,
     confidence,
     model,
     profile,
