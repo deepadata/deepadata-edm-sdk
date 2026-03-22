@@ -195,11 +195,11 @@ export declare const GravitySchema: z.ZodObject<{
     valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
     viscosity: z.ZodNullable<z.ZodEnum<["low", "medium", "high", "enduring", "fluid"]>>;
     gravity_type: z.ZodNullable<z.ZodString>;
-    tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>>;
+    tether_type: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>, z.ZodString]>>;
     recall_triggers: z.ZodArray<z.ZodString, "many">;
     retrieval_keys: z.ZodArray<z.ZodString, "many">;
     nearby_themes: z.ZodArray<z.ZodString, "many">;
-    recurrence_pattern: z.ZodNullable<z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>>;
+    recurrence_pattern: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>, z.ZodString]>>;
     strength_score: z.ZodNumber;
     temporal_decay: z.ZodNullable<z.ZodEnum<["fast", "moderate", "slow"]>>;
     resilience_markers: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
@@ -210,11 +210,11 @@ export declare const GravitySchema: z.ZodObject<{
     valence: "mixed" | "positive" | "negative" | null;
     viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
     gravity_type: string | null;
-    tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+    tether_type: string | null;
     recall_triggers: string[];
     retrieval_keys: string[];
     nearby_themes: string[];
-    recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+    recurrence_pattern: string | null;
     strength_score: number;
     temporal_decay: "moderate" | "fast" | "slow" | null;
     resilience_markers: string[] | null;
@@ -225,11 +225,11 @@ export declare const GravitySchema: z.ZodObject<{
     valence: "mixed" | "positive" | "negative" | null;
     viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
     gravity_type: string | null;
-    tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+    tether_type: string | null;
     recall_triggers: string[];
     retrieval_keys: string[];
     nearby_themes: string[];
-    recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+    recurrence_pattern: string | null;
     strength_score: number;
     temporal_decay: "moderate" | "fast" | "slow" | null;
     resilience_markers: string[] | null;
@@ -247,7 +247,7 @@ export declare const ImpulseSchema: z.ZodObject<{
     agency_level: z.ZodNullable<z.ZodEnum<["low", "medium", "high"]>>;
     regulation_state: z.ZodNullable<z.ZodEnum<["regulated", "wavering", "dysregulated"]>>;
     attachment_style: z.ZodNullable<z.ZodEnum<["secure", "anxious", "avoidant", "disorganized"]>>;
-    coping_style: z.ZodNullable<z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"]>>;
+    coping_style: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"]>, z.ZodString]>>;
 }, "strip", z.ZodTypeAny, {
     primary_energy: string | null;
     drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -260,7 +260,7 @@ export declare const ImpulseSchema: z.ZodObject<{
     agency_level: "low" | "high" | "medium" | null;
     regulation_state: "regulated" | "wavering" | "dysregulated" | null;
     attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-    coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+    coping_style: string | null;
 }, {
     primary_energy: string | null;
     drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -273,7 +273,7 @@ export declare const ImpulseSchema: z.ZodObject<{
     agency_level: "low" | "high" | "medium" | null;
     regulation_state: "regulated" | "wavering" | "dysregulated" | null;
     attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-    coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+    coping_style: string | null;
 }>;
 export declare const RetentionPolicySchema: z.ZodObject<{
     basis: z.ZodNullable<z.ZodEnum<["user_defined", "legal", "business_need"]>>;
@@ -669,11 +669,11 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
         viscosity: z.ZodNullable<z.ZodEnum<["low", "medium", "high", "enduring", "fluid"]>>;
         gravity_type: z.ZodNullable<z.ZodString>;
-        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>>;
+        tether_type: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>, z.ZodString]>>;
         recall_triggers: z.ZodArray<z.ZodString, "many">;
         retrieval_keys: z.ZodArray<z.ZodString, "many">;
         nearby_themes: z.ZodArray<z.ZodString, "many">;
-        recurrence_pattern: z.ZodNullable<z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>>;
+        recurrence_pattern: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>, z.ZodString]>>;
         strength_score: z.ZodNumber;
         temporal_decay: z.ZodNullable<z.ZodEnum<["fast", "moderate", "slow"]>>;
         resilience_markers: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
@@ -684,11 +684,11 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
@@ -699,11 +699,11 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
@@ -721,7 +721,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         agency_level: z.ZodNullable<z.ZodEnum<["low", "medium", "high"]>>;
         regulation_state: z.ZodNullable<z.ZodEnum<["regulated", "wavering", "dysregulated"]>>;
         attachment_style: z.ZodNullable<z.ZodEnum<["secure", "anxious", "avoidant", "disorganized"]>>;
-        coping_style: z.ZodNullable<z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"]>>;
+        coping_style: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"]>, z.ZodString]>>;
     }, "strip", z.ZodTypeAny, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -734,7 +734,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: string | null;
     }, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -747,7 +747,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: string | null;
     }>;
     governance: z.ZodObject<{
         jurisdiction: z.ZodNullable<z.ZodEnum<["GDPR", "CCPA", "HIPAA", "PIPEDA", "LGPD", "None", "Mixed"]>>;
@@ -978,11 +978,11 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
@@ -1000,7 +1000,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: string | null;
     };
     governance: {
         jurisdiction: "GDPR" | "CCPA" | "HIPAA" | "PIPEDA" | "LGPD" | "None" | "Mixed" | null;
@@ -1111,11 +1111,11 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
@@ -1133,7 +1133,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: string | null;
     };
     governance: {
         jurisdiction: "GDPR" | "CCPA" | "HIPAA" | "PIPEDA" | "LGPD" | "None" | "Mixed" | null;
@@ -1204,19 +1204,19 @@ export declare const ConstellationEssentialSchema: z.ZodObject<{
 export declare const GravityExtendedSchema: z.ZodObject<{
     emotional_weight: z.ZodNumber;
     valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
-    tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>>;
+    tether_type: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>, z.ZodString]>>;
     recurrence_pattern: z.ZodNullable<z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>>;
     strength_score: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
     emotional_weight: number;
     valence: "mixed" | "positive" | "negative" | null;
-    tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+    tether_type: string | null;
     recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
     strength_score: number;
 }, {
     emotional_weight: number;
     valence: "mixed" | "positive" | "negative" | null;
-    tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+    tether_type: string | null;
     recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
     strength_score: number;
 }>;
@@ -1403,19 +1403,19 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
     gravity: z.ZodObject<{
         emotional_weight: z.ZodNumber;
         valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
-        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>>;
+        tether_type: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>, z.ZodString]>>;
         recurrence_pattern: z.ZodNullable<z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>>;
         strength_score: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
         emotional_weight: number;
         valence: "mixed" | "positive" | "negative" | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
         strength_score: number;
     }, {
         emotional_weight: number;
         valence: "mixed" | "positive" | "negative" | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
         strength_score: number;
     }>;
@@ -1460,7 +1460,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
     gravity: {
         emotional_weight: number;
         valence: "mixed" | "positive" | "negative" | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
         strength_score: number;
     };
@@ -1505,7 +1505,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
     gravity: {
         emotional_weight: number;
         valence: "mixed" | "positive" | "negative" | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
         strength_score: number;
     };
@@ -1625,11 +1625,11 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
         viscosity: z.ZodNullable<z.ZodEnum<["low", "medium", "high", "enduring", "fluid"]>>;
         gravity_type: z.ZodNullable<z.ZodString>;
-        tether_type: z.ZodNullable<z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>>;
+        tether_type: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>, z.ZodString]>>;
         recall_triggers: z.ZodArray<z.ZodString, "many">;
         retrieval_keys: z.ZodArray<z.ZodString, "many">;
         nearby_themes: z.ZodArray<z.ZodString, "many">;
-        recurrence_pattern: z.ZodNullable<z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>>;
+        recurrence_pattern: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>, z.ZodString]>>;
         strength_score: z.ZodNumber;
         temporal_decay: z.ZodNullable<z.ZodEnum<["fast", "moderate", "slow"]>>;
         resilience_markers: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
@@ -1640,11 +1640,11 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
@@ -1655,11 +1655,11 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
@@ -1677,7 +1677,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         agency_level: z.ZodNullable<z.ZodEnum<["low", "medium", "high"]>>;
         regulation_state: z.ZodNullable<z.ZodEnum<["regulated", "wavering", "dysregulated"]>>;
         attachment_style: z.ZodNullable<z.ZodEnum<["secure", "anxious", "avoidant", "disorganized"]>>;
-        coping_style: z.ZodNullable<z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"]>>;
+        coping_style: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"]>, z.ZodString]>>;
     }, "strip", z.ZodTypeAny, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -1690,7 +1690,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: string | null;
     }, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
@@ -1703,7 +1703,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: string | null;
     }>;
 }, "strip", z.ZodTypeAny, {
     core: {
@@ -1749,11 +1749,11 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
@@ -1771,7 +1771,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: string | null;
     };
 }, {
     core: {
@@ -1817,11 +1817,11 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         valence: "mixed" | "positive" | "negative" | null;
         viscosity: "low" | "high" | "medium" | "enduring" | "fluid" | null;
         gravity_type: string | null;
-        tether_type: "symbol" | "object" | "self" | "person" | "event" | "place" | "ritual" | "tradition" | "identity" | null;
+        tether_type: string | null;
         recall_triggers: string[];
         retrieval_keys: string[];
         nearby_themes: string[];
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
         temporal_decay: "moderate" | "fast" | "slow" | null;
         resilience_markers: string[] | null;
@@ -1839,7 +1839,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         agency_level: "low" | "high" | "medium" | null;
         regulation_state: "regulated" | "wavering" | "dysregulated" | null;
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
-        coping_style: "confront" | "process" | "reframe_meaning" | "seek_support" | "distract" | "ritualize" | "detach" | null;
+        coping_style: string | null;
     };
 }>;
 //# sourceMappingURL=edm-schema.d.ts.map

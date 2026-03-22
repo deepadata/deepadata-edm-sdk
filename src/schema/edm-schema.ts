@@ -219,14 +219,20 @@ export const GravitySchema = z.object({
     .describe("Emotion persistence"),
   gravity_type: z.string().nullable().describe("Nature of emotional pull"),
   tether_type: z
-    .enum(["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"])
+    .union([
+      z.enum(["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]),
+      z.string()
+    ])
     .nullable()
     .describe("Anchor element type"),
   recall_triggers: z.array(z.string()).describe("Sensory/symbolic cues"),
   retrieval_keys: z.array(z.string()).describe("Compact memory hooks"),
   nearby_themes: z.array(z.string()).describe("Adjacent concepts"),
   recurrence_pattern: z
-    .enum(["cyclical", "isolated", "chronic", "emerging"])
+    .union([
+      z.enum(["cyclical", "isolated", "chronic", "emerging"]),
+      z.string()
+    ])
     .nullable()
     .describe("Temporal recurrence structure"),
   strength_score: z.number().min(0).max(1).describe("Binding strength (0.0-1.0)"),
@@ -272,7 +278,10 @@ export const ImpulseSchema = z.object({
     .nullable()
     .describe("Relational attachment pattern"),
   coping_style: z
-    .enum(["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"])
+    .union([
+      z.enum(["reframe_meaning", "seek_support", "distract", "ritualize", "confront", "detach", "process"]),
+      z.string()
+    ])
     .nullable()
     .describe("Primary coping strategy"),
 });
@@ -400,7 +409,10 @@ export const GravityExtendedSchema = z.object({
   emotional_weight: z.number().min(0).max(1),
   valence: z.enum(["positive", "negative", "mixed"]).nullable(),
   tether_type: z
-    .enum(["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"])
+    .union([
+      z.enum(["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]),
+      z.string()
+    ])
     .nullable(),
   recurrence_pattern: z
     .enum(["cyclical", "isolated", "chronic", "emerging"])
