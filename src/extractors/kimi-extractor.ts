@@ -6,11 +6,26 @@
 import OpenAI from "openai";
 import type { ChatCompletionContentPart } from "openai/resources/chat/completions.js";
 import type { LlmExtractedFields, ExtractionInput, EdmProfile } from "../schema/types.js";
-import { LlmExtractedFieldsSchema } from "../schema/edm-schema.js";
+import { LlmExtractedFieldsSchema, LlmEssentialFieldsSchema, LlmExtendedFieldsSchema } from "../schema/edm-schema.js";
 import {
   EXTRACTION_SYSTEM_PROMPT,
   type LlmExtractionResult,
 } from "./llm-extractor.js";
+
+/**
+ * Get the appropriate schema for profile-specific validation
+ */
+function getProfileSchema(profile: EdmProfile) {
+  switch (profile) {
+    case "essential":
+      return LlmEssentialFieldsSchema;
+    case "extended":
+      return LlmExtendedFieldsSchema;
+    case "full":
+    default:
+      return LlmExtractedFieldsSchema;
+  }
+}
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 
 /**
@@ -97,8 +112,9 @@ export async function extractWithKimi(
     throw new Error(`Failed to parse Kimi response as JSON: ${text.slice(0, 200)}...`);
   }
 
-  // Validate against schema
-  const result = LlmExtractedFieldsSchema.safeParse(parsed);
+  // Validate against profile-specific schema
+  const schema = getProfileSchema(profile);
+  const result = schema.safeParse(parsed);
   if (!result.success) {
     const errorDetails = result.error.errors
       .map((e) => `${e.path.join(".")}: ${e.message}`)
