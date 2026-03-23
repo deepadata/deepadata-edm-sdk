@@ -20,7 +20,6 @@ import {
   SubjectRightsSchema,
   KAnonymitySchema,
   EmbeddingRefSchema,
-  SectorWeightsSchema,
   IndicesSchema,
 } from "./edm-schema.js";
 
@@ -45,7 +44,6 @@ export type RetentionPolicy = z.infer<typeof RetentionPolicySchema>;
 export type SubjectRights = z.infer<typeof SubjectRightsSchema>;
 export type KAnonymity = z.infer<typeof KAnonymitySchema>;
 export type EmbeddingRef = z.infer<typeof EmbeddingRefSchema>;
-export type SectorWeights = z.infer<typeof SectorWeightsSchema>;
 export type Indices = z.infer<typeof IndicesSchema>;
 
 // =============================================================================

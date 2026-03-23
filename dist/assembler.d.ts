@@ -43,12 +43,12 @@ export declare const FULL_PROFILE_FIELDS: {
     readonly core: readonly ["anchor", "spark", "wound", "fuel", "bridge", "echo", "narrative"];
     readonly constellation: readonly ["emotion_primary", "emotion_subtone", "higher_order_emotion", "meta_emotional_state", "interpersonal_affect", "narrative_arc", "relational_dynamics", "temporal_context", "memory_type", "media_format", "narrative_archetype", "symbolic_anchor", "relational_perspective", "temporal_rhythm", "identity_thread", "expressed_insight", "transformational_pivot", "somatic_signature"];
     readonly milky_way: readonly ["event_type", "location_context", "associated_people", "visibility_context", "tone_shift"];
-    readonly gravity: readonly ["emotional_weight", "emotional_density", "valence", "viscosity", "gravity_type", "tether_type", "recall_triggers", "retrieval_keys", "nearby_themes", "legacy_embed", "recurrence_pattern", "strength_score", "temporal_decay", "resilience_markers", "adaptation_trajectory"];
+    readonly gravity: readonly ["emotional_weight", "emotional_density", "valence", "viscosity", "gravity_type", "tether_type", "recall_triggers", "retrieval_keys", "nearby_themes", "recurrence_pattern", "strength_score", "temporal_decay", "resilience_markers", "adaptation_trajectory"];
     readonly impulse: readonly ["primary_energy", "drive_state", "motivational_orientation", "temporal_focus", "directionality", "social_visibility", "urgency", "risk_posture", "agency_level", "regulation_state", "attachment_style", "coping_style"];
     readonly governance: readonly ["jurisdiction", "retention_policy", "subject_rights", "exportability", "k_anonymity", "policy_labels", "masking_rules"];
-    readonly telemetry: readonly ["entry_confidence", "extraction_model", "extraction_provider", "extraction_notes", "alignment_delta"];
+    readonly telemetry: readonly ["entry_confidence", "extraction_model", "extraction_provider", "extraction_notes"];
     readonly system: readonly ["embeddings", "indices"];
-    readonly crosswalks: readonly ["plutchik_primary", "geneva_emotion_wheel", "DSM5_specifiers", "HMD_v2_memory_type", "ISO_27557_labels"];
+    readonly crosswalks: readonly ["plutchik_primary", "geneva_emotion_wheel", "DSM5_specifiers", "ISO_27557_labels"];
 };
 /**
  * Get profile field definitions

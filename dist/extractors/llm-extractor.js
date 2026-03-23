@@ -1,5 +1,5 @@
 /**
- * LLM Extractor for EDM v0.6.0
+ * LLM Extractor for EDM v0.7.0
  * Uses Anthropic Claude to extract emotional data from content
  * Supports profile-aware extraction with profile-specific schema validation
  */
@@ -7,14 +7,14 @@ import Anthropic from "@anthropic-ai/sdk";
 import { LlmExtractedFieldsSchema, LlmEssentialFieldsSchema, LlmExtendedFieldsSchema, } from "../schema/edm-schema.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 /**
- * System prompt for EDM extraction - Updated for v0.4.0 canonical schema
- * Reconciled field names from system-prompt-B.ts:
- * - archetype_energy → narrative_archetype
- * - meaning_inference → expressed_insight
- * - transcendent_moment → transformational_pivot
- * - REMOVED: active_motivational_state, media_context, memory_layers, tether_target, moral_valence
- * - reentry_score → recurrence_pattern (type changed: number → enum)
- * - ADDED: somatic_signature
+ * System prompt for EDM extraction - Updated for v0.7.0 canonical schema
+ * v0.7.0 changes:
+ * - emotion_primary: added disappointment, relief, frustration; accepts free text
+ * - narrative_arc: added loss, confrontation; accepts free text
+ * - relational_dynamics: accepts free text
+ * - arc_type: new field with 12 canonical values
+ * - REMOVED: legacy_embed, alignment_delta
+ * - emotional_weight calibration anchors added
  */
 export const EXTRACTION_SYSTEM_PROMPT = `
 You classify emotionally rich memories into a JSON object. Input may include text and an image.
@@ -29,12 +29,12 @@ Rules
 - If motivation is ambiguous, choose the most conservative option (e.g., "curiosity" vs "fear") or return null.
 
 CRITICAL: Enum Field Constraints
-- Many fields below are STRICT ENUMS with a fixed set of allowed values.
-- You MUST use ONLY the values listed in the enum sets. Do not invent similar values.
+- Many fields below have CANONICAL values — preferred values for cross-artifact comparability.
+- Use canonical values where they fit. If no canonical value accurately represents the content, use the most accurate free-text term. Accuracy takes precedence over canonical conformance.
 - Cross-contamination warning: Each enum field has its own distinct value set. Do not use values from one field in another.
   Example: "milestone" is valid for memory_type but NOT for narrative_arc.
   Example: "confront" is valid for both drive_state and coping_style - check which field you're populating.
-- If none of the allowed enum values adequately capture the expressed content, use the closest match. Do not invent alternatives.
+- emotion_primary, narrative_arc, relational_dynamics, and arc_type accept free text if no canonical value fits.
 
 Normalization (very important)
 - Emit lowercase for all string fields except proper names in arrays like associated_people.
@@ -56,13 +56,13 @@ Schema
     "narrative": ""          // 3–5 sentences. REQUIRED: include ALL of the following — ≥1 concrete sensory detail (sight, sound, smell, texture), ≥1 temporal cue that anchors the memory in time, ≥1 symbolic callback that connects past to present. Write from the subject's perspective. Do not compress or summarise — give the memory space to breathe. Faithful and specific. Never generic.
   },
   "constellation": {
-    "emotion_primary": "",           // STRICT ENUM: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame (pick best-fit from these 14 ONLY)
+    "emotion_primary": "",           // CANONICAL: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame | disappointment | relief | frustration (free text accepted if none fits)
     "emotion_subtone": [],           // 2–4 short words (e.g., bittersweet, grateful) — free text array
     "higher_order_emotion": "",      // free text: e.g., awe, forgiveness, pride, moral_elevation (or null)
     "meta_emotional_state": "",      // free text: e.g., acceptance, confusion, curiosity (or null)
     "interpersonal_affect": "",      // free text: e.g., warmth, openness, defensiveness (or null)
-    "narrative_arc": "",             // STRICT ENUM: overcoming | transformation | connection | reflection | closure (pick ONE or null)
-    "relational_dynamics": "",       // STRICT ENUM: parent_child | grandparent_grandchild | romantic_partnership | couple | sibling_bond | family | friendship | friend | companionship | colleague | mentorship | reunion | community_ritual | grief | self_reflection | professional | therapeutic | service | adversarial (pick ONE)
+    "narrative_arc": "",             // CANONICAL: overcoming | transformation | connection | reflection | closure | loss | confrontation (free text accepted if none fits)
+    "relational_dynamics": "",       // CANONICAL: parent_child | grandparent_grandchild | romantic_partnership | couple | sibling_bond | family | friendship | friend | companionship | colleague | mentorship | reunion | community_ritual | grief | self_reflection | professional | therapeutic | service | adversarial (free text accepted if none fits)
     "temporal_context": "",          // STRICT ENUM: childhood | early_adulthood | midlife | late_life | recent | future | timeless (pick ONE or null)
     "memory_type": "",               // STRICT ENUM: legacy_artifact | fleeting_moment | milestone | reflection | formative_experience (pick ONE or null)
     "media_format": "",              // photo, video, audio, text, photo_with_story (or null)
@@ -73,7 +73,8 @@ Schema
     "identity_thread": "",           // short sentence
     "expressed_insight": "",         // brief insight explicitly stated by subject (extracted, not inferred)
     "transformational_pivot": false, // true if subject explicitly identifies this as life-changing
-    "somatic_signature": ""          // bodily sensations explicitly described (e.g., "chest tightness", "warmth spreading") or null
+    "somatic_signature": "",         // bodily sensations explicitly described (e.g., "chest tightness", "warmth spreading") or null
+    "arc_type": ""                   // CANONICAL: betrayal | liberation | grief | discovery | resistance | bond | moral_awakening | transformation | reconciliation | reckoning | threshold | exile (free text accepted if none fits)
   },
   "milky_way": {
     "event_type": "",                // e.g., family gathering, farewell, birthday (or null)
@@ -83,7 +84,7 @@ Schema
     "tone_shift": ""                 // e.g., loss to gratitude (or null)
   },
   "gravity": {
-    "emotional_weight": 0.0,         // 0.0–1.0 (felt intensity IN THE MOMENT)
+    "emotional_weight": 0.0,         // 0.0–1.0 (felt intensity IN THE MOMENT). Calibration: 0.9+ life-altering irreversible moments; 0.7-0.9 significant personal events with strong emotional response; 0.4-0.7 meaningful but routine emotional experiences; 0.1-0.4 mild passing emotional content
     "emotional_density": "",         // STRICT ENUM: low | medium | high (pick ONE or null)
     "valence": "",                   // STRICT ENUM: positive | negative | mixed (pick ONE or null)
     "viscosity": "",                 // STRICT ENUM: low | medium | high | enduring | fluid (pick ONE or null)
@@ -92,7 +93,6 @@ Schema
     "recall_triggers": [],           // sensory or symbolic cues (lowercase tokens)
     "retrieval_keys": [],            // compact hooks (3–6 tokens recommended)
     "nearby_themes": [],             // adjacent concepts
-    "legacy_embed": false,
     "recurrence_pattern": "",        // STRICT ENUM: cyclical | isolated | chronic | emerging (pick ONE or null)
     "strength_score": 0.0,           // 0.0–1.0 (how BOUND/STUCK this memory is)
     "temporal_decay": "",            // STRICT ENUM: fast | moderate | slow (pick ONE or null)

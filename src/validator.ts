@@ -458,7 +458,6 @@ export function validateCompleteness(artifact: EdmArtifact): CompletenessResult 
     "gravity.recall_triggers",
     "gravity.retrieval_keys",
     "gravity.nearby_themes",
-    "gravity.legacy_embed",
     "gravity.strength_score",
     "gravity.resilience_markers",
     "governance.subject_rights",
