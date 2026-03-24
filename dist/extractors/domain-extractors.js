@@ -10,7 +10,7 @@ import { randomUUID } from "crypto";
 export function createMeta(metadata, sourceType, profile = "full") {
     return {
         id: randomUUID(),
-        version: "0.6.0",
+        version: "0.7.0",
         profile,
         created_at: new Date().toISOString(),
         updated_at: null,
