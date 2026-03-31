@@ -396,19 +396,16 @@ export declare const TelemetrySchema: z.ZodObject<{
     extraction_model: z.ZodNullable<z.ZodString>;
     extraction_provider: z.ZodOptional<z.ZodNullable<z.ZodEnum<["anthropic", "openai", "kimi"]>>>;
     extraction_notes: z.ZodNullable<z.ZodString>;
-    extraction_chunking_strategy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     entry_confidence: number;
     extraction_model: string | null;
     extraction_notes: string | null;
     extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
-    extraction_chunking_strategy?: string | null | undefined;
 }, {
     entry_confidence: number;
     extraction_model: string | null;
     extraction_notes: string | null;
     extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
-    extraction_chunking_strategy?: string | null | undefined;
 }>;
 export declare const EmbeddingRefSchema: z.ZodObject<{
     provider: z.ZodString;
@@ -834,19 +831,16 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         extraction_model: z.ZodNullable<z.ZodString>;
         extraction_provider: z.ZodOptional<z.ZodNullable<z.ZodEnum<["anthropic", "openai", "kimi"]>>>;
         extraction_notes: z.ZodNullable<z.ZodString>;
-        extraction_chunking_strategy: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
         entry_confidence: number;
         extraction_model: string | null;
         extraction_notes: string | null;
         extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
-        extraction_chunking_strategy?: string | null | undefined;
     }, {
         entry_confidence: number;
         extraction_model: string | null;
         extraction_notes: string | null;
         extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
-        extraction_chunking_strategy?: string | null | undefined;
     }>;
     system: z.ZodObject<{
         embeddings: z.ZodArray<z.ZodObject<{
@@ -1027,7 +1021,6 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         extraction_model: string | null;
         extraction_notes: string | null;
         extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
-        extraction_chunking_strategy?: string | null | undefined;
     };
     system: {
         embeddings: {
@@ -1160,7 +1153,6 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         extraction_model: string | null;
         extraction_notes: string | null;
         extraction_provider?: "anthropic" | "openai" | "kimi" | null | undefined;
-        extraction_chunking_strategy?: string | null | undefined;
     };
     system: {
         embeddings: {

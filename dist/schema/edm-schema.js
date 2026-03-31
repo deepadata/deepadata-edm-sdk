@@ -317,7 +317,6 @@ export const TelemetrySchema = z.object({
     extraction_model: z.string().nullable().describe("Model/engine identifier"),
     extraction_provider: z.enum(['anthropic', 'openai', 'kimi']).nullable().optional().describe("LLM provider used for extraction"),
     extraction_notes: z.string().nullable().describe("Quality notes"),
-    extraction_chunking_strategy: z.string().nullable().optional().describe("Segmentation strategy used at extraction"),
 });
 // =============================================================================
 // SYSTEM Domain
