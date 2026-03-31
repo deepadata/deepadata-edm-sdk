@@ -146,7 +146,7 @@ EXTENDED PROFILE SCHEMA:
 // narrative_arc: Describes the STORY TRAJECTORY. loss, confrontation are now canonical.
 //   Use free text if no canonical value fits accurately.
 //
-// arc_type: Identify the structural arc pattern. Prefer canonical values: betrayal, liberation, grief, discovery, resistance, bond, moral_awakening, transformation, reconciliation, reckoning, threshold, exile. If none fits accurately, use the most accurate descriptive term.
+// arc_type: Identify the structural arc pattern. Prefer canonical values: betrayal, liberation, grief, discovery, resistance, bond, moral_awakening, transformation, reconciliation, reckoning, threshold, exile. If none fits accurately, use the most accurate descriptive term. Use exact canonical spelling with underscores: moral_awakening not moral awakening. Canonical values must match exactly.
 //
 // wound: Do NOT use generic labels like "loss" or "grief".
 //   Extract what specifically was lost or why it hurts.

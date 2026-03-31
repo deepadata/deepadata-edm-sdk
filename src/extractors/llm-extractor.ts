@@ -41,6 +41,7 @@ CRITICAL: Enum Field Constraints
   Example: "milestone" is valid for memory_type but NOT for narrative_arc.
   Example: "confront" is valid for both drive_state and coping_style - check which field you're populating.
 - emotion_primary, narrative_arc, relational_dynamics, and arc_type accept free text if no canonical value fits.
+- arc_type canonical values use underscores not spaces. Use moral_awakening not moral awakening. Canonical values must match exactly as listed — no spaces, no variations.
 
 Normalization (very important)
 - Emit lowercase for all string fields except proper names in arrays like associated_people.
