@@ -16,6 +16,8 @@ The difference: a raw conversation chunk tells your retrieval system what was sa
 - Give memory platforms five retrieval axes instead of one
 - Portable, governed artifacts that travel with the person across platforms
 
+In a controlled retrieval comparison, EDM field routing outperformed raw vector similarity by 55.6 percentage points on significance-typed queries — the class of queries that have zero lexical overlap between the question and the answer. These queries require significance structure. Raw text cannot answer them.
+
 The spec is MIT licensed and published on Zenodo. The SDK is the extraction layer.
 
 ## Installation
@@ -60,7 +62,7 @@ console.log(JSON.stringify(artifact, null, 2));
 ## Features
 
 - **LLM-Assisted Extraction**: Uses Claude, OpenAI, or Kimi to extract emotional data from text and images
-- **EDM v0.6.0 Compliant**: Full support for all 10 EDM domains
+- **EDM v0.7.0 Compliant**: Full support for all 10 EDM domains
 - **Profile Support**: Essential (~20 fields), Extended (~45 fields), or Full (all fields)
 - **Text + Image Fusion**: Combines text narrative with image context
 - **Stateless Mode**: Privacy-preserving mode for session use
@@ -69,7 +71,7 @@ console.log(JSON.stringify(artifact, null, 2));
 
 ## Profiles
 
-EDM v0.6.0 introduces profile-aware extraction. Choose the profile that matches your use case:
+EDM v0.7.0 introduces profile-aware extraction. Choose the profile that matches your use case:
 
 | Profile | Fields | Use Case |
 |---------|--------|----------|
@@ -164,7 +166,7 @@ Validate stateless compliance with detailed violations.
 
 #### `validateEDM(artifact)`
 
-Validate against the complete EDM v0.6.0 schema.
+Validate against the complete EDM v0.7.0 schema.
 
 ```typescript
 const result = validateEDM(artifact);
@@ -198,7 +200,7 @@ Create an empty artifact structure for manual population.
 
 Create an Anthropic client (uses `ANTHROPIC_API_KEY` env var if not provided).
 
-## EDM v0.6.0 Domains
+## EDM v0.7.0 Domains
 
 The SDK supports all 10 EDM domains:
 
@@ -243,7 +245,7 @@ This SDK is designed for compliance with the EU AI Act. Emotional data extractio
 
 ## Schema Version
 
-This SDK implements EDM v0.6.0. Key changes from v0.5:
+This SDK implements EDM v0.7.0. Key changes from v0.6:
 
 - Added `meta.profile` field for conformance level declaration
 - Profile-aware extraction with tailored system prompts
