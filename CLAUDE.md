@@ -9,10 +9,9 @@ Given text (conversation, journal entry, transcript), it produces
 a structured significance artifact — emotional weight, narrative
 arc, identity threads, recall triggers — encoded at capture time.
 
-- **Current version:** v0.7.1
+- **Current version:** v0.8.2
 - **License:** UNLICENSED (commercial)
-- **npm:** deepadata-edm-sdk@0.7.1 published
-- **arc_type normalisation fix:** underscores enforced in extraction prompts (2974fdc)
+- **npm:** deepadata-edm-sdk@0.8.2 published
 
 ## Role in the DeepaData System
 
@@ -32,7 +31,17 @@ happens in deepadata-com.
 
 ## What This Repo Does
 
+**Exported functions:**
 - `extractFromContent()` — LLM-assisted extraction to EDM artifact
+- `activate()` — calls /v1/activate on deepadata.com, returns field filters for significance routing
+- `feedback()` — calls /v1/feedback on deepadata.com, closes learning loop
+
+**Exported types:**
+- `EdmArtifact` — the artifact shape
+- `ActivateResult` — response from activate() including activation_id and field filters
+- `FeedbackOptions` — options for feedback() call
+
+**Validation:**
 - `validateEDM()` — schema validation against profile (Essential/Extended/Full)
 - `createStatelessArtifact()` — privacy conversion (nulls PII fields)
 - Zod schemas for all 10 EDM domains
