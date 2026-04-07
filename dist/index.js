@@ -62,4 +62,38 @@ LlmEssentialFieldsSchema, LlmExtendedFieldsSchema, ConstellationEssentialSchema,
 RetentionPolicySchema, SubjectRightsSchema, KAnonymitySchema, EmbeddingRefSchema, IndicesSchema, } from "./schema/edm-schema.js";
 // Enum constants
 export { EMOTION_PRIMARY, NARRATIVE_ARC, RELATIONAL_DYNAMICS, TEMPORAL_CONTEXT, MEMORY_TYPE, NARRATIVE_ARCHETYPE, DRIVE_STATE, MOTIVATIONAL_ORIENTATION, } from "./schema/types.js";
+export async function activate(query, options = {}) {
+    const apiKey = options.apiKey ?? process.env.DEEPADATA_API_KEY;
+    if (!apiKey) {
+        throw new Error("DEEPADATA_API_KEY is required for activate(). " +
+            "Pass apiKey option or set DEEPADATA_API_KEY env var.");
+    }
+    const baseUrl = options.baseUrl ?? process.env.DEEPADATA_API_URL ?? "https://deepadata.com";
+    const response = await fetch(`${baseUrl}/api/v1/activate`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            query,
+            subject_vp_id: options.subjectVpId,
+            top_k: options.topK ?? 10,
+        }),
+    });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(`activate() failed: ${response.status} ` +
+            `${error.error ?? ""}`);
+    }
+    const result = (await response.json());
+    const data = result.data;
+    return {
+        arcTypes: data.arc_types ?? [],
+        primaryDomain: data.primary_domain ?? null,
+        fieldFilters: data.field_filters ?? [],
+        confidence: data.confidence ?? 0,
+        significanceGate: data.significance_gate ?? false,
+    };
+}
 //# sourceMappingURL=index.js.map

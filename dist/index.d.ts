@@ -37,4 +37,12 @@ export type { Meta, Core, Constellation, MilkyWay, Gravity, Impulse, Governance,
 export { EMOTION_PRIMARY, NARRATIVE_ARC, RELATIONAL_DYNAMICS, TEMPORAL_CONTEXT, MEMORY_TYPE, NARRATIVE_ARCHETYPE, DRIVE_STATE, MOTIVATIONAL_ORIENTATION, } from "./schema/types.js";
 export type { StatelessValidation } from "./stateless.js";
 export type { CompletenessResult, DomainName, ProfileConformanceResult, ProfileConformanceError, } from "./validator.js";
+export type { ActivateResult } from "./schema/types.js";
+import type { ActivateResult } from "./schema/types.js";
+export declare function activate(query: string, options?: {
+    apiKey?: string;
+    baseUrl?: string;
+    subjectVpId?: string;
+    topK?: number;
+}): Promise<ActivateResult>;
 //# sourceMappingURL=index.d.ts.map

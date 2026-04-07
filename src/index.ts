@@ -179,3 +179,76 @@ export type {
   ProfileConformanceResult,
   ProfileConformanceError,
 } from "./validator.js";
+
+// Re-export ActivateResult type
+export type { ActivateResult } from "./schema/types.js";
+
+// =============================================================================
+// Activate API
+// =============================================================================
+import type { ActivateResult } from "./schema/types.js";
+
+export async function activate(
+  query: string,
+  options: {
+    apiKey?: string;
+    baseUrl?: string;
+    subjectVpId?: string;
+    topK?: number;
+  } = {}
+): Promise<ActivateResult> {
+  const apiKey = options.apiKey ?? process.env.DEEPADATA_API_KEY;
+  if (!apiKey) {
+    throw new Error(
+      "DEEPADATA_API_KEY is required for activate(). " +
+        "Pass apiKey option or set DEEPADATA_API_KEY env var."
+    );
+  }
+  const baseUrl =
+    options.baseUrl ?? process.env.DEEPADATA_API_URL ?? "https://deepadata.com";
+
+  const response = await fetch(`${baseUrl}/api/v1/activate`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query,
+      subject_vp_id: options.subjectVpId,
+      top_k: options.topK ?? 10,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(
+      `activate() failed: ${response.status} ` +
+        `${(error as Record<string, unknown>).error ?? ""}`
+    );
+  }
+
+  const result = (await response.json()) as {
+    data: {
+      arc_types?: string[];
+      primary_domain?: string | null;
+      field_filters?: Array<{
+        field: string;
+        operator: string;
+        value: unknown;
+        weight: number;
+      }>;
+      confidence?: number;
+      significance_gate?: boolean;
+    };
+  };
+  const data = result.data;
+
+  return {
+    arcTypes: data.arc_types ?? [],
+    primaryDomain: data.primary_domain ?? null,
+    fieldFilters: data.field_filters ?? [],
+    confidence: data.confidence ?? 0,
+    significanceGate: data.significance_gate ?? false,
+  };
+}

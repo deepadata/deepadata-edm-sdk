@@ -210,3 +210,19 @@ export const MOTIVATIONAL_ORIENTATION = [
   "meaning",
   "autonomy",
 ] as const;
+
+// =============================================================================
+// Activate API Types
+// =============================================================================
+export interface ActivateResult {
+  arcTypes: string[];
+  primaryDomain: string | null;
+  fieldFilters: Array<{
+    field: string;
+    operator: string;
+    value: unknown;
+    weight: number;
+  }>;
+  confidence: number;
+  significanceGate: boolean;
+}

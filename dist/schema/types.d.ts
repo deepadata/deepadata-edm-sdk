@@ -90,4 +90,16 @@ export declare const MEMORY_TYPE: readonly ["legacy_artifact", "fleeting_moment"
 export declare const NARRATIVE_ARCHETYPE: readonly ["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler", "mentor"];
 export declare const DRIVE_STATE: readonly ["explore", "approach", "avoid", "repair", "persevere", "share"];
 export declare const MOTIVATIONAL_ORIENTATION: readonly ["belonging", "safety", "mastery", "meaning", "autonomy"];
+export interface ActivateResult {
+    arcTypes: string[];
+    primaryDomain: string | null;
+    fieldFilters: Array<{
+        field: string;
+        operator: string;
+        value: unknown;
+        weight: number;
+    }>;
+    confidence: number;
+    significanceGate: boolean;
+}
 //# sourceMappingURL=types.d.ts.map
