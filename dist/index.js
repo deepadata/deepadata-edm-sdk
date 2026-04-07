@@ -97,4 +97,32 @@ export async function activate(query, options = {}) {
         significanceGate: data.significance_gate ?? false,
     };
 }
+// =============================================================================
+// Feedback API
+// =============================================================================
+export async function feedback(options) {
+    const apiKey = options.apiKey ?? process.env.DEEPADATA_API_KEY;
+    if (!apiKey) {
+        throw new Error("DEEPADATA_API_KEY is required for feedback(). " +
+            "Pass apiKey option or set DEEPADATA_API_KEY env var.");
+    }
+    const baseUrl = options.baseUrl ?? process.env.DEEPADATA_API_URL ?? "https://deepadata.com";
+    const response = await fetch(`${baseUrl}/api/v1/feedback`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            activation_id: options.activationId,
+            hit: options.hit,
+            subject_vp_id: options.subjectVpId,
+        }),
+    });
+    if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(`feedback() failed: ${response.status} ` +
+            `${error.error ?? ""}`);
+    }
+}
 //# sourceMappingURL=index.js.map

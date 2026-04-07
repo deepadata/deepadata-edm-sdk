@@ -103,4 +103,11 @@ export interface ActivateResult {
     confidence: number;
     significanceGate: boolean;
 }
+export interface FeedbackOptions {
+    activationId: string;
+    hit: boolean;
+    subjectVpId?: string;
+    apiKey?: string;
+    baseUrl?: string;
+}
 //# sourceMappingURL=types.d.ts.map
