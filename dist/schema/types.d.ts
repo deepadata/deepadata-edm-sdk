@@ -91,6 +91,7 @@ export declare const NARRATIVE_ARCHETYPE: readonly ["hero", "caregiver", "seeker
 export declare const DRIVE_STATE: readonly ["explore", "approach", "avoid", "repair", "persevere", "share"];
 export declare const MOTIVATIONAL_ORIENTATION: readonly ["belonging", "safety", "mastery", "meaning", "autonomy"];
 export interface ActivateResult {
+    activationId: string | null;
     arcTypes: string[];
     primaryDomain: string | null;
     fieldFilters: Array<{

@@ -89,6 +89,7 @@ export async function activate(query, options = {}) {
     const result = (await response.json());
     const data = result.data;
     return {
+        activationId: data.activation_id ?? null,
         arcTypes: data.arc_types ?? [],
         primaryDomain: data.primary_domain ?? null,
         fieldFilters: data.field_filters ?? [],

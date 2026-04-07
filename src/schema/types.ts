@@ -215,6 +215,7 @@ export const MOTIVATIONAL_ORIENTATION = [
 // Activate API Types
 // =============================================================================
 export interface ActivateResult {
+  activationId: string | null;
   arcTypes: string[];
   primaryDomain: string | null;
   fieldFilters: Array<{

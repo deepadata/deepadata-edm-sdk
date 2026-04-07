@@ -230,6 +230,7 @@ export async function activate(
 
   const result = (await response.json()) as {
     data: {
+      activation_id?: string | null;
       arc_types?: string[];
       primary_domain?: string | null;
       field_filters?: Array<{
@@ -245,6 +246,7 @@ export async function activate(
   const data = result.data;
 
   return {
+    activationId: data.activation_id ?? null,
     arcTypes: data.arc_types ?? [],
     primaryDomain: data.primary_domain ?? null,
     fieldFilters: data.field_filters ?? [],
