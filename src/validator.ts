@@ -59,10 +59,16 @@ const domainSchemas = {
 // Profile Conformance Validation
 // =============================================================================
 
+export interface ProfileConformanceWarning {
+  type: "partner_profile";
+  message: string;
+}
+
 export interface ProfileConformanceResult {
   conformant: boolean;
   profile: EdmProfile;
   errors: ProfileConformanceError[];
+  warnings?: ProfileConformanceWarning[];
   domainCount: number;
   fieldCount: number;
 }
@@ -100,7 +106,11 @@ export function validateProfileConformance(artifact: unknown): ProfileConformanc
   const meta = obj.meta as Record<string, unknown> | undefined;
   const declaredProfile = (meta?.profile as EdmProfile) ?? "full";
 
-  if (!["essential", "extended", "full"].includes(declaredProfile)) {
+  const isCanonical = ["essential", "extended", "full"]
+    .includes(declaredProfile);
+  const isPartner = declaredProfile.startsWith("partner:");
+
+  if (!isCanonical && !isPartner) {
     return {
       conformant: false,
       profile: declaredProfile,
@@ -108,7 +118,27 @@ export function validateProfileConformance(artifact: unknown): ProfileConformanc
         type: "extra_field",
         domain: "meta",
         field: "profile",
-        message: `Invalid profile value: ${declaredProfile}. Must be essential, extended, or full.`
+        message: `Invalid profile value: ${declaredProfile}. ` +
+          `Must be essential, extended, full, or ` +
+          `partner:<profile_id> per EDM v0.8.0 Section 3.7.2.`
+      }],
+      domainCount: 0,
+      fieldCount: 0,
+    };
+  }
+
+  // Partner profiles: skip completeness validation pending registry lookup
+  if (isPartner) {
+    return {
+      conformant: true,
+      profile: declaredProfile,
+      errors: [],
+      warnings: [{
+        type: "partner_profile",
+        message: `Partner profile ${declaredProfile} — ` +
+          `completeness validation skipped pending ` +
+          `registry lookup (ADR-0012). ` +
+          `Canonical fields validated.`
       }],
       domainCount: 0,
       fieldCount: 0,
