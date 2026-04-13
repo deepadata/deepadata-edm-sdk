@@ -109,7 +109,7 @@ EXTENDED PROFILE SCHEMA:
     "expressed_insight": "",
     "transformational_pivot": false,
     "somatic_signature": "",
-    "arc_type": ""                   // CANONICAL: betrayal | liberation | grief | discovery | resistance | bond | moral_awakening | transformation | reconciliation | reckoning | threshold | exile (free text accepted if none fits)
+    "arc_type": ""                   // CANONICAL: betrayal | liberation | grief | discovery | resistance | bond | moral_awakening | transformation | reconciliation | reckoning | threshold | exile | gratitude | authenticity (free text accepted if none fits). gratitude = moments of thankfulness, appreciation, acknowledging blessing; authenticity = feeling fully oneself, self-alignment, identity congruence
   },
   "milky_way": {
     "event_type": "",

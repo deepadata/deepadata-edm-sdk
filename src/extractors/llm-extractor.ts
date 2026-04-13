@@ -81,7 +81,7 @@ Schema
     "expressed_insight": "",         // brief insight explicitly stated by subject (extracted, not inferred)
     "transformational_pivot": false, // true if subject explicitly identifies this as life-changing
     "somatic_signature": "",         // bodily sensations explicitly described (e.g., "chest tightness", "warmth spreading") or null
-    "arc_type": ""                   // CANONICAL: betrayal | liberation | grief | discovery | resistance | bond | moral_awakening | transformation | reconciliation | reckoning | threshold | exile (free text accepted if none fits)
+    "arc_type": ""                   // CANONICAL: betrayal | liberation | grief | discovery | resistance | bond | moral_awakening | transformation | reconciliation | reckoning | threshold | exile | gratitude | authenticity (free text accepted if none fits). gratitude = moments of thankfulness, appreciation, acknowledging blessing; authenticity = feeling fully oneself, self-alignment, identity congruence
   },
   "milky_way": {
     "event_type": "",                // e.g., family gathering, farewell, birthday (or null)
