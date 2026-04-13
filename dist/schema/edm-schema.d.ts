@@ -128,7 +128,7 @@ export declare const ConstellationSchema: z.ZodObject<{
     expressed_insight: z.ZodNullable<z.ZodString>;
     transformational_pivot: z.ZodBoolean;
     somatic_signature: z.ZodNullable<z.ZodString>;
-    arc_type: z.ZodOptional<z.ZodNullable<z.ZodUnion<[z.ZodEnum<["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile"]>, z.ZodString]>>>;
+    arc_type: z.ZodOptional<z.ZodNullable<z.ZodUnion<[z.ZodEnum<["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile", "gratitude", "authenticity"]>, z.ZodString]>>>;
 }, "strip", z.ZodTypeAny, {
     emotion_primary: string | null;
     emotion_subtone: string[];
@@ -251,7 +251,7 @@ export declare const ImpulseSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     primary_energy: string | null;
     drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-    motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
+    motivational_orientation: "authenticity" | "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
     temporal_focus: "future" | "past" | "present" | null;
     directionality: "inward" | "outward" | "transcendent" | null;
     social_visibility: "private" | "relational" | "collective" | null;
@@ -264,7 +264,7 @@ export declare const ImpulseSchema: z.ZodObject<{
 }, {
     primary_energy: string | null;
     drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-    motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
+    motivational_orientation: "authenticity" | "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
     temporal_focus: "future" | "past" | "present" | null;
     directionality: "inward" | "outward" | "transcendent" | null;
     social_visibility: "private" | "relational" | "collective" | null;
@@ -599,7 +599,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         expressed_insight: z.ZodNullable<z.ZodString>;
         transformational_pivot: z.ZodBoolean;
         somatic_signature: z.ZodNullable<z.ZodString>;
-        arc_type: z.ZodOptional<z.ZodNullable<z.ZodUnion<[z.ZodEnum<["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile"]>, z.ZodString]>>>;
+        arc_type: z.ZodOptional<z.ZodNullable<z.ZodUnion<[z.ZodEnum<["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile", "gratitude", "authenticity"]>, z.ZodString]>>>;
     }, "strip", z.ZodTypeAny, {
         emotion_primary: string | null;
         emotion_subtone: string[];
@@ -722,7 +722,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
+        motivational_orientation: "authenticity" | "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -735,7 +735,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     }, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
+        motivational_orientation: "authenticity" | "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -985,7 +985,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     impulse: {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
+        motivational_orientation: "authenticity" | "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1117,7 +1117,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     impulse: {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
+        motivational_orientation: "authenticity" | "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1331,7 +1331,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         expressed_insight: z.ZodNullable<z.ZodString>;
         transformational_pivot: z.ZodBoolean;
         somatic_signature: z.ZodNullable<z.ZodString>;
-        arc_type: z.ZodOptional<z.ZodNullable<z.ZodUnion<[z.ZodEnum<["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile"]>, z.ZodString]>>>;
+        arc_type: z.ZodOptional<z.ZodNullable<z.ZodUnion<[z.ZodEnum<["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile", "gratitude", "authenticity"]>, z.ZodString]>>>;
     }, "strip", z.ZodTypeAny, {
         emotion_primary: string | null;
         emotion_subtone: string[];
@@ -1550,7 +1550,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         expressed_insight: z.ZodNullable<z.ZodString>;
         transformational_pivot: z.ZodBoolean;
         somatic_signature: z.ZodNullable<z.ZodString>;
-        arc_type: z.ZodOptional<z.ZodNullable<z.ZodUnion<[z.ZodEnum<["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile"]>, z.ZodString]>>>;
+        arc_type: z.ZodOptional<z.ZodNullable<z.ZodUnion<[z.ZodEnum<["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile", "gratitude", "authenticity"]>, z.ZodString]>>>;
     }, "strip", z.ZodTypeAny, {
         emotion_primary: string | null;
         emotion_subtone: string[];
@@ -1673,7 +1673,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
+        motivational_orientation: "authenticity" | "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1686,7 +1686,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
     }, {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
+        motivational_orientation: "authenticity" | "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1754,7 +1754,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
     impulse: {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
+        motivational_orientation: "authenticity" | "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;
@@ -1822,7 +1822,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
     impulse: {
         primary_energy: string | null;
         drive_state: "explore" | "approach" | "avoid" | "repair" | "persevere" | "share" | "confront" | "protect" | "process" | null;
-        motivational_orientation: "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | "authenticity" | null;
+        motivational_orientation: "authenticity" | "belonging" | "safety" | "mastery" | "meaning" | "autonomy" | null;
         temporal_focus: "future" | "past" | "present" | null;
         directionality: "inward" | "outward" | "transcendent" | null;
         social_visibility: "private" | "relational" | "collective" | null;

@@ -84,12 +84,19 @@ export interface ExtractionMetadata {
 }
 
 /**
+ * Partner profile ID with required "partner:" prefix per ADR-0017
+ * e.g. "partner:com.deepadata.journaling.v1"
+ */
+export type PartnerProfileId = `partner:${string}`;
+
+/**
  * EDM Implementation Profile
  * - essential: ~20 required fields, minimal extraction for memory platforms
  * - extended: ~45 fields, adds full Constellation and key Gravity fields
  * - full: all 96 fields, current v0.6.0 behaviour
+ * - partner:<profile_id>: partner-defined profile per ADR-0017
  */
-export type EdmProfile = 'essential' | 'extended' | 'full';
+export type EdmProfile = 'essential' | 'extended' | 'full' | PartnerProfileId;
 
 export interface ExtractionOptions {
   /** Content to extract from */

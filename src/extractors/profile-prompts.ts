@@ -233,7 +233,8 @@ export function calculateProfileConfidence(
   extracted: Record<string, Record<string, unknown>>,
   profile: EdmProfile
 ): number {
-  const requiredFields = PROFILE_REQUIRED_FIELDS[profile];
+  const requiredFields = PROFILE_REQUIRED_FIELDS[profile as keyof typeof PROFILE_REQUIRED_FIELDS]
+    ?? PROFILE_REQUIRED_FIELDS.extended;
   let populated = 0;
 
   for (const fieldPath of requiredFields) {

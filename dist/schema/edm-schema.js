@@ -180,7 +180,7 @@ export const ConstellationSchema = z.object({
     somatic_signature: z.string().nullable().describe("Bodily sensations described"),
     arc_type: z
         .union([
-        z.enum(["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile"]),
+        z.enum(["betrayal", "liberation", "grief", "discovery", "resistance", "bond", "moral_awakening", "transformation", "reconciliation", "reckoning", "threshold", "exile", "gratitude", "authenticity"]),
         z.string()
     ])
         .nullable()

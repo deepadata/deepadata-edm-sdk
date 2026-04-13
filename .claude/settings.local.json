@@ -27,7 +27,16 @@
       "Bash(grep:*)",
       "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\deepadata-edm-spec\" log --oneline -3)",
       "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\planning\" status)",
-      "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\planning\" log --oneline -3)"
+      "Bash(git -C \"C:\\\\Users\\\\JasonHarvey-ModularW\\\\Documents\\\\GitHub\\\\planning\" log --oneline -3)",
+      "Bash(git -C \"C:\\Users\\JasonHarvey-ModularW\\Documents\\GitHub\\deepadata-edm-sdk\" branch --show-current)",
+      "Bash(git -C \"C:\\Users\\JasonHarvey-ModularW\\Documents\\GitHub\\deepadata-edm-sdk\" log --oneline -5)",
+      "Bash(git -C \"C:\\Users\\JasonHarvey-ModularW\\Documents\\GitHub\\deepadata-edm-sdk\" status)",
+      "Bash(npm publish:*)",
+      "Bash(git -C \"C:\\Users\\JasonHarvey-ModularW\\Documents\\GitHub\\deepadata-edm-sdk\" config user.email \"jason@deepadata.com\")",
+      "Bash(git -C \"C:\\Users\\JasonHarvey-ModularW\\Documents\\GitHub\\deepadata-edm-sdk\" config user.name \"Jason Harvey\")",
+      "Bash(git -C \"C:\\Users\\JasonHarvey-ModularW\\Documents\\GitHub\\deepadata-edm-sdk\" log --oneline -3)",
+      "Bash(git -C \"C:\\Users\\JasonHarvey-ModularW\\Documents\\GitHub\\deepadata-edm-sdk\" push origin main)",
+      "Bash(git push:*)"
     ]
   }
 }

@@ -4,7 +4,7 @@
  * Enforces exact field-level profile filtering per EDM v0.6.0 spec
  */
 import Anthropic from "@anthropic-ai/sdk";
-import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile } from "./schema/types.js";
+import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile, PartnerProfileId } from "./schema/types.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
 import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 import { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
@@ -113,6 +113,9 @@ export function getProfileFields(profile: EdmProfile): Record<string, readonly s
       return EXTENDED_PROFILE_FIELDS;
     case "full":
       return FULL_PROFILE_FIELDS;
+    default:
+      // Partner profile — return extended base fields pending registry lookup (ADR-0012)
+      return EXTENDED_PROFILE_FIELDS;
   }
 }
 
@@ -121,6 +124,32 @@ export function getProfileFields(profile: EdmProfile): Record<string, readonly s
  */
 export function getProfileDomains(profile: EdmProfile): string[] {
   return Object.keys(getProfileFields(profile));
+}
+
+// =============================================================================
+// Profile Type Guards (ADR-0017)
+// =============================================================================
+
+/**
+ * Check if profile is one of the canonical profiles (essential/extended/full)
+ */
+export function isCanonicalProfile(profile: string): profile is "essential" | "extended" | "full" {
+  return ["essential", "extended", "full"].includes(profile);
+}
+
+/**
+ * Check if profile is a partner profile (prefixed with "partner:")
+ */
+export function isPartnerProfile(profile: string): profile is PartnerProfileId {
+  return profile.startsWith("partner:");
+}
+
+/**
+ * Extract the profile ID from a partner profile string
+ * Returns null if not a partner profile
+ */
+export function getPartnerProfileId(profile: string): string | null {
+  return profile.startsWith("partner:") ? profile.slice(8) : null;
 }
 
 // =============================================================================
