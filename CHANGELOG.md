@@ -2,6 +2,10 @@
 
 All notable changes to deepadata-edm-sdk will be documented in this file.
 
+### v0.8.5
+
+- feat: export EdmProfile and PartnerProfileId from main index — enables downstream consumers to import types without cast pattern
+
 ### v0.8.4
 
 - fix(schema): meta.profile namespace model — partner: prefix per ADR-0017 and EDM v0.8.0 Section 3.7.2. Canonical values (essential/extended/full) unchanged. Partner profiles declared as partner:<profile_id>. Adds isCanonicalProfile(), isPartnerProfile(), getPartnerProfileId() helpers.

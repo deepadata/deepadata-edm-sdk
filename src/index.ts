@@ -148,6 +148,9 @@ export type {
   // Composite Types
   EdmArtifact,
   LlmExtractedFields,
+  // Profile Types
+  EdmProfile,
+  PartnerProfileId,
   // Input Types
   ExtractionInput,
   ExtractionMetadata,
