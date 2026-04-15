@@ -9,9 +9,9 @@ Given text (conversation, journal entry, transcript), it produces
 a structured significance artifact — emotional weight, narrative
 arc, identity threads, recall triggers — encoded at capture time.
 
-- **Current version:** v0.8.2
+- **Current version:** v0.8.5
 - **License:** UNLICENSED (commercial)
-- **npm:** deepadata-edm-sdk@0.8.2 published
+- **npm:** deepadata-edm-sdk@0.8.5 published
 
 ## Role in the DeepaData System
 
