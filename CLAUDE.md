@@ -72,6 +72,29 @@ latent psychological states, predict behavior, or diagnose.
 | Extended | 50 | Journaling, companion AI |
 | Full | 96 | Therapy/clinical, regulatory |
 
+## Partner Profiles (v0.8.0)
+
+`meta.profile` accepts `partner:` prefixed values per ADR-0017.
+Canonical per whitepaper §3.7.2 and §3.7.6. Schema validator accepts
+partner-prefixed profiles; completeness check skipped pending registry.
+
+## Arc Types (v0.8.0)
+
+14 canonical arc_types per edm-schema.ts:189-196. v0.8.0 added
+`gratitude` and `authenticity`:
+
+```
+betrayal, liberation, grief, discovery, resistance, bond,
+moral_awakening, transformation, reconciliation, reckoning,
+threshold, exile,
+gratitude, authenticity
+```
+
+## Open Items
+
+- `activate_reason()` SDK surface: not yet implemented. Platform
+  endpoint `/v1/activate_reason` exists (ADR-0018); SDK wrapper pending.
+
 ## Source of Truth
 
 For full project context, cross-repo state, and architectural decisions:
@@ -80,3 +103,6 @@ For full project context, cross-repo state, and architectural decisions:
 
 The platform repo (deepadata-com) is the source of truth for
 session state, version alignment, and task tracking.
+
+## Last session: 2026-04-15
+CLAUDE.md alignment pass across all repos.
