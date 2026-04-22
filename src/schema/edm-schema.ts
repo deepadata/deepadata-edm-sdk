@@ -14,9 +14,15 @@ export const MetaSchema = z.object({
     .regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
     .nullable()
     .describe("Unique identifier for the EDM artifact"),
+  // TODO ADR-0021: Replace single-regex acceptance with version-routed
+  // validation. Per whitepaper §11.4, declared version must govern
+  // interpretation. Current single-regex approach validates all accepted
+  // versions against the v0.8.0 schema, which is incorrect for v0.7.0
+  // artifacts. Partial mitigation: regex limited to versions still in
+  // production circulation.
   version: z
     .string()
-    .regex(/^0\.[5-7]\.[0-9]+(-alpha)?$/)
+    .regex(/^0\.[7-8]\.[0-9]+(-alpha)?$/)
     .describe("EDM schema version"),
   source_timestamp: z.string().nullable().optional().describe("Original source content timestamp"),
   profile: z
