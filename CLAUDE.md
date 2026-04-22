@@ -9,9 +9,9 @@ Given text (conversation, journal entry, transcript), it produces
 a structured significance artifact — emotional weight, narrative
 arc, identity threads, recall triggers — encoded at capture time.
 
-- **Current version:** v0.8.5
+- **Current version:** v0.8.6
 - **License:** UNLICENSED (commercial)
-- **npm:** deepadata-edm-sdk@0.8.5 published
+- **npm:** deepadata-edm-sdk@0.8.6 published
 
 ## Role in the DeepaData System
 
@@ -104,5 +104,5 @@ For full project context, cross-repo state, and architectural decisions:
 The platform repo (deepadata-com) is the source of truth for
 session state, version alignment, and task tracking.
 
-## Last session: 2026-04-15
-CLAUDE.md alignment pass across all repos.
+## Last session: 2026-04-23
+v0.8.6 release (meta.version fix), SDK audit documented.
