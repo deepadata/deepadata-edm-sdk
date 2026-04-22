@@ -1,5 +1,5 @@
 /**
- * Profile-specific extraction prompts for EDM v0.7.0
+ * Profile-specific extraction prompts
  *
  * Essential Profile: 24 required fields for memory platforms
  * Extended Profile: 50 fields for journaling apps

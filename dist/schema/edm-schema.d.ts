@@ -1,13 +1,14 @@
 /**
- * EDM v0.7.0 Zod Schema
+ * EDM Zod Schema
  * Generated from canonical JSON schema at deepadata-edm-spec
+ * EDM schema version is declared in src/version.ts
  */
 import { z } from "zod";
 export declare const MetaSchema: z.ZodObject<{
     id: z.ZodNullable<z.ZodString>;
     version: z.ZodString;
     source_timestamp: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    profile: z.ZodEnum<["essential", "extended", "full"]>;
+    profile: z.ZodUnion<[z.ZodEnum<["essential", "extended", "full"]>, z.ZodString]>;
     created_at: z.ZodString;
     updated_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     locale: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -24,7 +25,7 @@ export declare const MetaSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string | null;
     version: string;
-    profile: "essential" | "extended" | "full";
+    profile: string;
     created_at: string;
     owner_user_id: string | null;
     visibility: "private" | "shared" | "public";
@@ -42,7 +43,7 @@ export declare const MetaSchema: z.ZodObject<{
 }, {
     id: string | null;
     version: string;
-    profile: "essential" | "extended" | "full";
+    profile: string;
     created_at: string;
     owner_user_id: string | null;
     visibility: "private" | "shared" | "public";
@@ -504,7 +505,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         id: z.ZodNullable<z.ZodString>;
         version: z.ZodString;
         source_timestamp: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        profile: z.ZodEnum<["essential", "extended", "full"]>;
+        profile: z.ZodUnion<[z.ZodEnum<["essential", "extended", "full"]>, z.ZodString]>;
         created_at: z.ZodString;
         updated_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         locale: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -521,7 +522,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     }, "strip", z.ZodTypeAny, {
         id: string | null;
         version: string;
-        profile: "essential" | "extended" | "full";
+        profile: string;
         created_at: string;
         owner_user_id: string | null;
         visibility: "private" | "shared" | "public";
@@ -539,7 +540,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     }, {
         id: string | null;
         version: string;
-        profile: "essential" | "extended" | "full";
+        profile: string;
         created_at: string;
         owner_user_id: string | null;
         visibility: "private" | "shared" | "public";
@@ -913,7 +914,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     meta: {
         id: string | null;
         version: string;
-        profile: "essential" | "extended" | "full";
+        profile: string;
         created_at: string;
         owner_user_id: string | null;
         visibility: "private" | "shared" | "public";
@@ -1045,7 +1046,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
     meta: {
         id: string | null;
         version: string;
-        profile: "essential" | "extended" | "full";
+        profile: string;
         created_at: string;
         owner_user_id: string | null;
         visibility: "private" | "shared" | "public";

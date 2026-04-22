@@ -1,5 +1,5 @@
 /**
- * Profile-specific extraction prompts for EDM v0.7.0
+ * Profile-specific extraction prompts
  *
  * Essential Profile: 24 required fields for memory platforms
  * Extended Profile: 50 fields for journaling apps
@@ -223,7 +223,8 @@ export const PROFILE_REQUIRED_FIELDS = {
  * Only scores required fields for the declared profile
  */
 export function calculateProfileConfidence(extracted, profile) {
-    const requiredFields = PROFILE_REQUIRED_FIELDS[profile];
+    const requiredFields = PROFILE_REQUIRED_FIELDS[profile]
+        ?? PROFILE_REQUIRED_FIELDS.extended;
     let populated = 0;
     for (const fieldPath of requiredFields) {
         const parts = fieldPath.split(".");

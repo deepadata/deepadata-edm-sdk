@@ -1,9 +1,10 @@
 /**
- * DeepAData EDM SDK v0.6.0
+ * DeepAData EDM SDK
  *
  * SDK for assembling EDM artifacts from user content using LLM-assisted extraction.
  * Follows interpretation constraints (extraction, not inference) for EU AI Act compliance.
- * Enforces exact field-level profile filtering per EDM v0.6.0 spec.
+ * Enforces exact field-level profile filtering per EDM spec.
+ * EDM schema version is declared in src/version.ts
  *
  * @example
  * ```typescript

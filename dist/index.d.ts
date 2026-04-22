@@ -1,9 +1,10 @@
 /**
- * DeepAData EDM SDK v0.6.0
+ * DeepAData EDM SDK
  *
  * SDK for assembling EDM artifacts from user content using LLM-assisted extraction.
  * Follows interpretation constraints (extraction, not inference) for EU AI Act compliance.
- * Enforces exact field-level profile filtering per EDM v0.6.0 spec.
+ * Enforces exact field-level profile filtering per EDM spec.
+ * EDM schema version is declared in src/version.ts
  *
  * @example
  * ```typescript
@@ -33,7 +34,7 @@ export { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/
 export { analyzeImage, mergeImageContext } from "./extractors/image-analyzer.js";
 export { createMeta, createGovernance, createTelemetry, createSystem, createCrosswalks, detectSourceType, } from "./extractors/domain-extractors.js";
 export { MetaSchema, CoreSchema, ConstellationSchema, MilkyWaySchema, GravitySchema, ImpulseSchema, GovernanceSchema, TelemetrySchema, SystemSchema, CrosswalksSchema, EdmArtifactSchema, LlmExtractedFieldsSchema, LlmEssentialFieldsSchema, LlmExtendedFieldsSchema, ConstellationEssentialSchema, GravityExtendedSchema, RetentionPolicySchema, SubjectRightsSchema, KAnonymitySchema, EmbeddingRefSchema, IndicesSchema, } from "./schema/edm-schema.js";
-export type { Meta, Core, Constellation, MilkyWay, Gravity, Impulse, Governance, Telemetry, System, Crosswalks, RetentionPolicy, SubjectRights, KAnonymity, EmbeddingRef, Indices, EdmArtifact, LlmExtractedFields, ExtractionInput, ExtractionMetadata, ExtractionOptions, ValidationResult, ValidationError, } from "./schema/types.js";
+export type { Meta, Core, Constellation, MilkyWay, Gravity, Impulse, Governance, Telemetry, System, Crosswalks, RetentionPolicy, SubjectRights, KAnonymity, EmbeddingRef, Indices, EdmArtifact, LlmExtractedFields, EdmProfile, PartnerProfileId, ExtractionInput, ExtractionMetadata, ExtractionOptions, ValidationResult, ValidationError, } from "./schema/types.js";
 export { EMOTION_PRIMARY, NARRATIVE_ARC, RELATIONAL_DYNAMICS, TEMPORAL_CONTEXT, MEMORY_TYPE, NARRATIVE_ARCHETYPE, DRIVE_STATE, MOTIVATIONAL_ORIENTATION, } from "./schema/types.js";
 export type { StatelessValidation } from "./stateless.js";
 export type { CompletenessResult, DomainName, ProfileConformanceResult, ProfileConformanceError, } from "./validator.js";

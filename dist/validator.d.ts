@@ -1,9 +1,14 @@
 import type { EdmArtifact, ValidationResult, EdmProfile } from "./schema/types.js";
 export type DomainName = "meta" | "core" | "constellation" | "milky_way" | "gravity" | "impulse" | "governance" | "telemetry" | "system" | "crosswalks";
+export interface ProfileConformanceWarning {
+    type: "partner_profile";
+    message: string;
+}
 export interface ProfileConformanceResult {
     conformant: boolean;
     profile: EdmProfile;
     errors: ProfileConformanceError[];
+    warnings?: ProfileConformanceWarning[];
     domainCount: number;
     fieldCount: number;
 }
@@ -15,7 +20,7 @@ export interface ProfileConformanceError {
 }
 /**
  * Validate that an artifact conforms to its declared profile
- * Per EDM v0.6.0 Profile Invariants:
+ * Per EDM Profile Invariants:
  * - Artifact MUST contain only domains defined for declared profile
  * - Artifact MUST contain only fields defined for declared profile
  * - Out-of-profile domains/fields MUST be omitted entirely
@@ -24,7 +29,7 @@ export declare function validateProfileConformance(artifact: unknown): ProfileCo
 /**
  * Validate an EDM artifact against its declared profile schema
  *
- * Profile-aware validation (EDM v0.6.0):
+ * Profile-aware validation:
  * - Detects meta.profile value (defaults to "full" if not specified)
  * - Essential/Extended profiles: validates domain/field conformance only
  * - Full profile: validates against complete Zod schema

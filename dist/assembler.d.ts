@@ -1,10 +1,11 @@
 /**
- * EDM Artifact Assembler v0.6.0
+ * EDM Artifact Assembler
  * Combines LLM-extracted fields with metadata to create complete artifacts
- * Enforces exact field-level profile filtering per EDM v0.6.0 spec
+ * Enforces exact field-level profile filtering per EDM spec
+ * EDM schema version is declared in src/version.ts
  */
 import Anthropic from "@anthropic-ai/sdk";
-import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile } from "./schema/types.js";
+import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile, PartnerProfileId } from "./schema/types.js";
 /**
  * Essential Profile: 5 domains, 24 fields
  * Target: memory platforms, agent frameworks, AI assistants
@@ -59,8 +60,21 @@ export declare function getProfileFields(profile: EdmProfile): Record<string, re
  */
 export declare function getProfileDomains(profile: EdmProfile): string[];
 /**
+ * Check if profile is one of the canonical profiles (essential/extended/full)
+ */
+export declare function isCanonicalProfile(profile: string): profile is "essential" | "extended" | "full";
+/**
+ * Check if profile is a partner profile (prefixed with "partner:")
+ */
+export declare function isPartnerProfile(profile: string): profile is PartnerProfileId;
+/**
+ * Extract the profile ID from a partner profile string
+ * Returns null if not a partner profile
+ */
+export declare function getPartnerProfileId(profile: string): string | null;
+/**
  * Filter artifact to include only fields defined for the declared profile
- * Per EDM v0.6.0 Profile Invariants: out-of-profile fields MUST be omitted entirely
+ * Per EDM Profile Invariants: out-of-profile fields MUST be omitted entirely
  */
 export declare function filterByProfile(artifact: Record<string, unknown>, profile: EdmProfile): Record<string, unknown>;
 /**

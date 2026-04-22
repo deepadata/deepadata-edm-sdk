@@ -1,9 +1,10 @@
+import { EDM_SCHEMA_VERSION } from "./version.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
 import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 import { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
 import { createMeta, createGovernance, createTelemetry, createSystem, createCrosswalks, detectSourceType, } from "./extractors/domain-extractors.js";
 // =============================================================================
-// Profile Field Definitions (EDM v0.6.0 Spec)
+// Profile Field Definitions
 // =============================================================================
 /**
  * Essential Profile: 5 domains, 24 fields
@@ -94,6 +95,9 @@ export function getProfileFields(profile) {
             return EXTENDED_PROFILE_FIELDS;
         case "full":
             return FULL_PROFILE_FIELDS;
+        default:
+            // Partner profile — return extended base fields pending registry lookup (ADR-0012)
+            return EXTENDED_PROFILE_FIELDS;
     }
 }
 /**
@@ -101,6 +105,28 @@ export function getProfileFields(profile) {
  */
 export function getProfileDomains(profile) {
     return Object.keys(getProfileFields(profile));
+}
+// =============================================================================
+// Profile Type Guards (ADR-0017)
+// =============================================================================
+/**
+ * Check if profile is one of the canonical profiles (essential/extended/full)
+ */
+export function isCanonicalProfile(profile) {
+    return ["essential", "extended", "full"].includes(profile);
+}
+/**
+ * Check if profile is a partner profile (prefixed with "partner:")
+ */
+export function isPartnerProfile(profile) {
+    return profile.startsWith("partner:");
+}
+/**
+ * Extract the profile ID from a partner profile string
+ * Returns null if not a partner profile
+ */
+export function getPartnerProfileId(profile) {
+    return profile.startsWith("partner:") ? profile.slice(8) : null;
 }
 // =============================================================================
 // Profile Filtering
@@ -152,7 +178,7 @@ function filterGovernanceFields(governance, allowedFields) {
 }
 /**
  * Filter artifact to include only fields defined for the declared profile
- * Per EDM v0.6.0 Profile Invariants: out-of-profile fields MUST be omitted entirely
+ * Per EDM Profile Invariants: out-of-profile fields MUST be omitted entirely
  */
 export function filterByProfile(artifact, profile) {
     const profileFields = getProfileFields(profile);
@@ -286,7 +312,7 @@ export function createEmptyArtifact() {
     return {
         meta: {
             id: null,
-            version: "0.7.0",
+            version: EDM_SCHEMA_VERSION,
             profile: "full",
             created_at: new Date().toISOString(),
             updated_at: null,

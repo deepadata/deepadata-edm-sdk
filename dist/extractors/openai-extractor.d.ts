@@ -1,5 +1,5 @@
 /**
- * OpenAI Extractor for EDM v0.6.0
+ * OpenAI Extractor
  * Uses OpenAI GPT models to extract emotional data from content
  * Supports profile-aware extraction (essential/extended/full)
  */
