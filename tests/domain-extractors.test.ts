@@ -10,6 +10,7 @@ import {
   createCrosswalks,
   detectSourceType,
 } from "../src/extractors/domain-extractors.js";
+import { EDM_SCHEMA_VERSION } from "../src/version.js";
 import type { ExtractionMetadata, LlmExtractedFields } from "../src/schema/types.js";
 
 describe("createMeta", () => {
@@ -19,7 +20,7 @@ describe("createMeta", () => {
     };
     const meta = createMeta(metadata, "text");
 
-    expect(meta.version).toBe("0.6.0");
+    expect(meta.version).toBe(EDM_SCHEMA_VERSION);
     expect(meta.consent_basis).toBe("consent");
     expect(meta.source_type).toBe("text");
     expect(meta.visibility).toBe("private");
@@ -111,7 +112,7 @@ describe("createTelemetry", () => {
     expect(telemetry.entry_confidence).toBe(0.85);
     expect(telemetry.extraction_model).toBe("claude-sonnet-4-20250514");
     expect(telemetry.extraction_notes).toBe("High quality extraction");
-    expect(telemetry.alignment_delta).toBeNull();
+    // alignment_delta removed in v0.7.0
   });
 
   it("should accept null notes", () => {
@@ -126,13 +127,7 @@ describe("createSystem", () => {
 
     expect(system.embeddings).toEqual([]);
     expect(system.indices.waypoint_ids).toEqual([]);
-    expect(system.indices.sector_weights).toEqual({
-      episodic: 0,
-      semantic: 0,
-      procedural: 0,
-      emotional: 0,
-      reflective: 0,
-    });
+    // sector_weights removed in v0.7.0
   });
 });
 
@@ -185,7 +180,7 @@ describe("createCrosswalks", () => {
       recall_triggers: [],
       retrieval_keys: [],
       nearby_themes: [],
-      legacy_embed: false,
+      // legacy_embed removed in v0.7.0
       recurrence_pattern: null,
       strength_score: 0,
       temporal_decay: null,
@@ -226,17 +221,7 @@ describe("createCrosswalks", () => {
     expect(crosswalks.plutchik_primary).toBe("trust");
   });
 
-  it("should map legacy_artifact to HMD autobiographical", () => {
-    const extracted = createExtracted({ memory_type: "legacy_artifact" });
-    const crosswalks = createCrosswalks(extracted);
-    expect(crosswalks.HMD_v2_memory_type).toBe("autobiographical");
-  });
-
-  it("should map milestone to HMD flashbulb", () => {
-    const extracted = createExtracted({ memory_type: "milestone" });
-    const crosswalks = createCrosswalks(extracted);
-    expect(crosswalks.HMD_v2_memory_type).toBe("flashbulb");
-  });
+  // HMD_v2_memory_type tests removed — field removed in v0.7.0
 
   it("should return null for unmapped emotions", () => {
     const extracted = createExtracted({ emotion_primary: null });

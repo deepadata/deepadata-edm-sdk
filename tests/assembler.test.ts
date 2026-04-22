@@ -4,6 +4,7 @@
 import { describe, it, expect } from "vitest";
 import { createEmptyArtifact, assembleArtifact } from "../src/assembler.js";
 import { validateEDM } from "../src/validator.js";
+import { EDM_SCHEMA_VERSION } from "../src/version.js";
 import type { LlmExtractedFields } from "../src/schema/types.js";
 
 describe("createEmptyArtifact", () => {
@@ -23,9 +24,9 @@ describe("createEmptyArtifact", () => {
     expect(artifact).toHaveProperty("crosswalks");
   });
 
-  it("should set version to 0.6.0", () => {
+  it("should set version to EDM_SCHEMA_VERSION", () => {
     const artifact = createEmptyArtifact();
-    expect(artifact.meta.version).toBe("0.6.0");
+    expect(artifact.meta.version).toBe(EDM_SCHEMA_VERSION);
   });
 
   it("should have valid created_at timestamp", () => {
@@ -48,7 +49,7 @@ describe("createEmptyArtifact", () => {
     const artifact = createEmptyArtifact();
 
     expect(artifact.constellation.transformational_pivot).toBe(false);
-    expect(artifact.gravity.legacy_embed).toBe(false);
+    // legacy_embed removed in v0.7.0
   });
 
   it("should set scores to 0", () => {
@@ -108,7 +109,7 @@ describe("assembleArtifact", () => {
       recall_triggers: ["smell of bread", "old songs"],
       retrieval_keys: ["grandmother", "kitchen", "warmth"],
       nearby_themes: ["family", "tradition", "legacy"],
-      legacy_embed: true,
+      // legacy_embed removed in v0.7.0
       recurrence_pattern: "cyclical",
       strength_score: 0.9,
       temporal_decay: "slow",
@@ -232,7 +233,7 @@ describe("assembleArtifact", () => {
     const artifact = assembleArtifact(extracted, metadata, context);
 
     expect(artifact.crosswalks.plutchik_primary).toBe("joy");
-    expect(artifact.crosswalks.HMD_v2_memory_type).toBe("autobiographical");
+    // HMD_v2_memory_type removed in v0.7.0
   });
 
   it("should detect mixed source type", () => {
