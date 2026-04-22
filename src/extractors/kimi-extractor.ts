@@ -1,5 +1,5 @@
 /**
- * Kimi K2 Extractor for EDM v0.6.0
+ * Kimi K2 Extractor
  * Uses MoonshotAI's Kimi K2 model via OpenAI-compatible API
  * Supports profile-aware extraction (essential/extended/full)
  */

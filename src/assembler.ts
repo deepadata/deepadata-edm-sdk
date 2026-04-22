@@ -1,10 +1,12 @@
 /**
- * EDM Artifact Assembler v0.6.0
+ * EDM Artifact Assembler
  * Combines LLM-extracted fields with metadata to create complete artifacts
- * Enforces exact field-level profile filtering per EDM v0.6.0 spec
+ * Enforces exact field-level profile filtering per EDM spec
+ * EDM schema version is declared in src/version.ts
  */
 import Anthropic from "@anthropic-ai/sdk";
 import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile, PartnerProfileId } from "./schema/types.js";
+import { EDM_SCHEMA_VERSION } from "./version.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
 import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 import { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
@@ -18,7 +20,7 @@ import {
 } from "./extractors/domain-extractors.js";
 
 // =============================================================================
-// Profile Field Definitions (EDM v0.6.0 Spec)
+// Profile Field Definitions
 // =============================================================================
 
 /**
@@ -214,7 +216,7 @@ function filterGovernanceFields(
 
 /**
  * Filter artifact to include only fields defined for the declared profile
- * Per EDM v0.6.0 Profile Invariants: out-of-profile fields MUST be omitted entirely
+ * Per EDM Profile Invariants: out-of-profile fields MUST be omitted entirely
  */
 export function filterByProfile(
   artifact: Record<string, unknown>,
@@ -411,7 +413,7 @@ export function createEmptyArtifact(): EdmArtifact {
   return {
     meta: {
       id: null,
-      version: "0.7.0",
+      version: EDM_SCHEMA_VERSION,
       profile: "full",
       created_at: new Date().toISOString(),
       updated_at: null,

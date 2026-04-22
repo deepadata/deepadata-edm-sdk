@@ -1,5 +1,5 @@
 /**
- * Stateless Mode for EDM v0.4.0
+ * Stateless Mode
  * Creates privacy-preserving versions of artifacts for session use
  *
  * Stateless artifacts:

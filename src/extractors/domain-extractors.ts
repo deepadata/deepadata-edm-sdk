@@ -1,7 +1,8 @@
 /**
- * Domain Extractors for EDM v0.6.0
+ * Domain Extractors
  * Populates domains not handled by LLM extraction
  * Supports profile-aware artifact assembly
+ * EDM schema version is declared in src/version.ts
  */
 import { randomUUID } from "crypto";
 import type {
@@ -14,6 +15,7 @@ import type {
   LlmExtractedFields,
   EdmProfile,
 } from "../schema/types.js";
+import { EDM_SCHEMA_VERSION } from "../version.js";
 
 // =============================================================================
 // META Domain
@@ -25,7 +27,7 @@ export function createMeta(
 ): Meta {
   return {
     id: randomUUID(),
-    version: "0.7.0",
+    version: EDM_SCHEMA_VERSION,
     profile,
     created_at: new Date().toISOString(),
     updated_at: null,

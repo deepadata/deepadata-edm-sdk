@@ -1,7 +1,8 @@
 /**
  * EDM Artifact Validator
  * Schema validation with detailed error reporting
- * Enforces exact profile field sets per EDM v0.6.0 spec
+ * Enforces exact profile field sets per EDM spec
+ * EDM schema version is declared in src/version.ts
  */
 import { ZodError } from "zod";
 import {
@@ -82,7 +83,7 @@ export interface ProfileConformanceError {
 
 /**
  * Validate that an artifact conforms to its declared profile
- * Per EDM v0.6.0 Profile Invariants:
+ * Per EDM Profile Invariants:
  * - Artifact MUST contain only domains defined for declared profile
  * - Artifact MUST contain only fields defined for declared profile
  * - Out-of-profile domains/fields MUST be omitted entirely
@@ -293,7 +294,7 @@ function validateGovernanceNested(
 /**
  * Validate an EDM artifact against its declared profile schema
  *
- * Profile-aware validation (EDM v0.6.0):
+ * Profile-aware validation:
  * - Detects meta.profile value (defaults to "full" if not specified)
  * - Essential/Extended profiles: validates domain/field conformance only
  * - Full profile: validates against complete Zod schema

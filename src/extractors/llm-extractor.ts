@@ -1,5 +1,5 @@
 /**
- * LLM Extractor for EDM v0.7.0
+ * LLM Extractor
  * Uses Anthropic Claude to extract emotional data from content
  * Supports profile-aware extraction with profile-specific schema validation
  */
@@ -13,14 +13,8 @@ import {
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 
 /**
- * System prompt for EDM extraction - Updated for v0.7.0 canonical schema
- * v0.7.0 changes:
- * - emotion_primary: added disappointment, relief, frustration; accepts free text
- * - narrative_arc: added loss, confrontation; accepts free text
- * - relational_dynamics: accepts free text
- * - arc_type: new field with 12 canonical values
- * - REMOVED: legacy_embed, alignment_delta
- * - emotional_weight calibration anchors added
+ * System prompt for EDM extraction
+ * See CHANGELOG.md for version-specific schema changes
  */
 export const EXTRACTION_SYSTEM_PROMPT = `
 You classify emotionally rich memories into a JSON object. Input may include text and an image.

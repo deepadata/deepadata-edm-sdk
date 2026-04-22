@@ -1,5 +1,5 @@
 /**
- * Image Context Analyzer for EDM v0.4.0
+ * Image Context Analyzer
  * Extracts grounding context from images to supplement text extraction
  */
 import Anthropic from "@anthropic-ai/sdk";

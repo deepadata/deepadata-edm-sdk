@@ -1,6 +1,7 @@
 /**
- * EDM v0.6.0 TypeScript Types
+ * EDM TypeScript Types
  * Inferred from Zod schemas
+ * EDM schema version is declared in src/version.ts
  */
 import { z } from "zod";
 import {
@@ -93,7 +94,7 @@ export type PartnerProfileId = `partner:${string}`;
  * EDM Implementation Profile
  * - essential: ~20 required fields, minimal extraction for memory platforms
  * - extended: ~45 fields, adds full Constellation and key Gravity fields
- * - full: all 96 fields, current v0.6.0 behaviour
+ * - full: all 96 fields, complete extraction
  * - partner:<profile_id>: partner-defined profile per ADR-0017
  */
 export type EdmProfile = 'essential' | 'extended' | 'full' | PartnerProfileId;

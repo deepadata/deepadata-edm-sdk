@@ -1,6 +1,7 @@
 /**
- * EDM v0.7.0 Zod Schema
+ * EDM Zod Schema
  * Generated from canonical JSON schema at deepadata-edm-spec
+ * EDM schema version is declared in src/version.ts
  */
 import { z } from "zod";
 
