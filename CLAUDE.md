@@ -50,13 +50,12 @@ happens in deepadata-com.
 
 - Seal or sign artifacts (that's deepadata-com)
 - Write to any registry (that's deepadata-com)
-- Expose extraction prompts publicly (commercial IP)
 
 ## Hard Constraints
 
 | Constraint | Reason |
 |---|---|
-| Do not expose EXTRACTION_SYSTEM_PROMPT | Commercial IP — ADR-0003 |
+| Do not expose PARTNER profile extraction prompts (partner: prefix) via API, logs, or errors | Registry-gated per spec §3.7.6 | ADR-0003 (amended 2026-04-23), ADR-0017 |
 | Do not add providers without test validation | Empirical trust — ADR-0002 |
 | Interpretation only, never inference | EU AI Act compliance |
 
