@@ -82,6 +82,8 @@ export interface ExtractionMetadata {
   visibility?: Meta["visibility"];
   /** PII classification */
   piiTier?: Meta["pii_tier"];
+  /** Retention policy basis (default "user_defined") */
+  retentionPolicyBasis?: RetentionPolicy["basis"];
 }
 
 /**
