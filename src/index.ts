@@ -360,6 +360,10 @@ export async function activateReason(
       significance_gate?: boolean;
       candidate_count?: number;
     };
+    meta?: {
+      reasoning_model?: string;
+      activated_at?: string;
+    };
   };
   const data = result.data;
 
@@ -372,5 +376,7 @@ export async function activateReason(
     confidence: data.confidence ?? 0,
     significanceGate: data.significance_gate ?? false,
     candidateCount: data.candidate_count ?? 0,
+    reasoningModel: result.meta?.reasoning_model ?? null,
+    activatedAt: result.meta?.activated_at ?? null,
   };
 }

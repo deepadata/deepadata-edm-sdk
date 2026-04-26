@@ -168,6 +168,8 @@ export async function activateReason(query, options) {
         confidence: data.confidence ?? 0,
         significanceGate: data.significance_gate ?? false,
         candidateCount: data.candidate_count ?? 0,
+        reasoningModel: result.meta?.reasoning_model ?? null,
+        activatedAt: result.meta?.activated_at ?? null,
     };
 }
 //# sourceMappingURL=index.js.map

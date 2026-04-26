@@ -144,6 +144,10 @@ export interface ActivateReasonResult {
     significanceGate: boolean;
     /** Number of candidate artifacts considered before sources were selected */
     candidateCount: number;
+    /** Reasoning model used (e.g. "kimi-k2"); null when significance gate is closed and no reasoning fired */
+    reasoningModel: string | null;
+    /** ISO timestamp of when reasoning completed */
+    activatedAt: string | null;
 }
 export interface ActivateReasonOptions {
     /** TurboPuffer namespace to query against */
