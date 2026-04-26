@@ -185,12 +185,24 @@ export type {
 } from "./validator.js";
 
 // Re-export ActivateResult and FeedbackOptions types
-export type { ActivateResult, FeedbackOptions } from "./schema/types.js";
+export type {
+  ActivateResult,
+  FeedbackOptions,
+  ActivateReasonResult,
+  ActivateReasonOptions,
+  ActivateReasonSource,
+} from "./schema/types.js";
 
 // =============================================================================
 // Activate API
 // =============================================================================
-import type { ActivateResult, FeedbackOptions } from "./schema/types.js";
+import type {
+  ActivateResult,
+  FeedbackOptions,
+  ActivateReasonResult,
+  ActivateReasonOptions,
+  ActivateReasonSource,
+} from "./schema/types.js";
 
 export async function activate(
   query: string,
@@ -293,4 +305,72 @@ export async function feedback(options: FeedbackOptions): Promise<void> {
         `${(error as Record<string, unknown>).error ?? ""}`
     );
   }
+}
+
+// =============================================================================
+// Activate Reason API (ADR-0018)
+// =============================================================================
+export async function activateReason(
+  query: string,
+  options: ActivateReasonOptions
+): Promise<ActivateReasonResult> {
+  const apiKey = options.apiKey ?? process.env.DEEPADATA_API_KEY;
+  if (!apiKey) {
+    throw new Error(
+      "DEEPADATA_API_KEY is required for activateReason(). " +
+        "Pass apiKey option or set DEEPADATA_API_KEY env var."
+    );
+  }
+  if (!options.namespace) {
+    throw new Error("namespace is required for activateReason().");
+  }
+  const baseUrl =
+    options.baseUrl ?? process.env.DEEPADATA_API_URL ?? "https://deepadata.com";
+
+  const response = await fetch(`${baseUrl}/api/v1/activate_reason`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query,
+      namespace: options.namespace,
+      subject_vp_id: options.subjectVpId,
+      top_k: options.topK ?? 5,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(
+      `activateReason() failed: ${response.status} ` +
+        `${(error as Record<string, unknown>).error ?? ""}`
+    );
+  }
+
+  const result = (await response.json()) as {
+    data: {
+      arc_reasoning_event_id?: string | null;
+      answer?: string | null;
+      sources?: ActivateReasonSource[];
+      reasoning_fields_used?: string[];
+      arc_types?: string[];
+      confidence?: number;
+      significance_gate?: boolean;
+      candidate_count?: number;
+    };
+  };
+  const data = result.data;
+
+  return {
+    arcReasoningEventId: data.arc_reasoning_event_id ?? null,
+    answer: data.answer ?? null,
+    sources: data.sources ?? [],
+    reasoningFieldsUsed: data.reasoning_fields_used ?? [],
+    arcTypes: data.arc_types ?? [],
+    confidence: data.confidence ?? 0,
+    significanceGate: data.significance_gate ?? false,
+    candidateCount: data.candidate_count ?? 0,
+  };
 }

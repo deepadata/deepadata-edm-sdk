@@ -47,6 +47,8 @@ export interface ExtractionMetadata {
     visibility?: Meta["visibility"];
     /** PII classification */
     piiTier?: Meta["pii_tier"];
+    /** Retention policy basis (default "user_defined") */
+    retentionPolicyBasis?: RetentionPolicy["basis"];
 }
 /**
  * Partner profile ID with required "partner:" prefix per ADR-0017
@@ -115,6 +117,44 @@ export interface FeedbackOptions {
     hit: boolean;
     subjectVpId?: string;
     apiKey?: string;
+    baseUrl?: string;
+}
+export interface ActivateReasonSource {
+    date: string;
+    narrative: string;
+    arc_type: string | null;
+    emotional_weight: number;
+    identity_thread: string | null;
+    tether_type: string | null;
+}
+export interface ActivateReasonResult {
+    /** Reasoning event ID for partner correlation; null when significance gate is closed */
+    arcReasoningEventId: string | null;
+    /** Reasoned answer grounded in retrieved candidates; null when significance gate is closed */
+    answer: string | null;
+    /** Top sources that informed the answer (length capped by topK, max 20) */
+    sources: ActivateReasonSource[];
+    /** EDM fields the reasoning model attended to */
+    reasoningFieldsUsed: string[];
+    /** Arc types matched by query classification */
+    arcTypes: string[];
+    /** Classification confidence (0-1) */
+    confidence: number;
+    /** True when the query carries enough significance for reasoning to fire */
+    significanceGate: boolean;
+    /** Number of candidate artifacts considered before sources were selected */
+    candidateCount: number;
+}
+export interface ActivateReasonOptions {
+    /** TurboPuffer namespace to query against */
+    namespace: string;
+    /** Optional VitaPass subject ID for scoping the activation event */
+    subjectVpId?: string;
+    /** Number of sources to return in the response (default 5, max 20) */
+    topK?: number;
+    /** API key for the deepadata-com platform; falls back to DEEPADATA_API_KEY env */
+    apiKey?: string;
+    /** Override platform base URL; defaults to https://deepadata.com */
     baseUrl?: string;
 }
 //# sourceMappingURL=types.d.ts.map

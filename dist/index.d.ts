@@ -38,8 +38,8 @@ export type { Meta, Core, Constellation, MilkyWay, Gravity, Impulse, Governance,
 export { EMOTION_PRIMARY, NARRATIVE_ARC, RELATIONAL_DYNAMICS, TEMPORAL_CONTEXT, MEMORY_TYPE, NARRATIVE_ARCHETYPE, DRIVE_STATE, MOTIVATIONAL_ORIENTATION, } from "./schema/types.js";
 export type { StatelessValidation } from "./stateless.js";
 export type { CompletenessResult, DomainName, ProfileConformanceResult, ProfileConformanceError, } from "./validator.js";
-export type { ActivateResult, FeedbackOptions } from "./schema/types.js";
-import type { ActivateResult, FeedbackOptions } from "./schema/types.js";
+export type { ActivateResult, FeedbackOptions, ActivateReasonResult, ActivateReasonOptions, ActivateReasonSource, } from "./schema/types.js";
+import type { ActivateResult, FeedbackOptions, ActivateReasonResult, ActivateReasonOptions } from "./schema/types.js";
 export declare function activate(query: string, options?: {
     apiKey?: string;
     baseUrl?: string;
@@ -47,4 +47,5 @@ export declare function activate(query: string, options?: {
     topK?: number;
 }): Promise<ActivateResult>;
 export declare function feedback(options: FeedbackOptions): Promise<void>;
+export declare function activateReason(query: string, options: ActivateReasonOptions): Promise<ActivateReasonResult>;
 //# sourceMappingURL=index.d.ts.map
