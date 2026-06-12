@@ -176,7 +176,7 @@ export async function classifyStanceOpenAI(
   const response = await client.chat.completions.create({
     model,
     max_tokens: 1024,
-    temperature: 0,
+    // No explicit temperature: kimi-k2.5 rejects any value other than 1.
     messages: [
       { role: "system", content: STANCE_CLASSIFIER_PROMPT },
       { role: "user", content: buildClassifierUserContent(input) },
