@@ -148,6 +148,17 @@ describe("attribution guard per profile", () => {
     expect(artifact.core!.wound).toBeNull();
     expect("gravity" in artifact).toBe(false);
     expect("impulse" in artifact).toBe(false);
+    // §5.2 No Omission: exactly the meta fields the published essential
+    // schema defines, explicit null when there is no value
+    expect(Object.keys(artifact.meta!).sort()).toEqual(
+      [
+        "id", "version", "profile", "created_at", "updated_at", "locale",
+        "owner_user_id", "parent_id", "visibility", "pii_tier", "consent_basis",
+      ].sort()
+    );
+    expect(artifact.meta!.parent_id).toBeNull();
+    expect(artifact.meta!.updated_at).toBeNull();
+    expect(artifact.meta!.locale).toBeNull();
     const valid = validators["essential"]!(artifact);
     if (!valid) console.error(JSON.stringify(validators["essential"]!.errors, null, 2));
     expect(valid).toBe(true);
@@ -160,6 +171,25 @@ describe("attribution guard per profile", () => {
     expect(artifact.constellation!.identity_thread).toBeNull();
     expect(artifact.constellation!.transformational_pivot).toBe(false);
     expect(artifact.gravity!.emotional_weight).toBe(0.2);
+    // §5.2 No Omission: exactly the meta fields the published extended
+    // schema defines (essential's 11 + source_type, source_context,
+    // consent_scope, tags; consent_revoked_at is full-only)
+    expect(Object.keys(artifact.meta!).sort()).toEqual(
+      [
+        "id", "version", "profile", "created_at", "updated_at", "locale",
+        "owner_user_id", "parent_id", "visibility", "pii_tier", "source_type",
+        "source_context", "consent_basis", "consent_scope", "tags",
+      ].sort()
+    );
+    expect(artifact.meta!.parent_id).toBeNull();
+    expect(artifact.meta!.updated_at).toBeNull();
+    expect(artifact.meta!.locale).toBeNull();
+    expect(artifact.meta!.source_type).toBe("text");
+    expect(artifact.meta!.source_context).toBeNull();
+    expect(artifact.meta!.consent_scope).toBeNull();
+    // tags: schema type ["array","null"] — empty array, matching the
+    // full profile's emission for callers that pass no tags
+    expect(artifact.meta!.tags).toEqual([]);
     const valid = validators["extended"]!(artifact);
     if (!valid) console.error(JSON.stringify(validators["extended"]!.errors, null, 2));
     expect(valid).toBe(true);
@@ -171,6 +201,16 @@ describe("attribution guard per profile", () => {
     expect(artifact.core!.wound).toBeNull();
     expect(artifact.gravity!.emotional_weight).toBe(0.2);
     for (const v of Object.values(artifact.impulse!)) expect(v).toBeNull();
+    // §5.2 No Omission: exactly the meta fields the published full schema
+    // defines (extended's 15 + consent_revoked_at)
+    expect(Object.keys(artifact.meta!).sort()).toEqual(
+      [
+        "id", "version", "profile", "created_at", "updated_at", "locale",
+        "owner_user_id", "parent_id", "visibility", "pii_tier", "source_type",
+        "source_context", "consent_basis", "consent_scope", "consent_revoked_at", "tags",
+      ].sort()
+    );
+    expect(artifact.meta!.parent_id).toBeNull();
     const valid = validators["full"]!(artifact);
     if (!valid) console.error(JSON.stringify(validators["full"]!.errors, null, 2));
     expect(valid).toBe(true);
