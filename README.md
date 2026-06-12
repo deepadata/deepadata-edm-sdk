@@ -2,6 +2,12 @@
 
 The significance layer for AI memory.
 
+> **Versioning:** SDK package semver is independent of the EDM schema
+> version. The schema version this SDK emits is declared by
+> `src/version.ts` (`EDM_SCHEMA_VERSION`) and stamped into every
+> artifact's `meta.version` — currently **EDM v0.8.0**. An SDK version
+> number never implies a schema version.
+
 EDM artifacts encode what mattered at capture time — emotional weight, recall triggers, identity thread, arc type — so every memory architecture gets a richer signal to retrieve against.
 
 ## Why EDM

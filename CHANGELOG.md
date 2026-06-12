@@ -2,10 +2,20 @@
 
 All notable changes to deepadata-edm-sdk will be documented in this file.
 
-### v0.9.0
+### v0.8.9
 
-Extraction hardening from the 2026-06-10 archive-sample evidence run. SDK
-package version only — emitted artifacts remain EDM v0.8.0.
+Extraction hardening from the 2026-06-10 archive-sample evidence run.
+Emitted artifacts remain EDM v0.8.0.
+
+**Versioning note:** this release was briefly numbered 0.9.0 and
+re-versioned to 0.8.9 before publish to avoid collision with the planned
+EDM spec v0.9 (the release expected to add `experiential_stance` to the
+artifact body). SDK semver is independent of the EDM schema version — the
+schema version an SDK build emits is declared solely by
+`src/version.ts` (`EDM_SCHEMA_VERSION`, currently 0.8.0). Tradeoff
+acknowledged: 0.8.9 packs feature additions into a patch-level bump;
+strict semver would prefer 0.9.0 plus this decoupling note. Founder call
+recorded in deepadata-com session handoff 2026-06-12.
 
 - feat(attribution guard): extraction prompts now classify a top-level
   `experiential_stance` (lived | witnessed | quoted_third_party |

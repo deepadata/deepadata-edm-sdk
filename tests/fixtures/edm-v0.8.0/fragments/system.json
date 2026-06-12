@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EDM SYSTEM Domain",
+  "type": "object",
+  "properties": {
+    "embeddings": {
+      "description": "Embedding references associated with this artifact. Platform-managed. Not populated at extraction time. Excluded from seal hash.",
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "sector": {
+            "type": "string"
+          },
+          "dim": {
+            "type": "number"
+          },
+          "quantized": {
+            "type": "boolean"
+          },
+          "vector_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "indices": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "waypoint_ids": {
+          "description": "Identifiers for retrieval waypoints",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
