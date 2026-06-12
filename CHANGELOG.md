@@ -17,6 +17,18 @@ acknowledged: 0.8.9 packs feature additions into a patch-level bump;
 strict semver would prefer 0.9.0 plus this decoupling note. Founder call
 recorded in deepadata-com session handoff 2026-06-12.
 
+- fix(profile filtering): `meta.parent_id` now survives profile filtering
+  in ALL profiles. The published EDM v0.8.0 schemas (edm-spec `v0.8.0` tag
+  and `main`, mirrored byte-identically in ddna-tools, deepadata-com
+  `public/schemas/edm/v0.8.0/`, and this repo's vendored test fixtures)
+  define `parent_id` in the meta block of essential, extended, AND full;
+  whitepaper §5.2 No Omission requires every in-profile field to be
+  present, explicit null when there is no parent. The SDK previously
+  treated it as full-only and stripped it from essential/extended —
+  that was wrong; `extractFromConversation` chunk threading now appears
+  in the artifact body for every profile (null on the first chunk,
+  first chunk's `meta.id` afterwards). PROFILES.md is silent on meta
+  fields per profile, so no spec-side errata is required.
 - feat(attribution guard): extraction prompts now classify a top-level
   `experiential_stance` (lived | witnessed | quoted_third_party |
   assistant_generated | hypothetical). A deterministic guard clears subject

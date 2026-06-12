@@ -188,7 +188,7 @@ describe("artifact conformance (no stance leakage, v0.8.0 schema)", () => {
     expect(valid).toBe(true);
   });
 
-  it("extractFromConversation chunks emit stance-free, schema-valid artifacts; profile invariants strip parent_id from extended", async () => {
+  it("extractFromConversation chunks emit stance-free, schema-valid artifacts; meta.parent_id threads chunks in extended (present, null on first chunk)", async () => {
     mockExtraction.extracted = extendedExtraction("witnessed");
     const messages = Array.from({ length: 12 }, (_, i) => ({
       role: i % 2 ? "assistant" : "user",
@@ -205,16 +205,22 @@ describe("artifact conformance (no stance leakage, v0.8.0 schema)", () => {
     });
 
     expect(results.length).toBeGreaterThan(1);
+    const firstMeta = results[0]!.artifact["meta"] as Record<string, unknown>;
     for (const [i, r] of results.entries()) {
       expect(findKeyDeep(r.artifact, "experiential_stance")).toEqual([]);
       const valid = validators["extended"]!(r.artifact);
       if (!valid) console.error(JSON.stringify(validators["extended"]!.errors, null, 2));
       expect(valid).toBe(true);
-      // meta.parent_id is a FULL-profile field: extended artifacts must
-      // omit it (Profile Invariants: out-of-profile fields MUST be
-      // omitted). Chunk linkage lives in the returned chunk metadata.
+      // meta.parent_id is defined in ALL profile schemas (published v0.8.0
+      // schema set); §5.2 No Omission requires it present — explicit null
+      // on the first chunk, threaded to the first chunk's id afterwards.
       const meta = r.artifact["meta"] as Record<string, unknown>;
-      expect("parent_id" in meta).toBe(false);
+      expect("parent_id" in meta).toBe(true);
+      if (i === 0) {
+        expect(meta.parent_id).toBeNull();
+      } else {
+        expect(meta.parent_id).toBe(firstMeta.id);
+      }
       expect(r.chunk.index).toBe(i);
       expect(r.chunk.turnRange[1]).toBeGreaterThanOrEqual(r.chunk.turnRange[0]);
     }

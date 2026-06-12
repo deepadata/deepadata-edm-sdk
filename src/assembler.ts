@@ -41,7 +41,7 @@ import {
  * Target: memory platforms, agent frameworks, AI assistants
  */
 export const ESSENTIAL_PROFILE_FIELDS = {
-  meta: ["id", "version", "profile", "created_at", "owner_user_id", "consent_basis", "visibility", "pii_tier"],
+  meta: ["id", "version", "profile", "created_at", "owner_user_id", "parent_id", "consent_basis", "visibility", "pii_tier"],
   core: ["anchor", "spark", "wound", "fuel", "bridge", "echo"],
   constellation: ["emotion_primary", "emotion_subtone", "narrative_arc"],
   governance: ["jurisdiction", "retention_policy", "subject_rights"],
@@ -58,7 +58,7 @@ export const ESSENTIAL_PROFILE_FIELDS = {
  * Impulse domain is NOT included in Extended profile
  */
 export const EXTENDED_PROFILE_FIELDS = {
-  meta: ["id", "version", "profile", "created_at", "owner_user_id", "consent_basis", "visibility", "pii_tier"],
+  meta: ["id", "version", "profile", "created_at", "owner_user_id", "parent_id", "consent_basis", "visibility", "pii_tier"],
   core: ["anchor", "spark", "wound", "fuel", "bridge", "echo", "narrative"],
   constellation: [
     "emotion_primary", "emotion_subtone", "higher_order_emotion", "meta_emotional_state",
@@ -445,11 +445,11 @@ export interface ConversationChunkArtifact {
  * full-coverage, turn-aligned chunks (chunkConversation), each chunk is
  * extracted as a conversation input (framed, subject-anchored, stance-guarded),
  * and chunks after the first are threaded to the first chunk's artifact via
- * metadata.parentId. Note: meta.parent_id is a FULL-profile field — profile
- * filtering omits it from essential/extended artifacts per the profile
- * invariants, so for those profiles the linkage lives in the returned
- * chunk metadata (index, turnRange), not the artifact body. Short
- * conversations produce exactly one artifact.
+ * metadata.parentId. meta.parent_id is defined in ALL profile schemas
+ * (essential, extended, full) per the published v0.8.0 schema set, so the
+ * linkage appears in the artifact body for every profile — populated for
+ * chunks past the first, explicit null otherwise (whitepaper §5.2 No
+ * Omission). Short conversations produce exactly one artifact.
  */
 export async function extractFromConversation(
   options: ConversationExtractionOptions

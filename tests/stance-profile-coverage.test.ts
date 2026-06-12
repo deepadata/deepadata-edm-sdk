@@ -148,6 +148,10 @@ describe("attribution guard per profile", () => {
     expect(artifact.core!.wound).toBeNull();
     expect("gravity" in artifact).toBe(false);
     expect("impulse" in artifact).toBe(false);
+    // parent_id is defined in the essential schema; §5.2 No Omission —
+    // present as explicit null when there is no parent artifact
+    expect("parent_id" in artifact.meta!).toBe(true);
+    expect(artifact.meta!.parent_id).toBeNull();
     const valid = validators["essential"]!(artifact);
     if (!valid) console.error(JSON.stringify(validators["essential"]!.errors, null, 2));
     expect(valid).toBe(true);
@@ -160,6 +164,8 @@ describe("attribution guard per profile", () => {
     expect(artifact.constellation!.identity_thread).toBeNull();
     expect(artifact.constellation!.transformational_pivot).toBe(false);
     expect(artifact.gravity!.emotional_weight).toBe(0.2);
+    expect("parent_id" in artifact.meta!).toBe(true);
+    expect(artifact.meta!.parent_id).toBeNull();
     const valid = validators["extended"]!(artifact);
     if (!valid) console.error(JSON.stringify(validators["extended"]!.errors, null, 2));
     expect(valid).toBe(true);
@@ -171,6 +177,8 @@ describe("attribution guard per profile", () => {
     expect(artifact.core!.wound).toBeNull();
     expect(artifact.gravity!.emotional_weight).toBe(0.2);
     for (const v of Object.values(artifact.impulse!)) expect(v).toBeNull();
+    expect("parent_id" in artifact.meta!).toBe(true);
+    expect(artifact.meta!.parent_id).toBeNull();
     const valid = validators["full"]!(artifact);
     if (!valid) console.error(JSON.stringify(validators["full"]!.errors, null, 2));
     expect(valid).toBe(true);
