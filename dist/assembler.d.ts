@@ -12,7 +12,7 @@ import { type ConversationMessage, type ChunkConversationOptions } from "./conve
  * Target: memory platforms, agent frameworks, AI assistants
  */
 export declare const ESSENTIAL_PROFILE_FIELDS: {
-    readonly meta: readonly ["id", "version", "profile", "created_at", "owner_user_id", "consent_basis", "visibility", "pii_tier"];
+    readonly meta: readonly ["id", "version", "profile", "created_at", "updated_at", "locale", "owner_user_id", "parent_id", "visibility", "pii_tier", "consent_basis"];
     readonly core: readonly ["anchor", "spark", "wound", "fuel", "bridge", "echo"];
     readonly constellation: readonly ["emotion_primary", "emotion_subtone", "narrative_arc"];
     readonly governance: readonly ["jurisdiction", "retention_policy", "subject_rights"];
@@ -28,7 +28,7 @@ export declare const ESSENTIAL_PROFILE_FIELDS: {
  * Impulse domain is NOT included in Extended profile
  */
 export declare const EXTENDED_PROFILE_FIELDS: {
-    readonly meta: readonly ["id", "version", "profile", "created_at", "owner_user_id", "consent_basis", "visibility", "pii_tier"];
+    readonly meta: readonly ["id", "version", "profile", "created_at", "updated_at", "locale", "owner_user_id", "parent_id", "visibility", "pii_tier", "source_type", "source_context", "consent_basis", "consent_scope", "tags"];
     readonly core: readonly ["anchor", "spark", "wound", "fuel", "bridge", "echo", "narrative"];
     readonly constellation: readonly ["emotion_primary", "emotion_subtone", "higher_order_emotion", "meta_emotional_state", "interpersonal_affect", "narrative_arc", "relational_dynamics", "temporal_context", "memory_type", "media_format", "narrative_archetype", "symbolic_anchor", "relational_perspective", "temporal_rhythm", "identity_thread", "expressed_insight", "transformational_pivot", "somatic_signature"];
     readonly milky_way: readonly ["event_type", "location_context", "associated_people", "visibility_context", "tone_shift"];
@@ -110,11 +110,11 @@ export interface ConversationChunkArtifact {
  * full-coverage, turn-aligned chunks (chunkConversation), each chunk is
  * extracted as a conversation input (framed, subject-anchored, stance-guarded),
  * and chunks after the first are threaded to the first chunk's artifact via
- * metadata.parentId. Note: meta.parent_id is a FULL-profile field — profile
- * filtering omits it from essential/extended artifacts per the profile
- * invariants, so for those profiles the linkage lives in the returned
- * chunk metadata (index, turnRange), not the artifact body. Short
- * conversations produce exactly one artifact.
+ * metadata.parentId. meta.parent_id is defined in ALL profile schemas
+ * (essential, extended, full) per the published v0.8.0 schema set, so the
+ * linkage appears in the artifact body for every profile — populated for
+ * chunks past the first, explicit null otherwise (whitepaper §5.2 No
+ * Omission). Short conversations produce exactly one artifact.
  */
 export declare function extractFromConversation(options: ConversationExtractionOptions): Promise<ConversationChunkArtifact[]>;
 /**
