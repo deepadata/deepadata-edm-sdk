@@ -31,6 +31,7 @@
 export {
   extractFromContent,
   extractFromContentWithClient,
+  extractFromConversation,
   assembleArtifact,
   createEmptyArtifact,
   // Profile field definitions
@@ -41,6 +42,48 @@ export {
   getProfileDomains,
   filterByProfile,
 } from "./assembler.js";
+
+export type {
+  ConversationExtractionOptions,
+  ConversationChunkArtifact,
+} from "./assembler.js";
+
+// =============================================================================
+// Conversation Input (transcript framing + per_session chunking)
+// =============================================================================
+export {
+  flattenConversation,
+  frameTranscript,
+  chunkConversation,
+  DEFAULT_CHUNK_MAX_CHARS,
+} from "./conversation.js";
+
+export type {
+  ConversationMessage,
+  ConversationChunk,
+  ChunkConversationOptions,
+} from "./conversation.js";
+
+// =============================================================================
+// Attribution Guard (experiential stance)
+// =============================================================================
+export {
+  applyStanceGuard,
+  takeStance,
+  isNonSubjectStance,
+  resolveStance,
+  classifyStanceOpenAI,
+  classifyStanceAnthropic,
+} from "./extractors/stance-guard.js";
+
+export type { StanceGuardResult, StanceClassifierInput } from "./extractors/stance-guard.js";
+
+export {
+  sanitizeLlmOutput,
+  formatSanitationNotes,
+} from "./extractors/output-sanitizer.js";
+
+export type { SanitationNote } from "./extractors/output-sanitizer.js";
 
 // =============================================================================
 // Stateless Mode
@@ -71,12 +114,16 @@ export {
   createAnthropicClient,
   EXTRACTION_SYSTEM_PROMPT,
   calculateConfidence,
+  defaultMaxTokens,
+  DEFAULT_MAX_TOKENS,
+  THINKING_MODEL_MAX_TOKENS,
 } from "./extractors/llm-extractor.js";
 
 export type {
   LlmExtractionResult,
   LlmEssentialExtracted,
   LlmExtendedExtracted,
+  ExtractorCallOptions,
 } from "./extractors/llm-extractor.js";
 
 export { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
@@ -171,7 +218,10 @@ export {
   NARRATIVE_ARCHETYPE,
   DRIVE_STATE,
   MOTIVATIONAL_ORIENTATION,
+  EXPERIENTIAL_STANCE,
 } from "./schema/types.js";
+
+export type { ExperientialStance } from "./schema/types.js";
 
 // Validation types from stateless
 export type { StatelessValidation } from "./stateless.js";

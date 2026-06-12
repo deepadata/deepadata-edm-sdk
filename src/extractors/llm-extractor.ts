@@ -11,6 +11,38 @@ import {
   LlmExtendedFieldsSchema,
 } from "../schema/edm-schema.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
+import { sanitizeLlmOutput } from "./output-sanitizer.js";
+import { frameTranscript } from "../conversation.js";
+
+/**
+ * Per-extractor call options.
+ */
+export interface ExtractorCallOptions {
+  /** Output token budget; defaults via defaultMaxTokens(model) */
+  maxTokens?: number;
+}
+
+/** Default output budget for non-thinking models */
+export const DEFAULT_MAX_TOKENS = 4096;
+/**
+ * Default output budget for thinking models, whose reasoning tokens count
+ * against max_tokens. 4096 silently truncated extraction JSON on exactly
+ * the most emotionally dense inputs (archive-sample run, 2026-06-10).
+ */
+export const THINKING_MODEL_MAX_TOKENS = 16_384;
+
+/** Models that spend output tokens on reasoning before emitting JSON */
+const THINKING_MODEL_RE = /k2\.[5-9]|k2\.\d{2,}|k3|thinking|reasoner|o[13](-|$)|gpt-5/i;
+
+export function defaultMaxTokens(model: string): number {
+  return THINKING_MODEL_RE.test(model) ? THINKING_MODEL_MAX_TOKENS : DEFAULT_MAX_TOKENS;
+}
+
+/** Apply conversation framing when the input declares transcript content */
+export function prepareInputText(input: ExtractionInput): string | undefined {
+  if (!input.text) return input.text;
+  return input.inputType === "conversation" ? frameTranscript(input.text) : input.text;
+}
 
 /**
  * System prompt for EDM extraction
@@ -27,6 +59,21 @@ Rules
 - Do not omit fields; if unknown, return null.
 - Output JSON only — no commentary, markdown, or extra text.
 - If motivation is ambiguous, choose the most conservative option (e.g., "curiosity" vs "fear") or return null.
+
+SUBJECT ANCHORING (critical)
+- The SUBJECT is the person this artifact will belong to. In a chat transcript the SUBJECT is the USER speaker; ASSISTANT text is context only, never a source of the subject's experience.
+- Score every field relative to the SUBJECT, not the passage. emotional_weight measures what this content meant TO THE SUBJECT — not how vivid, dramatic, or emotionally rich the text itself is.
+- Routine work content (debugging, drafting, planning, logistics) is 0.1–0.4 even when the subject expresses momentary relief or frustration. Reserve 0.7+ for events with personal stakes the subject states or plainly carries. Do not invent somatic or emotional detail the subject never expressed.
+- transformational_pivot is true ONLY if the subject explicitly marks the experience as life-changing. Finishing a task, fixing a bug, or shipping a feature is not a transformational pivot.
+
+EXPERIENTIAL STANCE (critical)
+Classify whose experience the emotionally salient material is, in the top-level "experiential_stance" key:
+- "lived" — the subject's own first-hand experience
+- "witnessed" — events the subject personally witnessed or is directly affected by (a loved one's death, a family crisis)
+- "quoted_third_party" — someone else's story the subject quoted, pasted, or retold without being a participant (an article, test data, a stranger's anecdote)
+- "assistant_generated" — fiction, examples, or anecdotes produced by the assistant, not reported by the subject
+- "hypothetical" — imagined scenarios, drafts about invented people, role-play
+If the stance is quoted_third_party, assistant_generated, or hypothetical: do NOT encode that material into wound, identity_thread, expressed_insight, somatic_signature, transformational_pivot, the impulse domain, or high emotional_weight — those fields describe the SUBJECT. Extract only what the content reveals about the subject themselves (e.g. why they engaged with it), or return null fields with low weight.
 
 CRITICAL: Enum Field Constraints
 - Many fields below have CANONICAL values — preferred values for cross-artifact comparability.
@@ -47,6 +94,7 @@ Normalization (very important)
 
 Schema
 {
+  "experiential_stance": "",   // STRICT ENUM: lived | witnessed | quoted_third_party | assistant_generated | hypothetical (pick ONE or null)
   "core": {
     "anchor": "",            // central theme (e.g., "dad's toolbox", "nana's traditions")
     "spark": "",             // what triggered the memory (e.g., "finding the cassette", "first snow")
@@ -183,6 +231,8 @@ export interface LlmEssentialExtracted {
     emotion_subtone: string[];
     narrative_arc: string | null;
   };
+  /** Present until the attribution guard consumes it (see stance-guard) */
+  experiential_stance?: string | null;
 }
 
 export interface LlmExtendedExtracted {
@@ -197,6 +247,8 @@ export interface LlmExtendedExtracted {
     strength_score: number;
   };
   // impulse removed — not in Extended profile
+  /** Present until the attribution guard consumes it (see stance-guard) */
+  experiential_stance?: string | null;
 }
 
 export interface LlmExtractionResult {
@@ -234,15 +286,17 @@ export async function extractWithLlm(
   client: Anthropic,
   input: ExtractionInput,
   model: string = "claude-sonnet-4-20250514",
-  profile: EdmProfile = "full"
+  profile: EdmProfile = "full",
+  options: ExtractorCallOptions = {}
 ): Promise<LlmExtractionResult> {
   const userContent: Anthropic.MessageCreateParams["messages"][0]["content"] = [];
 
-  // Add text content
-  if (input.text) {
+  // Add text content (conversation inputs get source-material framing)
+  const text = prepareInputText(input);
+  if (text) {
     userContent.push({
       type: "text",
-      text: input.text,
+      text,
     });
   }
 
@@ -264,7 +318,7 @@ export async function extractWithLlm(
 
   const response = await client.messages.create({
     model,
-    max_tokens: 4096,
+    max_tokens: options.maxTokens ?? defaultMaxTokens(model),
     system: systemPrompt,
     messages: [
       {
@@ -292,6 +346,10 @@ export async function extractWithLlm(
   } catch {
     throw new Error(`Failed to parse LLM response as JSON: ${textBlock.text.slice(0, 200)}...`);
   }
+
+  // Sanitize before validation: clamp array caps, coerce invalid
+  // strict-enum values to null (prefer a null field over a dropped artifact)
+  sanitizeLlmOutput(parsed);
 
   // Validate against profile-specific schema
   const schema = getProfileSchema(profile);

@@ -5,18 +5,20 @@
  */
 import OpenAI from "openai";
 import { LlmExtractedFieldsSchema } from "../schema/edm-schema.js";
-import { EXTRACTION_SYSTEM_PROMPT, } from "./llm-extractor.js";
+import { EXTRACTION_SYSTEM_PROMPT, defaultMaxTokens, prepareInputText, } from "./llm-extractor.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
+import { sanitizeLlmOutput } from "./output-sanitizer.js";
 /**
  * Extract EDM fields from content using OpenAI
  */
-export async function extractWithOpenAI(client, input, model = "gpt-4o-mini", temperature = 0, profile = "full") {
+export async function extractWithOpenAI(client, input, model = "gpt-4o-mini", temperature = 0, profile = "full", options = {}) {
     const userContent = [];
-    // Add text content
-    if (input.text) {
+    // Add text content (conversation inputs get source-material framing)
+    const inputText = prepareInputText(input);
+    if (inputText) {
         userContent.push({
             type: "text",
-            text: input.text,
+            text: inputText,
         });
     }
     // Add image if provided (OpenAI uses image_url with data URI)
@@ -34,7 +36,7 @@ export async function extractWithOpenAI(client, input, model = "gpt-4o-mini", te
     const systemPrompt = profilePrompt || EXTRACTION_SYSTEM_PROMPT;
     const response = await client.chat.completions.create({
         model,
-        max_tokens: 4096,
+        max_tokens: options.maxTokens ?? defaultMaxTokens(model),
         response_format: { type: "json_object" },
         temperature,
         messages: [
@@ -66,6 +68,9 @@ export async function extractWithOpenAI(client, input, model = "gpt-4o-mini", te
     catch {
         throw new Error(`Failed to parse OpenAI response as JSON: ${text.slice(0, 200)}...`);
     }
+    // Sanitize before validation: clamp array caps, coerce invalid
+    // strict-enum values to null (prefer a null field over a dropped artifact)
+    sanitizeLlmOutput(parsed);
     // Validate against schema
     const result = LlmExtractedFieldsSchema.safeParse(parsed);
     if (!result.success) {

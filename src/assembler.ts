@@ -5,11 +5,24 @@
  * EDM schema version is declared in src/version.ts
  */
 import Anthropic from "@anthropic-ai/sdk";
-import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile, PartnerProfileId } from "./schema/types.js";
+import type OpenAI from "openai";
+import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile, PartnerProfileId, ExperientialStance } from "./schema/types.js";
 import { EDM_SCHEMA_VERSION } from "./version.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
 import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 import { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
+import {
+  takeStance,
+  applyStanceGuard,
+  resolveStance,
+  classifyStanceOpenAI,
+  classifyStanceAnthropic,
+} from "./extractors/stance-guard.js";
+import {
+  chunkConversation,
+  type ConversationMessage,
+  type ChunkConversationOptions,
+} from "./conversation.js";
 import {
   createMeta,
   createGovernance,
@@ -255,42 +268,200 @@ export function filterByProfile(
 type ProfileExtractedFields = Record<string, unknown>;
 
 /**
+ * Stance handling shared by extractFromContent and the with-client variant.
+ * Pulls experiential_stance out of the extracted fields, optionally verifies
+ * it with a cheap classifier call, applies the deterministic guard, and
+ * returns a telemetry note describing what happened.
+ */
+async function applyAttributionGuard(params: {
+  extracted: Record<string, unknown>;
+  content: ExtractionOptions["content"];
+  verifyStance: boolean | "auto";
+  classify: ((summary: string) => Promise<ExperientialStance | null>) | null;
+}): Promise<{ stance: ExperientialStance | null; note: string }> {
+  const { extracted, content, verifyStance, classify } = params;
+
+  const claimedStance = takeStance(extracted);
+  let stance = claimedStance;
+  const noteParts: string[] = [];
+
+  const gravity = extracted["gravity"] as Record<string, unknown> | undefined;
+  const weight = typeof gravity?.["emotional_weight"] === "number" ? (gravity["emotional_weight"] as number) : 0;
+
+  const shouldVerify =
+    verifyStance === true ||
+    (verifyStance === "auto" &&
+      content.inputType === "conversation" &&
+      (stance === "lived" || stance === "witnessed" || stance === null) &&
+      weight >= 0.6);
+
+  if (shouldVerify && classify && content.text) {
+    const core = extracted["core"] as Record<string, unknown> | undefined;
+    const summary =
+      (typeof core?.["narrative"] === "string" && core["narrative"]) ||
+      ["anchor", "wound", "echo"]
+        .map((f) => (core?.[f] ? `${f}: ${core[f]}` : null))
+        .filter(Boolean)
+        .join("; ") ||
+      "(no summary extracted)";
+    try {
+      const classified = await classify(summary);
+      const resolved = resolveStance(claimedStance, classified);
+      if (resolved !== claimedStance) {
+        stance = resolved;
+        noteParts.push(`stance_classifier_override=${classified} (claimed ${claimedStance ?? "null"})`);
+      }
+    } catch (err) {
+      // Verification is best-effort: a failed classifier call must not
+      // drop the artifact. The deterministic guard still applies below.
+      noteParts.push(`stance_verify_failed: ${err instanceof Error ? err.message.slice(0, 120) : "error"}`);
+    }
+  }
+
+  const cleared = applyStanceGuard(extracted, stance);
+  noteParts.unshift(`experiential_stance=${stance ?? "null"}`);
+  if (cleared.length > 0) {
+    noteParts.push(`stance_guard_cleared: ${cleared.join(", ")}`);
+  }
+
+  return { stance, note: noteParts.join("; ") };
+}
+
+function mergeNotes(...notes: (string | null | undefined)[]): string | null {
+  const merged = notes.filter(Boolean).join("; ");
+  return merged.length > 0 ? merged : null;
+}
+
+/**
  * Extract a complete EDM artifact from content
  *
  * @param options - Extraction options including profile
  * @returns Profile-conformant EDM artifact
  */
 export async function extractFromContent(options: ExtractionOptions): Promise<Record<string, unknown>> {
-  const { content, metadata, model, provider = "kimi", temperature, profile = "full" } = options;
+  const {
+    content,
+    metadata,
+    model,
+    provider = "kimi",
+    temperature,
+    profile = "full",
+    maxTokens,
+    verifyStance = "auto",
+  } = options;
+  const callOptions = { maxTokens };
 
   let llmResult;
+  let classify: ((summary: string) => Promise<ExperientialStance | null>) | null = null;
+
   if (provider === "openai") {
     const client = createOpenAIClient();
-    llmResult = await extractWithOpenAI(client, content, model, temperature, profile);
+    llmResult = await extractWithOpenAI(client, content, model, temperature, profile, callOptions);
+    classify = makeOpenAICompatibleClassifier(client, llmResult.model, content.text);
   } else if (provider === "kimi") {
     const client = createKimiClient();
-    llmResult = await extractWithKimi(client, content, model ?? getKimiModelId(), profile);
+    llmResult = await extractWithKimi(client, content, model ?? getKimiModelId(), profile, callOptions);
+    classify = makeOpenAICompatibleClassifier(client, llmResult.model, content.text);
   } else {
     const client = createAnthropicClient();
-    llmResult = await extractWithLlm(client, content, model, profile);
+    llmResult = await extractWithLlm(client, content, model, profile, callOptions);
+    classify = makeAnthropicClassifier(client, llmResult.model, content.text);
   }
+
+  const extracted = llmResult.extracted as ProfileExtractedFields;
+  const { note: stanceNote } = await applyAttributionGuard({
+    extracted: extracted as Record<string, unknown>,
+    content,
+    verifyStance,
+    classify,
+  });
 
   // Assemble profile-specific artifact
   const artifact = assembleProfileArtifact(
-    llmResult.extracted as ProfileExtractedFields,
+    extracted,
     metadata,
     {
       confidence: llmResult.confidence,
       model: llmResult.model,
       profile: llmResult.profile,
       provider,
-      notes: llmResult.notes,
+      notes: mergeNotes(llmResult.notes, stanceNote),
       hasText: !!content.text,
       hasImage: !!content.image,
     }
   );
 
   return artifact;
+}
+
+function makeOpenAICompatibleClassifier(
+  client: OpenAI,
+  model: string,
+  sourceText: string | undefined
+): ((summary: string) => Promise<ExperientialStance | null>) | null {
+  if (!sourceText) return null;
+  return (summary) => classifyStanceOpenAI(client, model, { sourceText, extractedSummary: summary });
+}
+
+function makeAnthropicClassifier(
+  client: Anthropic,
+  model: string,
+  sourceText: string | undefined
+): ((summary: string) => Promise<ExperientialStance | null>) | null {
+  if (!sourceText) return null;
+  return (summary) => classifyStanceAnthropic(client, model, { sourceText, extractedSummary: summary });
+}
+
+// =============================================================================
+// Conversation Extraction (per_session chunking)
+// =============================================================================
+
+export interface ConversationExtractionOptions extends Omit<ExtractionOptions, "content"> {
+  /** Parsed conversation messages (caller's export parser supplies these) */
+  messages: ConversationMessage[];
+  /** Chunking controls; defaults to 48K chars per chunk, turn-aligned */
+  chunking?: ChunkConversationOptions;
+}
+
+export interface ConversationChunkArtifact {
+  artifact: Record<string, unknown>;
+  /** Which slice of the conversation this artifact covers */
+  chunk: { index: number; turnRange: [number, number] };
+}
+
+/**
+ * Extract EDM artifacts from a full conversation with per_session chunking.
+ *
+ * Replaces caller-side head+tail truncation: the conversation is split into
+ * full-coverage, turn-aligned chunks (chunkConversation), each chunk is
+ * extracted as a conversation input (framed, subject-anchored, stance-guarded),
+ * and chunks after the first are threaded to the first chunk's artifact via
+ * meta.parent_id. Short conversations produce exactly one artifact.
+ */
+export async function extractFromConversation(
+  options: ConversationExtractionOptions
+): Promise<ConversationChunkArtifact[]> {
+  const { messages, chunking, metadata, ...rest } = options;
+  const chunks = chunkConversation(messages, chunking);
+
+  const results: ConversationChunkArtifact[] = [];
+  let threadParentId: string | null = null;
+
+  for (const chunk of chunks) {
+    const chunkMetadata = threadParentId ? { ...metadata, parentId: threadParentId } : metadata;
+    const artifact = await extractFromContent({
+      ...rest,
+      metadata: chunkMetadata,
+      content: { text: chunk.text, inputType: "conversation" },
+    });
+    if (threadParentId === null) {
+      const id = (artifact["meta"] as Record<string, unknown> | undefined)?.["id"];
+      if (typeof id === "string") threadParentId = id;
+    }
+    results.push({ artifact, chunk: { index: chunk.index, turnRange: chunk.turnRange } });
+  }
+
+  return results;
 }
 
 /**
@@ -300,21 +471,29 @@ export async function extractFromContentWithClient(
   client: Anthropic,
   options: ExtractionOptions
 ): Promise<Record<string, unknown>> {
-  const { content, metadata, model, profile = "full" } = options;
+  const { content, metadata, model, profile = "full", maxTokens, verifyStance = "auto" } = options;
 
   // Extract with LLM
-  const llmResult = await extractWithLlm(client, content, model, profile);
+  const llmResult = await extractWithLlm(client, content, model, profile, { maxTokens });
+
+  const extracted = llmResult.extracted as ProfileExtractedFields;
+  const { note: stanceNote } = await applyAttributionGuard({
+    extracted: extracted as Record<string, unknown>,
+    content,
+    verifyStance,
+    classify: makeAnthropicClassifier(client, llmResult.model, content.text),
+  });
 
   // Assemble profile-specific artifact
   const artifact = assembleProfileArtifact(
-    llmResult.extracted as ProfileExtractedFields,
+    extracted,
     metadata,
     {
       confidence: llmResult.confidence,
       model: llmResult.model,
       profile: llmResult.profile,
       provider: 'anthropic',
-      notes: llmResult.notes,
+      notes: mergeNotes(llmResult.notes, stanceNote),
       hasText: !!content.text,
       hasImage: !!content.image,
     }

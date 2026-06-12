@@ -2,6 +2,41 @@
 
 All notable changes to deepadata-edm-sdk will be documented in this file.
 
+### v0.9.0
+
+Extraction hardening from the 2026-06-10 archive-sample evidence run. SDK
+package version only — emitted artifacts remain EDM v0.8.0.
+
+- feat(attribution guard): extraction prompts now classify a top-level
+  `experiential_stance` (lived | witnessed | quoted_third_party |
+  assistant_generated | hypothetical). A deterministic guard clears subject
+  significance fields (wound, identity_thread, expressed_insight,
+  somatic_signature, transformational_pivot, impulse domain) and floors
+  weights at 0.2 when the salient material is not the subject's own
+  experience. Optional cheap classifier verification pass
+  (`verifyStance: "auto"` default — fires on high-weight conversation
+  extractions). Stance travels in telemetry notes, never the artifact body;
+  proposed as an EDM v0.9 spec field.
+- feat(subject anchoring): prompts score significance relative to the
+  SUBJECT, not the passage — work-thread weight calibration tightened,
+  transformational_pivot requires the subject explicitly marking the
+  experience as life-changing.
+- feat(conversation input): `ExtractionInput.inputType: "conversation"`
+  applies source-material framing inside extractors so transcripts get
+  classified instead of continued (previously a caller-side wrapper).
+  New `flattenConversation`, `frameTranscript`, `chunkConversation`,
+  `extractFromConversation` — full-coverage, turn-aligned per_session
+  chunking replaces head+tail truncation for long threads.
+- feat(token budget): hardcoded `max_tokens: 4096` replaced with
+  `ExtractionOptions.maxTokens` + model-aware default (16384 for thinking
+  models, whose reasoning tokens count against the output budget; 4096
+  silently truncated extraction on emotionally dense inputs).
+- feat(output sanitation): invalid strict-enum values coerce to null and
+  over-cap arrays (emotion_subtone > 4, resilience_markers > 3) truncate
+  before validation — a null field beats a dropped artifact.
+- fix: default Kimi model `kimi-k2-0711-preview` (retired by Moonshot,
+  404s) replaced with `kimi-k2.5`.
+
 ### v0.8.6
 
 - fix(version): single source of truth for EDM schema version in src/version.ts, with build-time coherence test against canonical spec examples. Stale 0.7.0 stamp on extracted artefacts corrected to 0.8.0 per whitepaper §11.4.

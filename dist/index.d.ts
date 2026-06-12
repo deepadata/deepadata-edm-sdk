@@ -24,18 +24,26 @@
  * const validation = validateProfileConformance(artifact);
  * ```
  */
-export { extractFromContent, extractFromContentWithClient, assembleArtifact, createEmptyArtifact, ESSENTIAL_PROFILE_FIELDS, EXTENDED_PROFILE_FIELDS, FULL_PROFILE_FIELDS, getProfileFields, getProfileDomains, filterByProfile, } from "./assembler.js";
+export { extractFromContent, extractFromContentWithClient, extractFromConversation, assembleArtifact, createEmptyArtifact, ESSENTIAL_PROFILE_FIELDS, EXTENDED_PROFILE_FIELDS, FULL_PROFILE_FIELDS, getProfileFields, getProfileDomains, filterByProfile, } from "./assembler.js";
+export type { ConversationExtractionOptions, ConversationChunkArtifact, } from "./assembler.js";
+export { flattenConversation, frameTranscript, chunkConversation, DEFAULT_CHUNK_MAX_CHARS, } from "./conversation.js";
+export type { ConversationMessage, ConversationChunk, ChunkConversationOptions, } from "./conversation.js";
+export { applyStanceGuard, takeStance, isNonSubjectStance, resolveStance, classifyStanceOpenAI, classifyStanceAnthropic, } from "./extractors/stance-guard.js";
+export type { StanceGuardResult, StanceClassifierInput } from "./extractors/stance-guard.js";
+export { sanitizeLlmOutput, formatSanitationNotes, } from "./extractors/output-sanitizer.js";
+export type { SanitationNote } from "./extractors/output-sanitizer.js";
 export { createStatelessArtifact, isStateless, validateStateless, } from "./stateless.js";
 export { validateEDM, validateEDMStrict, validateEDMWithProfile, validateProfileConformance, validateDomain, validateCompleteness, } from "./validator.js";
-export { extractWithLlm, createAnthropicClient, EXTRACTION_SYSTEM_PROMPT, calculateConfidence, } from "./extractors/llm-extractor.js";
-export type { LlmExtractionResult, LlmEssentialExtracted, LlmExtendedExtracted, } from "./extractors/llm-extractor.js";
+export { extractWithLlm, createAnthropicClient, EXTRACTION_SYSTEM_PROMPT, calculateConfidence, defaultMaxTokens, DEFAULT_MAX_TOKENS, THINKING_MODEL_MAX_TOKENS, } from "./extractors/llm-extractor.js";
+export type { LlmExtractionResult, LlmEssentialExtracted, LlmExtendedExtracted, ExtractorCallOptions, } from "./extractors/llm-extractor.js";
 export { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 export { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
 export { analyzeImage, mergeImageContext } from "./extractors/image-analyzer.js";
 export { createMeta, createGovernance, createTelemetry, createSystem, createCrosswalks, detectSourceType, } from "./extractors/domain-extractors.js";
 export { MetaSchema, CoreSchema, ConstellationSchema, MilkyWaySchema, GravitySchema, ImpulseSchema, GovernanceSchema, TelemetrySchema, SystemSchema, CrosswalksSchema, EdmArtifactSchema, LlmExtractedFieldsSchema, LlmEssentialFieldsSchema, LlmExtendedFieldsSchema, ConstellationEssentialSchema, GravityExtendedSchema, RetentionPolicySchema, SubjectRightsSchema, KAnonymitySchema, EmbeddingRefSchema, IndicesSchema, } from "./schema/edm-schema.js";
 export type { Meta, Core, Constellation, MilkyWay, Gravity, Impulse, Governance, Telemetry, System, Crosswalks, RetentionPolicy, SubjectRights, KAnonymity, EmbeddingRef, Indices, EdmArtifact, LlmExtractedFields, EdmProfile, PartnerProfileId, ExtractionInput, ExtractionMetadata, ExtractionOptions, ValidationResult, ValidationError, } from "./schema/types.js";
-export { EMOTION_PRIMARY, NARRATIVE_ARC, RELATIONAL_DYNAMICS, TEMPORAL_CONTEXT, MEMORY_TYPE, NARRATIVE_ARCHETYPE, DRIVE_STATE, MOTIVATIONAL_ORIENTATION, } from "./schema/types.js";
+export { EMOTION_PRIMARY, NARRATIVE_ARC, RELATIONAL_DYNAMICS, TEMPORAL_CONTEXT, MEMORY_TYPE, NARRATIVE_ARCHETYPE, DRIVE_STATE, MOTIVATIONAL_ORIENTATION, EXPERIENTIAL_STANCE, } from "./schema/types.js";
+export type { ExperientialStance } from "./schema/types.js";
 export type { StatelessValidation } from "./stateless.js";
 export type { CompletenessResult, DomainName, ProfileConformanceResult, ProfileConformanceError, } from "./validator.js";
 export type { ActivateResult, FeedbackOptions, ActivateReasonResult, ActivateReasonOptions, ActivateReasonSource, } from "./schema/types.js";

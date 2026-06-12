@@ -9,8 +9,12 @@ import type { LlmExtractedFields, ExtractionInput, EdmProfile } from "../schema/
 import { LlmExtractedFieldsSchema, LlmEssentialFieldsSchema, LlmExtendedFieldsSchema } from "../schema/edm-schema.js";
 import {
   EXTRACTION_SYSTEM_PROMPT,
+  defaultMaxTokens,
+  prepareInputText,
+  type ExtractorCallOptions,
   type LlmExtractionResult,
 } from "./llm-extractor.js";
+import { sanitizeLlmOutput } from "./output-sanitizer.js";
 
 /**
  * Get the appropriate schema for profile-specific validation
@@ -29,10 +33,13 @@ function getProfileSchema(profile: EdmProfile) {
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 
 /**
- * Default Kimi K2 model identifier
- * MoonshotAI exposes this via their OpenAI-compatible endpoint
+ * Default Kimi model identifier
+ * MoonshotAI exposes this via their OpenAI-compatible endpoint.
+ * kimi-k2-0711-preview was retired by Moonshot (404s as of 2026-06).
+ * Note: kimi-k2.5 is a thinking model — defaultMaxTokens() sizes the
+ * output budget accordingly.
  */
-const DEFAULT_KIMI_MODEL = "kimi-k2-0711-preview";
+const DEFAULT_KIMI_MODEL = "kimi-k2.5";
 
 /**
  * Kimi API base URLs
@@ -51,15 +58,17 @@ export async function extractWithKimi(
   client: OpenAI,
   input: ExtractionInput,
   model: string = DEFAULT_KIMI_MODEL,
-  profile: EdmProfile = "full"
+  profile: EdmProfile = "full",
+  options: ExtractorCallOptions = {}
 ): Promise<LlmExtractionResult> {
   const userContent: ChatCompletionContentPart[] = [];
 
-  // Add text content
-  if (input.text) {
+  // Add text content (conversation inputs get source-material framing)
+  const text = prepareInputText(input);
+  if (text) {
     userContent.push({
       type: "text",
-      text: input.text,
+      text,
     });
   }
 
@@ -80,7 +89,7 @@ export async function extractWithKimi(
 
   const response = await client.chat.completions.create({
     model,
-    max_tokens: 4096,
+    max_tokens: options.maxTokens ?? defaultMaxTokens(model),
     messages: [
       {
         role: "system",
@@ -94,13 +103,13 @@ export async function extractWithKimi(
   });
 
   // Extract text response
-  const text = response.choices[0]?.message?.content;
-  if (!text) {
+  const responseText = response.choices[0]?.message?.content;
+  if (!responseText) {
     throw new Error("No text response from Kimi K2");
   }
 
   // Parse JSON response (strip markdown code fences if present)
-  let jsonText = text.trim();
+  let jsonText = responseText.trim();
   const fenceMatch = jsonText.match(/^```(?:json)?\s*\n?([\s\S]*?)\n?\s*```$/);
   if (fenceMatch?.[1]) {
     jsonText = fenceMatch[1].trim();
@@ -109,8 +118,12 @@ export async function extractWithKimi(
   try {
     parsed = JSON.parse(jsonText);
   } catch {
-    throw new Error(`Failed to parse Kimi response as JSON: ${text.slice(0, 200)}...`);
+    throw new Error(`Failed to parse Kimi response as JSON: ${responseText.slice(0, 200)}...`);
   }
+
+  // Sanitize before validation: clamp array caps, coerce invalid
+  // strict-enum values to null (prefer a null field over a dropped artifact)
+  sanitizeLlmOutput(parsed);
 
   // Validate against profile-specific schema
   const schema = getProfileSchema(profile);

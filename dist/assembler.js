@@ -2,6 +2,8 @@ import { EDM_SCHEMA_VERSION } from "./version.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
 import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 import { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
+import { takeStance, applyStanceGuard, resolveStance, classifyStanceOpenAI, classifyStanceAnthropic, } from "./extractors/stance-guard.js";
+import { chunkConversation, } from "./conversation.js";
 import { createMeta, createGovernance, createTelemetry, createSystem, createCrosswalks, detectSourceType, } from "./extractors/domain-extractors.js";
 // =============================================================================
 // Profile Field Definitions
@@ -197,52 +199,162 @@ export function filterByProfile(artifact, profile) {
     return filtered;
 }
 /**
+ * Stance handling shared by extractFromContent and the with-client variant.
+ * Pulls experiential_stance out of the extracted fields, optionally verifies
+ * it with a cheap classifier call, applies the deterministic guard, and
+ * returns a telemetry note describing what happened.
+ */
+async function applyAttributionGuard(params) {
+    const { extracted, content, verifyStance, classify } = params;
+    const claimedStance = takeStance(extracted);
+    let stance = claimedStance;
+    const noteParts = [];
+    const gravity = extracted["gravity"];
+    const weight = typeof gravity?.["emotional_weight"] === "number" ? gravity["emotional_weight"] : 0;
+    const shouldVerify = verifyStance === true ||
+        (verifyStance === "auto" &&
+            content.inputType === "conversation" &&
+            (stance === "lived" || stance === "witnessed" || stance === null) &&
+            weight >= 0.6);
+    if (shouldVerify && classify && content.text) {
+        const core = extracted["core"];
+        const summary = (typeof core?.["narrative"] === "string" && core["narrative"]) ||
+            ["anchor", "wound", "echo"]
+                .map((f) => (core?.[f] ? `${f}: ${core[f]}` : null))
+                .filter(Boolean)
+                .join("; ") ||
+            "(no summary extracted)";
+        try {
+            const classified = await classify(summary);
+            const resolved = resolveStance(claimedStance, classified);
+            if (resolved !== claimedStance) {
+                stance = resolved;
+                noteParts.push(`stance_classifier_override=${classified} (claimed ${claimedStance ?? "null"})`);
+            }
+        }
+        catch (err) {
+            // Verification is best-effort: a failed classifier call must not
+            // drop the artifact. The deterministic guard still applies below.
+            noteParts.push(`stance_verify_failed: ${err instanceof Error ? err.message.slice(0, 120) : "error"}`);
+        }
+    }
+    const cleared = applyStanceGuard(extracted, stance);
+    noteParts.unshift(`experiential_stance=${stance ?? "null"}`);
+    if (cleared.length > 0) {
+        noteParts.push(`stance_guard_cleared: ${cleared.join(", ")}`);
+    }
+    return { stance, note: noteParts.join("; ") };
+}
+function mergeNotes(...notes) {
+    const merged = notes.filter(Boolean).join("; ");
+    return merged.length > 0 ? merged : null;
+}
+/**
  * Extract a complete EDM artifact from content
  *
  * @param options - Extraction options including profile
  * @returns Profile-conformant EDM artifact
  */
 export async function extractFromContent(options) {
-    const { content, metadata, model, provider = "kimi", temperature, profile = "full" } = options;
+    const { content, metadata, model, provider = "kimi", temperature, profile = "full", maxTokens, verifyStance = "auto", } = options;
+    const callOptions = { maxTokens };
     let llmResult;
+    let classify = null;
     if (provider === "openai") {
         const client = createOpenAIClient();
-        llmResult = await extractWithOpenAI(client, content, model, temperature, profile);
+        llmResult = await extractWithOpenAI(client, content, model, temperature, profile, callOptions);
+        classify = makeOpenAICompatibleClassifier(client, llmResult.model, content.text);
     }
     else if (provider === "kimi") {
         const client = createKimiClient();
-        llmResult = await extractWithKimi(client, content, model ?? getKimiModelId(), profile);
+        llmResult = await extractWithKimi(client, content, model ?? getKimiModelId(), profile, callOptions);
+        classify = makeOpenAICompatibleClassifier(client, llmResult.model, content.text);
     }
     else {
         const client = createAnthropicClient();
-        llmResult = await extractWithLlm(client, content, model, profile);
+        llmResult = await extractWithLlm(client, content, model, profile, callOptions);
+        classify = makeAnthropicClassifier(client, llmResult.model, content.text);
     }
+    const extracted = llmResult.extracted;
+    const { note: stanceNote } = await applyAttributionGuard({
+        extracted: extracted,
+        content,
+        verifyStance,
+        classify,
+    });
     // Assemble profile-specific artifact
-    const artifact = assembleProfileArtifact(llmResult.extracted, metadata, {
+    const artifact = assembleProfileArtifact(extracted, metadata, {
         confidence: llmResult.confidence,
         model: llmResult.model,
         profile: llmResult.profile,
         provider,
-        notes: llmResult.notes,
+        notes: mergeNotes(llmResult.notes, stanceNote),
         hasText: !!content.text,
         hasImage: !!content.image,
     });
     return artifact;
 }
+function makeOpenAICompatibleClassifier(client, model, sourceText) {
+    if (!sourceText)
+        return null;
+    return (summary) => classifyStanceOpenAI(client, model, { sourceText, extractedSummary: summary });
+}
+function makeAnthropicClassifier(client, model, sourceText) {
+    if (!sourceText)
+        return null;
+    return (summary) => classifyStanceAnthropic(client, model, { sourceText, extractedSummary: summary });
+}
+/**
+ * Extract EDM artifacts from a full conversation with per_session chunking.
+ *
+ * Replaces caller-side head+tail truncation: the conversation is split into
+ * full-coverage, turn-aligned chunks (chunkConversation), each chunk is
+ * extracted as a conversation input (framed, subject-anchored, stance-guarded),
+ * and chunks after the first are threaded to the first chunk's artifact via
+ * meta.parent_id. Short conversations produce exactly one artifact.
+ */
+export async function extractFromConversation(options) {
+    const { messages, chunking, metadata, ...rest } = options;
+    const chunks = chunkConversation(messages, chunking);
+    const results = [];
+    let threadParentId = null;
+    for (const chunk of chunks) {
+        const chunkMetadata = threadParentId ? { ...metadata, parentId: threadParentId } : metadata;
+        const artifact = await extractFromContent({
+            ...rest,
+            metadata: chunkMetadata,
+            content: { text: chunk.text, inputType: "conversation" },
+        });
+        if (threadParentId === null) {
+            const id = artifact["meta"]?.["id"];
+            if (typeof id === "string")
+                threadParentId = id;
+        }
+        results.push({ artifact, chunk: { index: chunk.index, turnRange: chunk.turnRange } });
+    }
+    return results;
+}
 /**
  * Extract from content with a provided Anthropic client
  */
 export async function extractFromContentWithClient(client, options) {
-    const { content, metadata, model, profile = "full" } = options;
+    const { content, metadata, model, profile = "full", maxTokens, verifyStance = "auto" } = options;
     // Extract with LLM
-    const llmResult = await extractWithLlm(client, content, model, profile);
+    const llmResult = await extractWithLlm(client, content, model, profile, { maxTokens });
+    const extracted = llmResult.extracted;
+    const { note: stanceNote } = await applyAttributionGuard({
+        extracted: extracted,
+        content,
+        verifyStance,
+        classify: makeAnthropicClassifier(client, llmResult.model, content.text),
+    });
     // Assemble profile-specific artifact
-    const artifact = assembleProfileArtifact(llmResult.extracted, metadata, {
+    const artifact = assembleProfileArtifact(extracted, metadata, {
         confidence: llmResult.confidence,
         model: llmResult.model,
         profile: llmResult.profile,
         provider: 'anthropic',
-        notes: llmResult.notes,
+        notes: mergeNotes(llmResult.notes, stanceNote),
         hasText: !!content.text,
         hasImage: !!content.image,
     });

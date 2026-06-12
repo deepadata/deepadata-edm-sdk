@@ -27,9 +27,18 @@
 // =============================================================================
 // Core Extraction API
 // =============================================================================
-export { extractFromContent, extractFromContentWithClient, assembleArtifact, createEmptyArtifact, 
+export { extractFromContent, extractFromContentWithClient, extractFromConversation, assembleArtifact, createEmptyArtifact, 
 // Profile field definitions
 ESSENTIAL_PROFILE_FIELDS, EXTENDED_PROFILE_FIELDS, FULL_PROFILE_FIELDS, getProfileFields, getProfileDomains, filterByProfile, } from "./assembler.js";
+// =============================================================================
+// Conversation Input (transcript framing + per_session chunking)
+// =============================================================================
+export { flattenConversation, frameTranscript, chunkConversation, DEFAULT_CHUNK_MAX_CHARS, } from "./conversation.js";
+// =============================================================================
+// Attribution Guard (experiential stance)
+// =============================================================================
+export { applyStanceGuard, takeStance, isNonSubjectStance, resolveStance, classifyStanceOpenAI, classifyStanceAnthropic, } from "./extractors/stance-guard.js";
+export { sanitizeLlmOutput, formatSanitationNotes, } from "./extractors/output-sanitizer.js";
 // =============================================================================
 // Stateless Mode
 // =============================================================================
@@ -41,7 +50,7 @@ export { validateEDM, validateEDMStrict, validateEDMWithProfile, validateProfile
 // =============================================================================
 // LLM Integration
 // =============================================================================
-export { extractWithLlm, createAnthropicClient, EXTRACTION_SYSTEM_PROMPT, calculateConfidence, } from "./extractors/llm-extractor.js";
+export { extractWithLlm, createAnthropicClient, EXTRACTION_SYSTEM_PROMPT, calculateConfidence, defaultMaxTokens, DEFAULT_MAX_TOKENS, THINKING_MODEL_MAX_TOKENS, } from "./extractors/llm-extractor.js";
 export { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
 export { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
 export { analyzeImage, mergeImageContext } from "./extractors/image-analyzer.js";
@@ -62,7 +71,7 @@ LlmEssentialFieldsSchema, LlmExtendedFieldsSchema, ConstellationEssentialSchema,
 // Nested Schemas
 RetentionPolicySchema, SubjectRightsSchema, KAnonymitySchema, EmbeddingRefSchema, IndicesSchema, } from "./schema/edm-schema.js";
 // Enum constants
-export { EMOTION_PRIMARY, NARRATIVE_ARC, RELATIONAL_DYNAMICS, TEMPORAL_CONTEXT, MEMORY_TYPE, NARRATIVE_ARCHETYPE, DRIVE_STATE, MOTIVATIONAL_ORIENTATION, } from "./schema/types.js";
+export { EMOTION_PRIMARY, NARRATIVE_ARC, RELATIONAL_DYNAMICS, TEMPORAL_CONTEXT, MEMORY_TYPE, NARRATIVE_ARCHETYPE, DRIVE_STATE, MOTIVATIONAL_ORIENTATION, EXPERIENTIAL_STANCE, } from "./schema/types.js";
 export async function activate(query, options = {}) {
     const apiKey = options.apiKey ?? process.env.DEEPADATA_API_KEY;
     if (!apiKey) {

@@ -431,12 +431,25 @@ export const GravityExtendedSchema = z.object({
 });
 
 /**
+ * Experiential stance of the extracted material relative to the subject.
+ * Top-level extraction output only (proposed for EDM v0.9) — consumed by
+ * the stance guard and recorded in telemetry, never sealed into the
+ * v0.8.0 artifact body.
+ */
+export const ExperientialStanceSchema = z
+  .enum(["lived", "witnessed", "quoted_third_party", "assistant_generated", "hypothetical"])
+  .nullable()
+  .optional()
+  .describe("Whose experience the emotionally salient material is");
+
+/**
  * Essential Profile LLM Extraction Schema
  * Core (6 fields) + Constellation (3 fields) = 9 LLM-extracted fields
  */
 export const LlmEssentialFieldsSchema = z.object({
   core: CoreEssentialSchema,
   constellation: ConstellationEssentialSchema,
+  experiential_stance: ExperientialStanceSchema,
 });
 
 /**
@@ -449,6 +462,7 @@ export const LlmExtendedFieldsSchema = z.object({
   constellation: ConstellationSchema,
   milky_way: MilkyWaySchema,
   gravity: GravityExtendedSchema,
+  experiential_stance: ExperientialStanceSchema,
 });
 
 /**
@@ -460,4 +474,5 @@ export const LlmExtractedFieldsSchema = z.object({
   milky_way: MilkyWaySchema,
   gravity: GravitySchema,
   impulse: ImpulseSchema,
+  experiential_stance: ExperientialStanceSchema,
 });

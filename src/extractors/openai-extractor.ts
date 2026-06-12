@@ -9,9 +9,13 @@ import type { LlmExtractedFields, ExtractionInput, EdmProfile } from "../schema/
 import { LlmExtractedFieldsSchema } from "../schema/edm-schema.js";
 import {
   EXTRACTION_SYSTEM_PROMPT,
+  defaultMaxTokens,
+  prepareInputText,
+  type ExtractorCallOptions,
   type LlmExtractionResult,
 } from "./llm-extractor.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
+import { sanitizeLlmOutput } from "./output-sanitizer.js";
 
 /**
  * Extract EDM fields from content using OpenAI
@@ -21,15 +25,17 @@ export async function extractWithOpenAI(
   input: ExtractionInput,
   model: string = "gpt-4o-mini",
   temperature: number = 0,
-  profile: EdmProfile = "full"
+  profile: EdmProfile = "full",
+  options: ExtractorCallOptions = {}
 ): Promise<LlmExtractionResult> {
   const userContent: ChatCompletionContentPart[] = [];
 
-  // Add text content
-  if (input.text) {
+  // Add text content (conversation inputs get source-material framing)
+  const inputText = prepareInputText(input);
+  if (inputText) {
     userContent.push({
       type: "text",
-      text: input.text,
+      text: inputText,
     });
   }
 
@@ -50,7 +56,7 @@ export async function extractWithOpenAI(
 
   const response = await client.chat.completions.create({
     model,
-    max_tokens: 4096,
+    max_tokens: options.maxTokens ?? defaultMaxTokens(model),
     response_format: { type: "json_object" },
     temperature,
     messages: [
@@ -83,6 +89,10 @@ export async function extractWithOpenAI(
   } catch {
     throw new Error(`Failed to parse OpenAI response as JSON: ${text.slice(0, 200)}...`);
   }
+
+  // Sanitize before validation: clamp array caps, coerce invalid
+  // strict-enum values to null (prefer a null field over a dropped artifact)
+  sanitizeLlmOutput(parsed);
 
   // Validate against schema
   const result = LlmExtractedFieldsSchema.safeParse(parsed);

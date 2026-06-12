@@ -6,6 +6,7 @@
  */
 import Anthropic from "@anthropic-ai/sdk";
 import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile, PartnerProfileId } from "./schema/types.js";
+import { type ConversationMessage, type ChunkConversationOptions } from "./conversation.js";
 /**
  * Essential Profile: 5 domains, 24 fields
  * Target: memory platforms, agent frameworks, AI assistants
@@ -88,6 +89,30 @@ type ProfileExtractedFields = Record<string, unknown>;
  * @returns Profile-conformant EDM artifact
  */
 export declare function extractFromContent(options: ExtractionOptions): Promise<Record<string, unknown>>;
+export interface ConversationExtractionOptions extends Omit<ExtractionOptions, "content"> {
+    /** Parsed conversation messages (caller's export parser supplies these) */
+    messages: ConversationMessage[];
+    /** Chunking controls; defaults to 48K chars per chunk, turn-aligned */
+    chunking?: ChunkConversationOptions;
+}
+export interface ConversationChunkArtifact {
+    artifact: Record<string, unknown>;
+    /** Which slice of the conversation this artifact covers */
+    chunk: {
+        index: number;
+        turnRange: [number, number];
+    };
+}
+/**
+ * Extract EDM artifacts from a full conversation with per_session chunking.
+ *
+ * Replaces caller-side head+tail truncation: the conversation is split into
+ * full-coverage, turn-aligned chunks (chunkConversation), each chunk is
+ * extracted as a conversation input (framed, subject-anchored, stance-guarded),
+ * and chunks after the first are threaded to the first chunk's artifact via
+ * meta.parent_id. Short conversations produce exactly one artifact.
+ */
+export declare function extractFromConversation(options: ConversationExtractionOptions): Promise<ConversationChunkArtifact[]>;
 /**
  * Extract from content with a provided Anthropic client
  */

@@ -1,3 +1,15 @@
+/**
+ * Experiential stance — whose experience the emotionally salient material
+ * is, relative to the subject. Proposed for EDM v0.9; until then it travels
+ * in extraction results and telemetry notes, never in the artifact body.
+ */
+export const EXPERIENTIAL_STANCE = [
+    "lived",
+    "witnessed",
+    "quoted_third_party",
+    "assistant_generated",
+    "hypothetical",
+];
 // =============================================================================
 // Enum Constants (for convenience)
 // =============================================================================

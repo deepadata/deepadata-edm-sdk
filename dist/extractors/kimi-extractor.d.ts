@@ -5,11 +5,11 @@
  */
 import OpenAI from "openai";
 import type { ExtractionInput, EdmProfile } from "../schema/types.js";
-import { type LlmExtractionResult } from "./llm-extractor.js";
+import { type ExtractorCallOptions, type LlmExtractionResult } from "./llm-extractor.js";
 /**
  * Extract EDM fields from content using Kimi K2
  */
-export declare function extractWithKimi(client: OpenAI, input: ExtractionInput, model?: string, profile?: EdmProfile): Promise<LlmExtractionResult>;
+export declare function extractWithKimi(client: OpenAI, input: ExtractionInput, model?: string, profile?: EdmProfile, options?: ExtractorCallOptions): Promise<LlmExtractionResult>;
 /**
  * Create a Kimi client using MoonshotAI's direct API
  * Falls back to OpenRouter if direct API key is not available

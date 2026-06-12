@@ -1214,6 +1214,13 @@ export declare const GravityExtendedSchema: z.ZodObject<{
     strength_score: number;
 }>;
 /**
+ * Experiential stance of the extracted material relative to the subject.
+ * Top-level extraction output only (proposed for EDM v0.9) — consumed by
+ * the stance guard and recorded in telemetry, never sealed into the
+ * v0.8.0 artifact body.
+ */
+export declare const ExperientialStanceSchema: z.ZodOptional<z.ZodNullable<z.ZodEnum<["lived", "witnessed", "quoted_third_party", "assistant_generated", "hypothetical"]>>>;
+/**
  * Essential Profile LLM Extraction Schema
  * Core (6 fields) + Constellation (3 fields) = 9 LLM-extracted fields
  */
@@ -1253,6 +1260,7 @@ export declare const LlmEssentialFieldsSchema: z.ZodObject<{
         emotion_subtone: string[];
         narrative_arc: string | null;
     }>;
+    experiential_stance: z.ZodOptional<z.ZodNullable<z.ZodEnum<["lived", "witnessed", "quoted_third_party", "assistant_generated", "hypothetical"]>>>;
 }, "strip", z.ZodTypeAny, {
     core: {
         anchor: string | null;
@@ -1267,6 +1275,7 @@ export declare const LlmEssentialFieldsSchema: z.ZodObject<{
         emotion_subtone: string[];
         narrative_arc: string | null;
     };
+    experiential_stance?: "lived" | "witnessed" | "quoted_third_party" | "assistant_generated" | "hypothetical" | null | undefined;
 }, {
     core: {
         anchor: string | null;
@@ -1281,6 +1290,7 @@ export declare const LlmEssentialFieldsSchema: z.ZodObject<{
         emotion_subtone: string[];
         narrative_arc: string | null;
     };
+    experiential_stance?: "lived" | "witnessed" | "quoted_third_party" | "assistant_generated" | "hypothetical" | null | undefined;
 }>;
 /**
  * Extended Profile LLM Extraction Schema
@@ -1412,6 +1422,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
         strength_score: number;
     }>;
+    experiential_stance: z.ZodOptional<z.ZodNullable<z.ZodEnum<["lived", "witnessed", "quoted_third_party", "assistant_generated", "hypothetical"]>>>;
 }, "strip", z.ZodTypeAny, {
     core: {
         anchor: string | null;
@@ -1457,6 +1468,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
         strength_score: number;
     };
+    experiential_stance?: "lived" | "witnessed" | "quoted_third_party" | "assistant_generated" | "hypothetical" | null | undefined;
 }, {
     core: {
         anchor: string | null;
@@ -1502,6 +1514,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
         strength_score: number;
     };
+    experiential_stance?: "lived" | "witnessed" | "quoted_third_party" | "assistant_generated" | "hypothetical" | null | undefined;
 }>;
 /**
  * Full Profile LLM Extraction Schema (all LLM-extracted domains)
@@ -1698,6 +1711,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
         coping_style: string | null;
     }>;
+    experiential_stance: z.ZodOptional<z.ZodNullable<z.ZodEnum<["lived", "witnessed", "quoted_third_party", "assistant_generated", "hypothetical"]>>>;
 }, "strip", z.ZodTypeAny, {
     core: {
         anchor: string | null;
@@ -1766,6 +1780,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
         coping_style: string | null;
     };
+    experiential_stance?: "lived" | "witnessed" | "quoted_third_party" | "assistant_generated" | "hypothetical" | null | undefined;
 }, {
     core: {
         anchor: string | null;
@@ -1834,5 +1849,6 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         attachment_style: "secure" | "anxious" | "avoidant" | "disorganized" | null;
         coping_style: string | null;
     };
+    experiential_stance?: "lived" | "witnessed" | "quoted_third_party" | "assistant_generated" | "hypothetical" | null | undefined;
 }>;
 //# sourceMappingURL=edm-schema.d.ts.map

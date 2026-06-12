@@ -29,7 +29,23 @@ export interface ExtractionInput {
     image?: string;
     /** Optional image media type */
     imageMediaType?: "image/jpeg" | "image/png" | "image/gif" | "image/webp";
+    /**
+     * How to treat the text (default "memory"):
+     * - "memory": first-person memory/passage, sent to the model as-is
+     * - "conversation": a flattened chat transcript (USER:/ASSISTANT: turns).
+     *   Extractors wrap it in source-material framing so the model classifies
+     *   the conversation instead of replying to it, and treats the USER
+     *   speaker as the subject.
+     */
+    inputType?: "memory" | "conversation";
 }
+/**
+ * Experiential stance — whose experience the emotionally salient material
+ * is, relative to the subject. Proposed for EDM v0.9; until then it travels
+ * in extraction results and telemetry notes, never in the artifact body.
+ */
+export declare const EXPERIENTIAL_STANCE: readonly ["lived", "witnessed", "quoted_third_party", "assistant_generated", "hypothetical"];
+export type ExperientialStance = (typeof EXPERIENTIAL_STANCE)[number];
 export interface ExtractionMetadata {
     /** Owner identifier (VitaPass recommended) */
     subjectId?: string;
@@ -81,6 +97,22 @@ export interface ExtractionOptions {
     model?: string;
     /** Temperature for OpenAI extractions (0-2, lower = more deterministic) */
     temperature?: number;
+    /**
+     * Output token budget for the extraction call. Defaults to 4096, or
+     * 16384 when the model is a thinking model (reasoning tokens count
+     * against max_tokens, and 4096 silently truncated extraction on exactly
+     * the most emotionally dense inputs).
+     */
+    maxTokens?: number;
+    /**
+     * Stance classifier verification pass (see stance-guard):
+     * - "auto" (default): run a cheap classifier call when the input is a
+     *   conversation and the extraction claims lived/witnessed material at
+     *   emotional_weight >= 0.6 — the regime where misattribution bites
+     * - true: always run; false: never run (prompt + deterministic guard
+     *   still apply)
+     */
+    verifyStance?: boolean | "auto";
 }
 export interface ValidationResult {
     valid: boolean;
