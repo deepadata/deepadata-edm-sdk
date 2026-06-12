@@ -210,12 +210,19 @@ async function applyAttributionGuard(params) {
     let stance = claimedStance;
     const noteParts = [];
     const gravity = extracted["gravity"];
-    const weight = typeof gravity?.["emotional_weight"] === "number" ? gravity["emotional_weight"] : 0;
+    const hasGravity = !!gravity && typeof gravity === "object";
+    const weight = hasGravity && typeof gravity["emotional_weight"] === "number" ? gravity["emotional_weight"] : 0;
+    // "auto" scopes the classifier to high-weight extractions — but
+    // gravity-less profiles (essential) carry no emotional_weight, so the
+    // weight gate would silently disable verification for exactly the
+    // profile memory platforms consume. Without gravity, fall back to a
+    // stance-only trigger.
+    const weightGate = hasGravity ? weight >= 0.6 : true;
     const shouldVerify = verifyStance === true ||
         (verifyStance === "auto" &&
             content.inputType === "conversation" &&
             (stance === "lived" || stance === "witnessed" || stance === null) &&
-            weight >= 0.6);
+            weightGate);
     if (shouldVerify && classify && content.text) {
         const core = extracted["core"];
         const summary = (typeof core?.["narrative"] === "string" && core["narrative"]) ||

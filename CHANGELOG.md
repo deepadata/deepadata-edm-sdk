@@ -25,7 +25,7 @@ recorded in deepadata-com session handoff 2026-06-12.
   weights at 0.2 when the salient material is not the subject's own
   experience. Optional cheap classifier verification pass
   (`verifyStance: "auto"` default — fires on high-weight conversation
-  extractions). Stance travels in telemetry notes, never the artifact body;
+  extractions; for gravity-less profiles such as essential, which carry no emotional_weight to gate on, "auto" falls back to a stance-only trigger so the profile memory platforms consume is not silently unverified - per-profile coverage asserted by tests/stance-profile-coverage.test.ts). Stance travels in telemetry notes, never the artifact body;
   proposed as an EDM v0.9 spec field.
 - feat(subject anchoring): prompts score significance relative to the
   SUBJECT, not the passage — work-thread weight calibration tightened,
