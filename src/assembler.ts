@@ -41,7 +41,10 @@ import {
  * Target: memory platforms, agent frameworks, AI assistants
  */
 export const ESSENTIAL_PROFILE_FIELDS = {
-  meta: ["id", "version", "profile", "created_at", "owner_user_id", "parent_id", "consent_basis", "visibility", "pii_tier"],
+  meta: [
+    "id", "version", "profile", "created_at", "updated_at", "locale",
+    "owner_user_id", "parent_id", "visibility", "pii_tier", "consent_basis"
+  ],
   core: ["anchor", "spark", "wound", "fuel", "bridge", "echo"],
   constellation: ["emotion_primary", "emotion_subtone", "narrative_arc"],
   governance: ["jurisdiction", "retention_policy", "subject_rights"],
@@ -58,7 +61,11 @@ export const ESSENTIAL_PROFILE_FIELDS = {
  * Impulse domain is NOT included in Extended profile
  */
 export const EXTENDED_PROFILE_FIELDS = {
-  meta: ["id", "version", "profile", "created_at", "owner_user_id", "parent_id", "consent_basis", "visibility", "pii_tier"],
+  meta: [
+    "id", "version", "profile", "created_at", "updated_at", "locale",
+    "owner_user_id", "parent_id", "visibility", "pii_tier", "source_type",
+    "source_context", "consent_basis", "consent_scope", "tags"
+  ],
   core: ["anchor", "spark", "wound", "fuel", "bridge", "echo", "narrative"],
   constellation: [
     "emotion_primary", "emotion_subtone", "higher_order_emotion", "meta_emotional_state",

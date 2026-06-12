@@ -29,6 +29,20 @@ recorded in deepadata-com session handoff 2026-06-12.
   in the artifact body for every profile (null on the first chunk,
   first chunk's `meta.id` afterwards). PROFILES.md is silent on meta
   fields per profile, so no spec-side errata is required.
+- fix(profile filtering): same §5.2 reconciliation extended to every
+  remaining schema-defined meta field. Essential now also emits
+  `updated_at` and `locale`; extended now also emits `updated_at`,
+  `locale`, `source_type`, `source_context`, `consent_scope`, and `tags`
+  — each verified present in `meta.properties` of that profile's
+  published v0.8.0 schema before inclusion. `consent_revoked_at` remains
+  full-only (not defined in the essential or extended schemas), and the
+  full profile's 16-field meta list already matched its schema exactly,
+  so the SDK meta field sets now mirror the published schemas 1:1 in all
+  three profiles. Meta key emission order now follows canonical schema
+  order in every profile. `tags` emits `[]` when the caller passes none
+  (schema type `["array","null"]`; matches prior full-profile
+  behaviour). Per-profile tests pin the exact meta key set against the
+  published schema field lists.
 - feat(attribution guard): extraction prompts now classify a top-level
   `experiential_stance` (lived | witnessed | quoted_third_party |
   assistant_generated | hypothetical). A deterministic guard clears subject
