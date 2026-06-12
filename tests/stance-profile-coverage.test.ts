@@ -5,9 +5,12 @@
  * - applyStanceGuard degrades gracefully when cleared-fields don't exist
  *   in the profile (essential has no gravity, no impulse, 3-field
  *   constellation)
- * - verifyStance:"auto" fires for gravity-less profiles via the
- *   stance-only fallback trigger (a weight>=0.6 gate alone could never
- *   trigger on essential — no gravity.emotional_weight exists there)
+ * - verifyStance:"auto" on gravity-less profiles (essential) fires ONLY
+ *   when extraction returned experiential_stance === null — NOT on
+ *   lived/witnessed claims (essential is the coherence tier for transient,
+ *   typically-unsealed artifacts; the deterministic guard covers
+ *   non-subject stances; always-on verification doubles cost in the
+ *   partner hot path). Gravity-bearing profiles keep the weight>=0.6 gate.
  */
 import { describe, it, expect, vi, beforeAll, beforeEach } from "vitest";
 import { readFileSync } from "node:fs";
@@ -198,15 +201,29 @@ describe("attribution guard per profile", () => {
 });
 
 describe("verifyStance auto trigger", () => {
-  it("fires on essential (gravity-less) via the stance-only fallback and applies the classifier override", async () => {
-    const artifact = await run("essential", essentialExtraction("lived"), { verifyStance: "auto" });
+  it("essential (gravity-less): fires ONLY on null stance, applies the classifier override", async () => {
+    const artifact = await run("essential", essentialExtraction(null), { verifyStance: "auto" });
     expect(classifySpy).toHaveBeenCalledTimes(1);
     // classifier said assistant_generated -> more conservative -> guard fires
     expect(artifact.core!.wound).toBeNull();
   });
 
-  it("does not fire on memory (non-conversation) input", async () => {
-    mockExtraction.extracted = essentialExtraction("lived");
+  it("essential (gravity-less): does NOT fire on lived or witnessed claims", async () => {
+    for (const stance of ["lived", "witnessed"] as const) {
+      const artifact = await run("essential", essentialExtraction(stance), { verifyStance: "auto" });
+      expect(classifySpy).not.toHaveBeenCalled();
+      // lived/witnessed are subject stances — guard leaves wound intact
+      expect(artifact.core!.wound).toBe("her loss");
+    }
+  });
+
+  it("essential: verifyStance:true still verifies unconditionally, overriding the narrowed auto gate", async () => {
+    await run("essential", essentialExtraction("lived"), { verifyStance: true });
+    expect(classifySpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not fire on memory (non-conversation) input even with null stance", async () => {
+    mockExtraction.extracted = essentialExtraction(null);
     mockExtraction.profile = "essential";
     await extractFromContent({
       content: { text: "a first-person memory" },

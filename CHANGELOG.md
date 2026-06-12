@@ -24,9 +24,18 @@ recorded in deepadata-com session handoff 2026-06-12.
   somatic_signature, transformational_pivot, impulse domain) and floors
   weights at 0.2 when the salient material is not the subject's own
   experience. Optional cheap classifier verification pass
-  (`verifyStance: "auto"` default — fires on high-weight conversation
-  extractions; for gravity-less profiles such as essential, which carry no emotional_weight to gate on, "auto" falls back to a stance-only trigger so the profile memory platforms consume is not silently unverified - per-profile coverage asserted by tests/stance-profile-coverage.test.ts). Stance travels in telemetry notes, never the artifact body;
-  proposed as an EDM v0.9 spec field.
+  (`verifyStance: "auto"` default): on gravity-bearing profiles it fires
+  on high-weight (>=0.6) conversation extractions claiming
+  lived/witnessed/null stance; on gravity-less profiles (essential), which
+  carry no emotional_weight to gate on, it fires ONLY when extraction
+  returned `experiential_stance: null` — essential is the coherence-tier
+  profile for transient, typically-unsealed artifacts, the deterministic
+  guard already demotes non-subject stances, and always-on verification
+  would double cost/latency in the partner hot path. Callers wanting
+  unconditional verification pass `verifyStance: true`. Per-profile
+  coverage asserted by tests/stance-profile-coverage.test.ts. Stance
+  travels in telemetry notes, never the artifact body; proposed as an EDM
+  v0.9 spec field.
 - feat(subject anchoring): prompts score significance relative to the
   SUBJECT, not the passage — work-thread weight calibration tightened,
   transformational_pivot requires the subject explicitly marking the

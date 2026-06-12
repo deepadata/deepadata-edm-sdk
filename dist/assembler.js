@@ -212,17 +212,19 @@ async function applyAttributionGuard(params) {
     const gravity = extracted["gravity"];
     const hasGravity = !!gravity && typeof gravity === "object";
     const weight = hasGravity && typeof gravity["emotional_weight"] === "number" ? gravity["emotional_weight"] : 0;
-    // "auto" scopes the classifier to high-weight extractions — but
-    // gravity-less profiles (essential) carry no emotional_weight, so the
-    // weight gate would silently disable verification for exactly the
-    // profile memory platforms consume. Without gravity, fall back to a
-    // stance-only trigger.
-    const weightGate = hasGravity ? weight >= 0.6 : true;
+    // "auto" scopes the classifier to high-weight (>=0.6) lived/witnessed/null
+    // conversation extractions on gravity-bearing profiles. Gravity-less
+    // profiles (essential) have no emotional_weight to gate on; there "auto"
+    // fires ONLY when extraction returned no stance at all — essential is the
+    // coherence-tier profile for transient, typically-unsealed artifacts, the
+    // deterministic guard below already demotes non-subject stances, and
+    // always-on verification would double cost/latency in the partner hot
+    // path. Callers wanting unconditional verification pass verifyStance: true.
+    const autoTrigger = hasGravity
+        ? (stance === "lived" || stance === "witnessed" || stance === null) && weight >= 0.6
+        : stance === null;
     const shouldVerify = verifyStance === true ||
-        (verifyStance === "auto" &&
-            content.inputType === "conversation" &&
-            (stance === "lived" || stance === "witnessed" || stance === null) &&
-            weightGate);
+        (verifyStance === "auto" && content.inputType === "conversation" && autoTrigger);
     if (shouldVerify && classify && content.text) {
         const core = extracted["core"];
         const summary = (typeof core?.["narrative"] === "string" && core["narrative"]) ||
