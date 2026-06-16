@@ -1198,19 +1198,19 @@ export declare const GravityExtendedSchema: z.ZodObject<{
     emotional_weight: z.ZodNumber;
     valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
     tether_type: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>, z.ZodString]>>;
-    recurrence_pattern: z.ZodNullable<z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>>;
+    recurrence_pattern: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>, z.ZodString]>>;
     strength_score: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
     emotional_weight: number;
     valence: "mixed" | "positive" | "negative" | null;
     tether_type: string | null;
-    recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+    recurrence_pattern: string | null;
     strength_score: number;
 }, {
     emotional_weight: number;
     valence: "mixed" | "positive" | "negative" | null;
     tether_type: string | null;
-    recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+    recurrence_pattern: string | null;
     strength_score: number;
 }>;
 /**
@@ -1407,19 +1407,19 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         emotional_weight: z.ZodNumber;
         valence: z.ZodNullable<z.ZodEnum<["positive", "negative", "mixed"]>>;
         tether_type: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["person", "symbol", "event", "place", "ritual", "object", "tradition", "identity", "self"]>, z.ZodString]>>;
-        recurrence_pattern: z.ZodNullable<z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>>;
+        recurrence_pattern: z.ZodNullable<z.ZodUnion<[z.ZodEnum<["cyclical", "isolated", "chronic", "emerging"]>, z.ZodString]>>;
         strength_score: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
         emotional_weight: number;
         valence: "mixed" | "positive" | "negative" | null;
         tether_type: string | null;
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
     }, {
         emotional_weight: number;
         valence: "mixed" | "positive" | "negative" | null;
         tether_type: string | null;
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
     }>;
     experiential_stance: z.ZodOptional<z.ZodNullable<z.ZodEnum<["lived", "witnessed", "quoted_third_party", "assistant_generated", "hypothetical"]>>>;
@@ -1465,7 +1465,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         emotional_weight: number;
         valence: "mixed" | "positive" | "negative" | null;
         tether_type: string | null;
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
     };
     experiential_stance?: "lived" | "witnessed" | "quoted_third_party" | "assistant_generated" | "hypothetical" | null | undefined;
@@ -1511,7 +1511,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         emotional_weight: number;
         valence: "mixed" | "positive" | "negative" | null;
         tether_type: string | null;
-        recurrence_pattern: "cyclical" | "isolated" | "chronic" | "emerging" | null;
+        recurrence_pattern: string | null;
         strength_score: number;
     };
     experiential_stance?: "lived" | "witnessed" | "quoted_third_party" | "assistant_generated" | "hypothetical" | null | undefined;

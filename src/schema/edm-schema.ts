@@ -423,7 +423,10 @@ export const GravityExtendedSchema = z.object({
     ])
     .nullable(),
   recurrence_pattern: z
-    .enum(["cyclical", "isolated", "chronic", "emerging"])
+    .union([
+      z.enum(["cyclical", "isolated", "chronic", "emerging"]),
+      z.string()
+    ])
     .nullable(),
   strength_score: z.number().min(0).max(1),
 });

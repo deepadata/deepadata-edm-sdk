@@ -43,7 +43,7 @@ export const EXTENDED_PROFILE_FIELDS = {
         "interpersonal_affect", "narrative_arc", "relational_dynamics", "temporal_context",
         "memory_type", "media_format", "narrative_archetype", "symbolic_anchor",
         "relational_perspective", "temporal_rhythm", "identity_thread", "expressed_insight",
-        "transformational_pivot", "somatic_signature"
+        "transformational_pivot", "somatic_signature", "arc_type"
     ],
     milky_way: ["event_type", "location_context", "associated_people", "visibility_context", "tone_shift"],
     gravity: ["emotional_weight", "valence", "tether_type", "recurrence_pattern", "strength_score"],
@@ -66,7 +66,7 @@ export const FULL_PROFILE_FIELDS = {
         "interpersonal_affect", "narrative_arc", "relational_dynamics", "temporal_context",
         "memory_type", "media_format", "narrative_archetype", "symbolic_anchor",
         "relational_perspective", "temporal_rhythm", "identity_thread", "expressed_insight",
-        "transformational_pivot", "somatic_signature"
+        "transformational_pivot", "somatic_signature", "arc_type"
     ],
     milky_way: ["event_type", "location_context", "associated_people", "visibility_context", "tone_shift"],
     gravity: [

@@ -143,7 +143,7 @@ EXTENDED PROFILE SCHEMA:
     "emotional_weight": 0.0,  // 0.0–1.0 (felt intensity IN THE MOMENT). Calibration: 0.9+ life-altering irreversible moments; 0.7-0.9 significant personal events with strong emotional response; 0.4-0.7 meaningful but routine emotional experiences; 0.1-0.4 mild passing emotional content
     "valence": "",            // STRICT ENUM: positive | negative | mixed (pick ONE or null)
     "tether_type": "",        // CANONICAL: person | symbol | event | place | ritual | object | tradition | identity | self (free text accepted if none fits)
-    "recurrence_pattern": "", // STRICT ENUM: cyclical | isolated | chronic | emerging (pick ONE or null)
+    "recurrence_pattern": "", // CANONICAL: cyclical | isolated | chronic | emerging (free text accepted if none fits)
     "strength_score": 0.0     // 0.0–1.0 (how BOUND/STUCK this memory is)
   }
 }
