@@ -154,13 +154,11 @@ export const ConstellationSchema = z.object({
         "lover",
         "outlaw",
         "innocent",
-        "orphan",
         "magician",
         "creator",
         "everyman",
         "jester",
         "ruler",
-        "mentor",
     ])
         .nullable()
         .describe("Structural role in narrative"),

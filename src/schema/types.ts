@@ -241,7 +241,6 @@ export const NARRATIVE_ARCHETYPE = [
   "everyman",
   "jester",
   "ruler",
-  "mentor",
 ] as const;
 
 export const DRIVE_STATE = [

@@ -121,7 +121,7 @@ export declare const ConstellationSchema: z.ZodObject<{
     temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
     memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
     media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
-    narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "orphan", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
+    narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler"]>>;
     symbolic_anchor: z.ZodNullable<z.ZodString>;
     relational_perspective: z.ZodNullable<z.ZodEnum<["self", "partner", "family", "friends", "community", "humanity"]>>;
     temporal_rhythm: z.ZodNullable<z.ZodEnum<["still", "sudden", "rising", "fading", "recurring", "spiraling", "dragging", "suspended", "looping", "cyclic"]>>;
@@ -141,7 +141,7 @@ export declare const ConstellationSchema: z.ZodObject<{
     temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
     memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
     media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-    narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+    narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
     symbolic_anchor: string | null;
     relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
     temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -161,7 +161,7 @@ export declare const ConstellationSchema: z.ZodObject<{
     temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
     memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
     media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-    narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+    narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
     symbolic_anchor: string | null;
     relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
     temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -592,7 +592,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
         memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
         media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
-        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "orphan", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
+        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler"]>>;
         symbolic_anchor: z.ZodNullable<z.ZodString>;
         relational_perspective: z.ZodNullable<z.ZodEnum<["self", "partner", "family", "friends", "community", "humanity"]>>;
         temporal_rhythm: z.ZodNullable<z.ZodEnum<["still", "sudden", "rising", "fading", "recurring", "spiraling", "dragging", "suspended", "looping", "cyclic"]>>;
@@ -612,7 +612,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -632,7 +632,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -950,7 +950,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1082,7 +1082,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1334,7 +1334,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
         memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
         media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
-        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "orphan", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
+        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler"]>>;
         symbolic_anchor: z.ZodNullable<z.ZodString>;
         relational_perspective: z.ZodNullable<z.ZodEnum<["self", "partner", "family", "friends", "community", "humanity"]>>;
         temporal_rhythm: z.ZodNullable<z.ZodEnum<["still", "sudden", "rising", "fading", "recurring", "spiraling", "dragging", "suspended", "looping", "cyclic"]>>;
@@ -1354,7 +1354,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1374,7 +1374,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1444,7 +1444,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1490,7 +1490,7 @@ export declare const LlmExtendedFieldsSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1556,7 +1556,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         temporal_context: z.ZodNullable<z.ZodEnum<["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"]>>;
         memory_type: z.ZodNullable<z.ZodEnum<["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"]>>;
         media_format: z.ZodNullable<z.ZodEnum<["photo", "video", "audio", "text", "photo_with_story"]>>;
-        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "orphan", "magician", "creator", "everyman", "jester", "ruler", "mentor"]>>;
+        narrative_archetype: z.ZodNullable<z.ZodEnum<["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler"]>>;
         symbolic_anchor: z.ZodNullable<z.ZodString>;
         relational_perspective: z.ZodNullable<z.ZodEnum<["self", "partner", "family", "friends", "community", "humanity"]>>;
         temporal_rhythm: z.ZodNullable<z.ZodEnum<["still", "sudden", "rising", "fading", "recurring", "spiraling", "dragging", "suspended", "looping", "cyclic"]>>;
@@ -1576,7 +1576,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1596,7 +1596,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1733,7 +1733,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;
@@ -1802,7 +1802,7 @@ export declare const LlmExtractedFieldsSchema: z.ZodObject<{
         temporal_context: "childhood" | "early_adulthood" | "midlife" | "late_life" | "recent" | "future" | "timeless" | null;
         memory_type: "reflection" | "legacy_artifact" | "fleeting_moment" | "milestone" | "formative_experience" | null;
         media_format: "text" | "audio" | "video" | "photo" | "photo_with_story" | null;
-        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "orphan" | "magician" | "creator" | "everyman" | "jester" | "ruler" | "mentor" | null;
+        narrative_archetype: "hero" | "caregiver" | "seeker" | "sage" | "lover" | "outlaw" | "innocent" | "magician" | "creator" | "everyman" | "jester" | "ruler" | null;
         symbolic_anchor: string | null;
         relational_perspective: "family" | "self" | "partner" | "friends" | "community" | "humanity" | null;
         temporal_rhythm: "still" | "sudden" | "rising" | "fading" | "recurring" | "spiraling" | "dragging" | "suspended" | "looping" | "cyclic" | null;

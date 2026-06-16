@@ -128,7 +128,7 @@ export declare const NARRATIVE_ARC: readonly ["overcoming", "transformation", "c
 export declare const RELATIONAL_DYNAMICS: readonly ["parent_child", "romantic_partnership", "sibling_bond", "friendship", "companionship", "mentorship", "reunion", "community_ritual", "grief", "self_reflection"];
 export declare const TEMPORAL_CONTEXT: readonly ["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"];
 export declare const MEMORY_TYPE: readonly ["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"];
-export declare const NARRATIVE_ARCHETYPE: readonly ["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler", "mentor"];
+export declare const NARRATIVE_ARCHETYPE: readonly ["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler"];
 export declare const DRIVE_STATE: readonly ["explore", "approach", "avoid", "repair", "persevere", "share"];
 export declare const MOTIVATIONAL_ORIENTATION: readonly ["belonging", "safety", "mastery", "meaning", "autonomy"];
 export interface ActivateResult {
