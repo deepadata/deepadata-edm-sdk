@@ -30,6 +30,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
+    "edm-spec": "^0.8.2",
     "openai": "^6.17.0",
     "zod": "^3.23.8"
   },

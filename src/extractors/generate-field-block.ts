@@ -1,68 +1,94 @@
 /**
- * Zod → prompt field-block generator (ADR-0030, Consolidation Spec §4)
+ * JSON-Schema → prompt field-block generator (ADR-0030, amended — Step 6).
  *
- * The two extraction prompts (Full in llm-extractor.ts; Extended/Essential in
- * profile-prompts.ts) each carry a hand-written JSON skeleton whose per-field
- * `// CANONICAL: a | b | c` comments enumerate the field vocabulary. Those
- * lists are hand-kept in parallel with the zod validator, so they drift (the
- * `orphan`/`mentor` class of bug). This generator emits that skeleton FROM the
- * zod schema instead, so the enum rendered in the comment is the *same array
- * object* the validator enforces — drift becomes impossible by construction.
+ * Reads the PUBLISHED edm-spec package (the source of truth, ADR-0030 amended)
+ * rather than walking the SDK's own zod validator. The two extraction prompts
+ * (Full in llm-extractor.ts; Extended/Essential in profile-prompts.ts) each
+ * carry a hand-written JSON skeleton whose per-field `// CANONICAL:` / `// STRICT
+ * ENUM:` comments enumerate the field vocabulary. This generator emits that
+ * skeleton FROM the spec's JSON Schema fragments, so the vocabulary rendered in
+ * each comment is the one the spec enforces — drift between prompt, validator,
+ * and spec becomes impossible by construction.
  *
- * Architectural rule (Consolidation Spec §3): zod is the mechanical canonical
- * source. The enum VALUES in every comment are read live from the zod node
- * (`classifyField` below), never hardcoded here. Only presentation that zod
- * does not carry — the prose guidance for free-text fields, the suffix wording,
- * the alignment — lives in this file's tables, and is the OUTPUT_CONTRACT layer
- * the spec keeps hand-written.
+ * Phase A walked the local zod schema; this is the spec-sourced port. The OUTPUT
+ * FORMAT is unchanged — byte-for-byte identical to what Phase A emitted (and
+ * therefore to the hand-written skeletons it reproduces). Only the INPUT source
+ * moved: zod nodes → edm-spec JSON Schema.
  *
- * Field MEMBERSHIP and ORDER per profile come from the profile's own LLM
- * extraction schema (LlmEssential/Extended/ExtractedFieldsSchema) — the exact
- * shapes the extractor validates against — so the generated block asks for
- * precisely the fields that profile extracts, in zod definition order.
+ * Classification maps directly from JSON Schema to the kinds the prompt renders:
+ *   - "x-edm-canonical": [...]  → canonical-enum (two-tier; free text accepted)
+ *   - "enum": [...]             → strict-enum    (validator rejects non-members)
+ *   - bare "type" string/number/boolean/array → free text / number / boolean / array
  *
- * Phase A scope: this module only GENERATES the block. Wiring it into prompt
- * construction (replacing the hand-written skeletons) is Phase B.
+ * Field MEMBERSHIP and ORDER per profile come from the composite profile schemas
+ * (edm-spec/schema/edm.v0.8.{essential,extended,full}.schema.json): which
+ * representational domains a profile includes, and — for inline domains — which
+ * fields, in which order. This is the role the SDK's LlmEssential/LlmExtended/
+ * LlmExtractedFields zod schemas used to play.
+ *
+ * Field DEFINITIONS (classification + canonical value lists) are always read from
+ * the fragments, never from the composite's inline copies, so the canonical
+ * vocabulary rendered in each comment is the one the fragment enforces.
  */
-import { z } from "zod";
-import {
-  LlmEssentialFieldsSchema,
-  LlmExtendedFieldsSchema,
-  LlmExtractedFieldsSchema,
-} from "../schema/edm-schema.js";
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const loadJson = (specPath: string): JsonSchemaNode =>
+  JSON.parse(readFileSync(require.resolve(specPath), "utf8")) as JsonSchemaNode;
 
 export type FieldBlockProfile = "essential" | "extended" | "full";
 
 // ---------------------------------------------------------------------------
-// Zod introspection — the canonical mechanism (§3 rule 3)
+// JSON Schema shape (the slice we read)
 // ---------------------------------------------------------------------------
 
-type ZodAny = z.ZodTypeAny & { _def: Record<string, unknown> };
-
-/** Peel ZodNullable / ZodOptional / ZodDefault wrappers to the core node. */
-function unwrap(node: z.ZodTypeAny): ZodAny {
-  let n = node as ZodAny;
-  while (
-    n?._def &&
-    (n._def["typeName"] === "ZodNullable" ||
-      n._def["typeName"] === "ZodOptional" ||
-      n._def["typeName"] === "ZodDefault")
-  ) {
-    n = (n._def["innerType"] as ZodAny);
-  }
-  return n;
+interface JsonSchemaNode {
+  type?: string | string[];
+  enum?: (string | null)[];
+  "x-edm-canonical"?: string[];
+  properties?: Record<string, JsonSchemaNode>;
+  $ref?: string;
+  [k: string]: unknown;
 }
 
-function typeName(node: ZodAny): string {
-  return node?._def?.["typeName"] as string;
-}
+// ---------------------------------------------------------------------------
+// Profile / domain wiring
+// ---------------------------------------------------------------------------
 
-function enumValues(node: ZodAny): readonly string[] {
-  // z.enum exposes both `.options` and `._def.values`
-  const opts = (node as unknown as { options?: readonly string[] }).options;
-  if (opts) return opts;
-  return (node._def["values"] as readonly string[]) ?? [];
-}
+/** The LLM-extracted representational domains, in canonical (zod definition) order. */
+const LLM_DOMAINS = ["core", "constellation", "milky_way", "gravity", "impulse"] as const;
+type LlmDomain = (typeof LLM_DOMAINS)[number];
+
+const FRAGMENT_SPEC: Record<LlmDomain, string> = {
+  core: "edm-spec/schema/fragments/core.json",
+  constellation: "edm-spec/schema/fragments/constellation.json",
+  milky_way: "edm-spec/schema/fragments/milky_way.json",
+  gravity: "edm-spec/schema/fragments/gravity.json",
+  impulse: "edm-spec/schema/fragments/impulse.json",
+};
+
+const COMPOSITE_SPEC: Record<FieldBlockProfile, string> = {
+  essential: "edm-spec/schema/edm.v0.8.essential.schema.json",
+  extended: "edm-spec/schema/edm.v0.8.extended.schema.json",
+  full: "edm-spec/schema/edm.v0.8.full.schema.json",
+};
+
+const loadFragment = (domain: LlmDomain): JsonSchemaNode => loadJson(FRAGMENT_SPEC[domain]);
+
+/**
+ * experiential_stance is a top-level extraction-only field — never sealed into
+ * the artifact body, so it appears in no fragment or composite schema. The SDK
+ * carries it as ExperientialStanceSchema (z.enum). Mirror it here as a strict
+ * enum so the generated block asks for it exactly as the current prompts do.
+ */
+const EXPERIENTIAL_STANCE_DEF: JsonSchemaNode = {
+  enum: ["lived", "witnessed", "quoted_third_party", "assistant_generated", "hypothetical"],
+};
+
+// ---------------------------------------------------------------------------
+// Classification — JSON Schema → field kind
+// ---------------------------------------------------------------------------
 
 export type FieldKind =
   | "strict-enum"
@@ -74,41 +100,34 @@ export type FieldKind =
 
 export interface FieldInfo {
   kind: FieldKind;
-  /** Present for strict-enum / canonical-enum — read live from the zod node. */
+  /** Present for strict-enum / canonical-enum — read live from the fragment node. */
   enumValues?: readonly string[];
 }
 
 /**
- * Classify a zod field node into the kind the prompt comment renders.
+ * Classify a JSON Schema field node into the kind the prompt comment renders.
  *
- * - z.union([z.enum([...]), z.string()])  → canonical-enum (two-tier free text)
- * - z.enum([...])                          → strict-enum
- * - z.string / z.number / z.boolean        → free text / number / boolean
- * - z.array(z.string())                    → string-array
+ * - "x-edm-canonical": [...]  → canonical-enum (two-tier free text)
+ * - "enum": [...]             → strict-enum (null stripped)
+ * - type number/integer       → number
+ * - type boolean              → boolean
+ * - type array                → string-array
+ * - otherwise (string/null)   → free text
  */
-export function classifyField(node: z.ZodTypeAny): FieldInfo {
-  const core = unwrap(node);
-  const tn = typeName(core);
-
-  if (tn === "ZodUnion") {
-    const options = (core._def["options"] as z.ZodTypeAny[]) ?? [];
-    for (const opt of options) {
-      const u = unwrap(opt);
-      if (typeName(u) === "ZodEnum") {
-        return { kind: "canonical-enum", enumValues: enumValues(u) };
-      }
-    }
-    // union without an enum option → treat as free text
-    return { kind: "string" };
+export function classifyField(def: JsonSchemaNode): FieldInfo {
+  const canonical = def["x-edm-canonical"];
+  if (Array.isArray(canonical)) {
+    return { kind: "canonical-enum", enumValues: canonical };
   }
-  if (tn === "ZodEnum") return { kind: "strict-enum", enumValues: enumValues(core) };
-  if (tn === "ZodNumber") return { kind: "number" };
-  if (tn === "ZodBoolean") return { kind: "boolean" };
-  if (tn === "ZodArray") {
-    const el = unwrap(core._def["type"] as z.ZodTypeAny);
-    if (typeName(el) === "ZodString") return { kind: "string-array" };
-    return { kind: "string-array" };
+  if (Array.isArray(def.enum)) {
+    // JSON Schema enums carry a trailing `null` for nullable fields; zod models
+    // nullability with `.nullable()` and keeps it out of the enum, so strip it.
+    return { kind: "strict-enum", enumValues: def.enum.filter((v): v is string => v !== null) };
   }
+  const types = Array.isArray(def.type) ? def.type : [def.type];
+  if (types.includes("number") || types.includes("integer")) return { kind: "number" };
+  if (types.includes("boolean")) return { kind: "boolean" };
+  if (types.includes("array")) return { kind: "string-array" };
   return { kind: "string" };
 }
 
@@ -118,7 +137,7 @@ export function classifyField(node: z.ZodTypeAny): FieldInfo {
 // Canonical comment conventions follow the Full prompt (the richest of the
 // three current skeletons): STRICT/CANONICAL prefixes with explicit suffixes
 // and per-field prose guidance for free-text fields. Enum VALUES are NEVER in
-// these tables — they come from the zod node.
+// these tables — they come from the fragment.
 // ---------------------------------------------------------------------------
 
 const STRICT_SUFFIX = " (pick ONE or null)";
@@ -223,14 +242,25 @@ function renderBlock(lines: Line[]): string[] {
   });
 }
 
-const PROFILE_SCHEMA: Record<FieldBlockProfile, z.ZodObject<z.ZodRawShape>> = {
-  essential: LlmEssentialFieldsSchema as unknown as z.ZodObject<z.ZodRawShape>,
-  extended: LlmExtendedFieldsSchema as unknown as z.ZodObject<z.ZodRawShape>,
-  full: LlmExtractedFieldsSchema as unknown as z.ZodObject<z.ZodRawShape>,
-};
+/**
+ * Resolve a profile domain to its ordered `[fieldName, def]` pairs.
+ * Field names/order: inline composite properties when present, else fragment
+ * order. Field defs: always the fragment (source of truth), falling back to the
+ * inline composite copy only if the fragment lacks the field.
+ */
+function domainFields(
+  compositeProp: JsonSchemaNode | undefined,
+  fragment: JsonSchemaNode
+): Array<[string, JsonSchemaNode]> {
+  const fragProps = fragment.properties ?? {};
+  const inlineProps = compositeProp?.properties;
+  const names = inlineProps ? Object.keys(inlineProps) : Object.keys(fragProps);
+  return names.map((name) => [name, fragProps[name] ?? inlineProps?.[name] ?? {}]);
+}
 
 /**
- * Generate the JSON field-block skeleton for a profile, from the zod schema.
+ * Generate the JSON field-block skeleton for a profile, from the edm-spec JSON
+ * Schema.
  *
  * Output shape (matches the current hand-written skeletons):
  *
@@ -244,47 +274,56 @@ const PROFILE_SCHEMA: Record<FieldBlockProfile, z.ZodObject<z.ZodRawShape>> = {
  *   }
  */
 export function generateFieldBlock(profile: FieldBlockProfile): string {
-  const schema = PROFILE_SCHEMA[profile];
-  const shape = schema.shape as z.ZodRawShape;
-  const entries = Object.entries(shape);
+  const compositeSpec = COMPOSITE_SPEC[profile];
+  if (!compositeSpec) {
+    throw new Error(
+      `unknown profile "${profile}" (expected one of: ${Object.keys(COMPOSITE_SPEC).join(", ")})`
+    );
+  }
+  const composite = loadJson(compositeSpec);
+  const props = composite.properties ?? {};
 
-  // Top-level scalar keys (experiential_stance) render first and inline;
-  // domain keys (ZodObject) render as nested blocks, in zod definition order.
-  const scalars = entries.filter(([, node]) => typeName(unwrap(node)) !== "ZodObject");
-  const domains = entries.filter(([, node]) => typeName(unwrap(node)) === "ZodObject");
-  const topLevel = [...scalars, ...domains];
+  // Representational domains present in this profile, in canonical order.
+  const domains = LLM_DOMAINS.filter((d) => props[d]);
+
+  // Top-level: the experiential_stance scalar renders first and inline; domains
+  // render as nested blocks. (Mirrors the SDK's [...scalars, ...domains] order.)
+  const topLevelCount = 1 + domains.length;
+  let topIdx = 0;
 
   const out: string[] = ["{"];
 
-  topLevel.forEach(([key, node], topIdx) => {
-    const isLastTop = topIdx === topLevel.length - 1;
+  // experiential_stance (scalar)
+  {
+    const isLastTop = topIdx === topLevelCount - 1;
     const topComma = isLastTop ? "" : ",";
+    const info = classifyField(EXPERIENTIAL_STANCE_DEF);
+    const comment = commentFor("experiential_stance", info);
+    const [rendered] = renderBlock([
+      { content: `  "experiential_stance": ${PLACEHOLDER[info.kind]}${topComma}`, comment },
+    ]);
+    out.push(rendered as string);
+    topIdx++;
+  }
 
-    if (typeName(unwrap(node)) !== "ZodObject") {
-      // scalar top-level field (experiential_stance)
-      const info = classifyField(node);
-      const comment = commentFor(key, info);
-      const [rendered] = renderBlock([
-        { content: `  "${key}": ${PLACEHOLDER[info.kind]}${topComma}`, comment },
-      ]);
-      out.push(rendered as string);
-      return;
-    }
+  for (const domain of domains) {
+    const isLastTop = topIdx === topLevelCount - 1;
+    const topComma = isLastTop ? "" : ",";
+    const fragment = loadFragment(domain);
+    const fields = domainFields(props[domain], fragment);
 
-    // domain block
-    out.push(`  "${key}": {`);
-    const domainShape = (unwrap(node) as unknown as z.ZodObject<z.ZodRawShape>).shape;
-    const fields = Object.entries(domainShape);
-    const lines: Line[] = fields.map(([field, fnode], idx) => {
+    out.push(`  "${domain}": {`);
+    const lines: Line[] = fields.map(([field, def], idx) => {
       const isLastField = idx === fields.length - 1;
       const comma = isLastField ? "" : ",";
-      const info = classifyField(fnode);
-      const comment = commentFor(`${key}.${field}`, info);
+      const info = classifyField(def);
+      const comment = commentFor(`${domain}.${field}`, info);
       return { content: `    "${field}": ${PLACEHOLDER[info.kind]}${comma}`, comment };
     });
     out.push(...renderBlock(lines));
     out.push(`  }${topComma}`);
-  });
+    topIdx++;
+  }
 
   out.push("}");
   return out.join("\n");

@@ -1,48 +1,32 @@
-/**
- * Zod → prompt field-block generator (ADR-0030, Consolidation Spec §4)
- *
- * The two extraction prompts (Full in llm-extractor.ts; Extended/Essential in
- * profile-prompts.ts) each carry a hand-written JSON skeleton whose per-field
- * `// CANONICAL: a | b | c` comments enumerate the field vocabulary. Those
- * lists are hand-kept in parallel with the zod validator, so they drift (the
- * `orphan`/`mentor` class of bug). This generator emits that skeleton FROM the
- * zod schema instead, so the enum rendered in the comment is the *same array
- * object* the validator enforces — drift becomes impossible by construction.
- *
- * Architectural rule (Consolidation Spec §3): zod is the mechanical canonical
- * source. The enum VALUES in every comment are read live from the zod node
- * (`classifyField` below), never hardcoded here. Only presentation that zod
- * does not carry — the prose guidance for free-text fields, the suffix wording,
- * the alignment — lives in this file's tables, and is the OUTPUT_CONTRACT layer
- * the spec keeps hand-written.
- *
- * Field MEMBERSHIP and ORDER per profile come from the profile's own LLM
- * extraction schema (LlmEssential/Extended/ExtractedFieldsSchema) — the exact
- * shapes the extractor validates against — so the generated block asks for
- * precisely the fields that profile extracts, in zod definition order.
- *
- * Phase A scope: this module only GENERATES the block. Wiring it into prompt
- * construction (replacing the hand-written skeletons) is Phase B.
- */
-import { z } from "zod";
 export type FieldBlockProfile = "essential" | "extended" | "full";
+interface JsonSchemaNode {
+    type?: string | string[];
+    enum?: (string | null)[];
+    "x-edm-canonical"?: string[];
+    properties?: Record<string, JsonSchemaNode>;
+    $ref?: string;
+    [k: string]: unknown;
+}
 export type FieldKind = "strict-enum" | "canonical-enum" | "string" | "number" | "boolean" | "string-array";
 export interface FieldInfo {
     kind: FieldKind;
-    /** Present for strict-enum / canonical-enum — read live from the zod node. */
+    /** Present for strict-enum / canonical-enum — read live from the fragment node. */
     enumValues?: readonly string[];
 }
 /**
- * Classify a zod field node into the kind the prompt comment renders.
+ * Classify a JSON Schema field node into the kind the prompt comment renders.
  *
- * - z.union([z.enum([...]), z.string()])  → canonical-enum (two-tier free text)
- * - z.enum([...])                          → strict-enum
- * - z.string / z.number / z.boolean        → free text / number / boolean
- * - z.array(z.string())                    → string-array
+ * - "x-edm-canonical": [...]  → canonical-enum (two-tier free text)
+ * - "enum": [...]             → strict-enum (null stripped)
+ * - type number/integer       → number
+ * - type boolean              → boolean
+ * - type array                → string-array
+ * - otherwise (string/null)   → free text
  */
-export declare function classifyField(node: z.ZodTypeAny): FieldInfo;
+export declare function classifyField(def: JsonSchemaNode): FieldInfo;
 /**
- * Generate the JSON field-block skeleton for a profile, from the zod schema.
+ * Generate the JSON field-block skeleton for a profile, from the edm-spec JSON
+ * Schema.
  *
  * Output shape (matches the current hand-written skeletons):
  *
@@ -56,4 +40,5 @@ export declare function classifyField(node: z.ZodTypeAny): FieldInfo;
  *   }
  */
 export declare function generateFieldBlock(profile: FieldBlockProfile): string;
+export {};
 //# sourceMappingURL=generate-field-block.d.ts.map
