@@ -4,7 +4,7 @@
  * Enforces exact profile field sets per EDM spec
  * EDM schema version is declared in src/version.ts
  */
-import { ZodError } from "zod";
+import { z, ZodError } from "zod";
 import {
   EdmArtifactSchema,
   MetaSchema,
@@ -26,6 +26,7 @@ import {
   EXTENDED_PROFILE_FIELDS,
   FULL_PROFILE_FIELDS,
 } from "./assembler.js";
+import { specProfileShape, type CanonicalProfile } from "./schema/spec-truth.js";
 
 // =============================================================================
 // Domain Schema Registry
@@ -202,8 +203,17 @@ export function validateProfileConformance(artifact: unknown): ProfileConformanc
       }
     }
 
-    // Check for missing required fields
-    for (const requiredField of allowedFields) {
+    // Check for missing required fields. Required-ness follows the spec
+    // composite (inline `required`, else the $ref'd fragment's `required`)
+    // — NOT the full manifest: the manifest is the ALLOWED set; the spec
+    // marks most fields optional (e.g. governance requires only
+    // jurisdiction/retention_policy/subject_rights). The SDK still EMITS
+    // every manifest field (whitepaper §5.2 No Omission), but validation
+    // must accept spec-conformant artifacts that omit optional fields —
+    // the spec's own profile examples do.
+    const requiredFields =
+      specProfileShape(declaredProfile as CanonicalProfile).requiredFields[domain] ?? [];
+    for (const requiredField of requiredFields) {
       if (!(requiredField in domainObj)) {
         errors.push({
           type: "missing_field",
@@ -271,20 +281,11 @@ function validateGovernanceNested(
     }
   }
 
-  // Full profile allows additional governance fields
-  if (profile !== "full") {
-    const extraGovFields = ["k_anonymity", "policy_labels", "masking_rules"];
-    for (const field of extraGovFields) {
-      if (field in governance) {
-        errors.push({
-          type: "extra_field",
-          domain: "governance",
-          field,
-          message: `Field 'governance.${field}' is not allowed in ${profile} profile`,
-        });
-      }
-    }
-  }
+  // NOTE: k_anonymity/policy_labels/masking_rules were previously banned
+  // outside the full profile. The spec composites $ref the full governance
+  // fragment for EVERY profile, so all seven governance fields are allowed
+  // (optional) at essential and extended too — the ban was manifest drift,
+  // removed with the 0.8.3 reconciliation.
 }
 
 // =============================================================================
@@ -292,58 +293,48 @@ function validateGovernanceNested(
 // =============================================================================
 
 /**
- * Validate an EDM artifact against its declared profile schema
+ * Validate an EDM artifact against its DECLARED profile's schema surface.
  *
- * Profile-aware validation:
- * - Detects meta.profile value (defaults to "full" if not specified)
- * - Essential/Extended profiles: validates domain/field conformance only
- * - Full profile: validates against complete Zod schema
+ * Profile-aware validation (defect fix, 2026-07-22 — validateEDM used to
+ * value-check essential/extended domains against the FULL domain zod
+ * schemas, whose required keys — meta.source_type, core.narrative,
+ * governance.exportability, telemetry.extraction_notes — do not exist at
+ * those profiles, so an essential artifact could never pass):
  *
- * This ensures Essential (5 domains) and Extended (7 domains) artifacts
- * pass validation without requiring all 10 domains.
+ * 1. detect meta.profile (defaults to "full" when absent/invalid)
+ * 2. structural conformance — domain/field membership from the profile
+ *    manifests (drift-guarded restatements of the spec composites);
+ *    required-ness from the spec composites/fragments
+ * 3. value validation — each present domain is checked against the full
+ *    domain zod schema NARROWED to the profile's field set and made
+ *    partial (`pick(profileFields).partial()`): every present field's
+ *    VALUE is validated, while required-ness stays with step 2 where the
+ *    spec, not zod key-optionality, is the authority
+ *
+ * Partner profiles (`partner:<id>`): structural completeness is skipped
+ * pending registry lookup (ADR-0012); values of canonical domains that
+ * are present are still validated against the full domain schemas
+ * (partial), so a partner artifact with a malformed canonical field fails.
  */
 export function validateEDM(artifact: unknown): ValidationResult {
   // Detect profile from artifact
   const profile = detectProfile(artifact);
+  const profileResult = validateProfileConformance(artifact);
 
-  // For Essential and Extended profiles, use profile conformance validation
-  // (Zod schema expects all 10 domains which would fail for lighter profiles)
-  if (profile === "essential" || profile === "extended") {
-    const profileResult = validateProfileConformance(artifact);
-
-    if (profileResult.conformant) {
-      // Also validate the domains that ARE present using Zod
-      const domainErrors = validatePresentDomains(artifact, profile);
-      if (domainErrors.length > 0) {
-        return { valid: false, errors: domainErrors };
-      }
-      return { valid: true, errors: [] };
-    }
-
-    return {
-      valid: false,
-      errors: profileResult.errors.map(e => ({
+  const structuralErrors: ValidationError[] = profileResult.conformant
+    ? []
+    : profileResult.errors.map(e => ({
         path: e.field ? `${e.domain}.${e.field}` : e.domain,
         message: e.message,
         code: e.type,
-      })),
-    };
-  }
+      }));
 
-  // Full profile: use complete Zod schema validation
-  const result = EdmArtifactSchema.safeParse(artifact);
+  // Value validation runs regardless of structural conformance so callers
+  // see structural AND value errors in one pass (present domains only).
+  const valueErrors = validatePresentDomains(artifact, profile);
 
-  if (result.success) {
-    return {
-      valid: true,
-      errors: [],
-    };
-  }
-
-  return {
-    valid: false,
-    errors: formatZodErrors(result.error),
-  };
+  const errors = [...structuralErrors, ...valueErrors];
+  return { valid: errors.length === 0, errors };
 }
 
 /**
@@ -360,12 +351,31 @@ function detectProfile(artifact: unknown): EdmProfile {
   if (profile === "essential" || profile === "extended" || profile === "full") {
     return profile;
   }
+  if (typeof profile === "string" && profile.startsWith("partner:")) {
+    return profile as EdmProfile;
+  }
   return "full"; // Default to full if not specified or invalid
 }
 
 /**
- * Validate present domains using their individual Zod schemas
- * Used for Essential/Extended profiles where not all domains are present
+ * Zod schema for one domain of one profile: the full domain schema
+ * narrowed to the profile's field set, all keys optional. Field VALUES are
+ * validated; key required-ness is the conformance layer's job (spec
+ * required arrays). Unknown keys are ignored here — the conformance layer
+ * already reports them as extra_field.
+ */
+function profileDomainSchema(domain: DomainName, profile: EdmProfile): z.ZodTypeAny {
+  const full = domainSchemas[domain] as unknown as z.ZodObject<z.ZodRawShape>;
+  const fields = getProfileFields(profile)[domain] ?? [];
+  const mask: Record<string, true> = {};
+  for (const f of fields) {
+    if (f in full.shape) mask[f] = true;
+  }
+  return full.pick(mask).partial();
+}
+
+/**
+ * Validate present domains using their profile-narrowed Zod schemas.
  */
 function validatePresentDomains(artifact: unknown, profile: EdmProfile): ValidationError[] {
   const errors: ValidationError[] = [];
@@ -374,16 +384,14 @@ function validatePresentDomains(artifact: unknown, profile: EdmProfile): Validat
 
   for (const domain of profileDomains) {
     const domainData = obj[domain];
-    if (domainData !== undefined) {
-      const schema = domainSchemas[domain as DomainName];
-      if (schema) {
-        const result = schema.safeParse(domainData);
-        if (!result.success) {
-          errors.push(...formatZodErrors(result.error).map(err => ({
-            ...err,
-            path: `${domain}.${err.path}`,
-          })));
-        }
+    if (domainData !== undefined && domain in domainSchemas) {
+      const schema = profileDomainSchema(domain as DomainName, profile);
+      const result = schema.safeParse(domainData);
+      if (!result.success) {
+        errors.push(...formatZodErrors(result.error).map(err => ({
+          ...err,
+          path: `${domain}.${err.path}`,
+        })));
       }
     }
   }

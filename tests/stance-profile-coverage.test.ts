@@ -13,11 +13,7 @@
  *   partner hot path). Gravity-bearing profiles keep the weight>=0.6 gate.
  */
 import { describe, it, expect, vi, beforeAll, beforeEach } from "vitest";
-import { readFileSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import Ajv from "ajv";
-import addFormats from "ajv-formats";
+import { compileProfileValidators } from "./helpers/spec-schemas.js";
 
 const mockExtraction = {
   extracted: {} as Record<string, unknown>,
@@ -48,30 +44,11 @@ vi.mock("../src/extractors/stance-guard.js", async (importOriginal) => {
 import { extractFromContent } from "../src/assembler.js";
 import { applyStanceGuard } from "../src/extractors/stance-guard.js";
 
-// ── Published v0.8.0 schema validators (same fixtures as conformance test) ─
-const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "fixtures", "edm-v0.8.0");
-
-function resolveRefs(schema: unknown): unknown {
-  if (typeof schema !== "object" || schema === null) return schema;
-  const obj = schema as Record<string, unknown>;
-  if (typeof obj["$ref"] === "string") {
-    const ref = obj["$ref"];
-    const name = ref.includes("/fragments/") ? ref.split("/fragments/")[1] : ref.startsWith("fragments/") ? ref.slice(10) : null;
-    if (name) return resolveRefs(JSON.parse(readFileSync(join(FIXTURES, "fragments", name), "utf8")));
-  }
-  const out: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(obj)) out[k] = Array.isArray(v) ? v.map(resolveRefs) : resolveRefs(v);
-  return out;
-}
-
-let validators: Record<string, ReturnType<Ajv["compile"]>>;
+// ── Published schema validators (installed edm-spec package; same helper
+// as the conformance test) ──────────────────────────────────────────────
+let validators: ReturnType<typeof compileProfileValidators>;
 beforeAll(() => {
-  const ajv = new Ajv({ allErrors: true, strict: false });
-  addFormats(ajv);
-  validators = {};
-  for (const p of ["essential", "extended", "full"] as const) {
-    validators[p] = ajv.compile(resolveRefs(JSON.parse(readFileSync(join(FIXTURES, `edm.${p}.schema.json`), "utf8"))) as object);
-  }
+  validators = compileProfileValidators();
 });
 
 beforeEach(() => {

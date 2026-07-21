@@ -5,18 +5,14 @@
  *     contain NO experiential_stance key anywhere — stance is consumed by
  *     the attribution guard and recorded only in telemetry notes.
  * (b) Emitted artifacts validate unchanged against the published EDM
- *     v0.8.0 JSON schemas (fixtures vendored from the reference schema
- *     set, including the 2026-06-12 nullable-enum conformance fix).
+ *     JSON schemas, loaded from the INSTALLED edm-spec package (no
+ *     vendored copies — see tests/helpers/spec-schemas.ts).
  *
  * LLM calls are mocked; everything downstream of the model response is
  * the real production path (sanitizer -> zod -> stance guard -> assembly).
  */
 import { describe, it, expect, vi, beforeAll } from "vitest";
-import { readFileSync, readdirSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import Ajv from "ajv";
-import addFormats from "ajv-formats";
+import { compileProfileValidators } from "./helpers/spec-schemas.js";
 
 // ── Mock the Kimi extractor module (client + extraction call) ──────────
 const mockExtraction = {
@@ -39,42 +35,12 @@ vi.mock("../src/extractors/kimi-extractor.js", () => ({
 
 import { extractFromContent, extractFromConversation } from "../src/assembler.js";
 
-// ── Published-schema validator (mirrors ddna-tools bundled validation) ─
-const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "fixtures", "edm-v0.8.0");
-
-function resolveRefs(schema: unknown): unknown {
-  if (typeof schema !== "object" || schema === null) return schema;
-  const obj = schema as Record<string, unknown>;
-  if (typeof obj["$ref"] === "string") {
-    const ref = obj["$ref"];
-    const fragmentName = ref.includes("/fragments/")
-      ? ref.split("/fragments/")[1]
-      : ref.startsWith("fragments/")
-        ? ref.slice("fragments/".length)
-        : null;
-    if (fragmentName) {
-      const fragment = JSON.parse(readFileSync(join(FIXTURES, "fragments", fragmentName), "utf8"));
-      return resolveRefs(fragment);
-    }
-  }
-  const out: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(obj)) {
-    out[k] = Array.isArray(v) ? v.map(resolveRefs) : resolveRefs(v);
-  }
-  return out;
-}
-
-let validators: Record<string, ReturnType<Ajv["compile"]>>;
+// ── Published-schema validator (installed edm-spec package; mirrors
+// ddna-tools bundled validation) ────────────────────────────────────────
+let validators: ReturnType<typeof compileProfileValidators>;
 
 beforeAll(() => {
-  const ajv = new Ajv({ allErrors: true, strict: false });
-  addFormats(ajv);
-  validators = {};
-  for (const profile of ["essential", "extended", "full"] as const) {
-    const raw = JSON.parse(readFileSync(join(FIXTURES, `edm.${profile}.schema.json`), "utf8"));
-    validators[profile] = ajv.compile(resolveRefs(raw) as object);
-  }
-  expect(readdirSync(join(FIXTURES, "fragments")).length).toBeGreaterThan(0);
+  validators = compileProfileValidators();
 });
 
 function findKeyDeep(obj: unknown, key: string, path = "$"): string[] {
