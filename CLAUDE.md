@@ -89,6 +89,13 @@ threshold, exile,
 gratitude, authenticity
 ```
 
+## Pending
+
+- `edm-spec` dependency is temporarily pinned to `file:../edm-spec`
+  (local release/v0.8.3 checkout) for the 0.8.3 version-truth work —
+  flip back to the published npm semver (`^0.8.3`) when the founder
+  publishes edm-spec 0.8.3 to npm.
+
 ## Open Items
 
 - `activate_reason()` SDK surface: not yet implemented. Platform
