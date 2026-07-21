@@ -3,10 +3,11 @@
 The significance layer for AI memory.
 
 > **Versioning:** SDK package semver is independent of the EDM schema
-> version. The schema version this SDK emits is declared by
-> `src/version.ts` (`EDM_SCHEMA_VERSION`) and stamped into every
-> artifact's `meta.version` — currently **EDM v0.8.0**. An SDK version
-> number never implies a schema version.
+> version. The schema version this SDK emits is DERIVED from the
+> installed `edm-spec` package (`src/version.ts`, `EDM_SCHEMA_VERSION`)
+> and stamped into every artifact's `meta.version` — bumping the
+> `edm-spec` dependency updates the stamp. An SDK version number never
+> implies a schema version.
 
 EDM artifacts encode what mattered at capture time — emotional weight, recall triggers, identity thread, arc type — so every memory architecture gets a richer signal to retrieve against.
 
@@ -83,7 +84,7 @@ EDM v0.7.0 introduces profile-aware extraction. Choose the profile that matches 
 |---------|--------|----------|
 | **essential** | ~20 | Memory platforms, agent frameworks, AI assistants |
 | **extended** | ~45 | Journaling apps, companion AI, workplace wellness |
-| **full** | 96 | Therapy tools, clinical applications, research |
+| **full** | all | Therapy tools, clinical applications, research |
 
 ```typescript
 // Essential profile - minimal extraction
@@ -251,7 +252,9 @@ This SDK is designed for compliance with the EU AI Act. Emotional data extractio
 
 ## Schema Version
 
-This SDK implements EDM v0.7.0. Key changes from v0.6:
+The EDM schema version this SDK implements and stamps is the installed
+`edm-spec` package version, derived at module load in `src/version.ts` —
+never hardcoded. Historical: key changes introduced at EDM v0.7.0 from v0.6:
 
 - Added `meta.profile` field for conformance level declaration
 - Profile-aware extraction with tailored system prompts

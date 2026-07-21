@@ -32,6 +32,7 @@
  */
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
+import { specCompositePath, specFragmentPath } from "../schema/spec-truth.js";
 
 const require = createRequire(import.meta.url);
 const loadJson = (specPath: string): JsonSchemaNode =>
@@ -60,18 +61,20 @@ interface JsonSchemaNode {
 const LLM_DOMAINS = ["core", "constellation", "milky_way", "gravity", "impulse"] as const;
 type LlmDomain = (typeof LLM_DOMAINS)[number];
 
+// Spec paths are DERIVED from the installed edm-spec version (the filename
+// version segment is the line, e.g. "v0.8") — no restated version strings.
 const FRAGMENT_SPEC: Record<LlmDomain, string> = {
-  core: "edm-spec/schema/fragments/core.json",
-  constellation: "edm-spec/schema/fragments/constellation.json",
-  milky_way: "edm-spec/schema/fragments/milky_way.json",
-  gravity: "edm-spec/schema/fragments/gravity.json",
-  impulse: "edm-spec/schema/fragments/impulse.json",
+  core: specFragmentPath("core"),
+  constellation: specFragmentPath("constellation"),
+  milky_way: specFragmentPath("milky_way"),
+  gravity: specFragmentPath("gravity"),
+  impulse: specFragmentPath("impulse"),
 };
 
 const COMPOSITE_SPEC: Record<FieldBlockProfile, string> = {
-  essential: "edm-spec/schema/edm.v0.8.essential.schema.json",
-  extended: "edm-spec/schema/edm.v0.8.extended.schema.json",
-  full: "edm-spec/schema/edm.v0.8.full.schema.json",
+  essential: specCompositePath("essential"),
+  extended: specCompositePath("extended"),
+  full: specCompositePath("full"),
 };
 
 const loadFragment = (domain: LlmDomain): JsonSchemaNode => loadJson(FRAGMENT_SPEC[domain]);
