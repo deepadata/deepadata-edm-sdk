@@ -27,15 +27,28 @@ export interface ProfileConformanceError {
  */
 export declare function validateProfileConformance(artifact: unknown): ProfileConformanceResult;
 /**
- * Validate an EDM artifact against its declared profile schema
+ * Validate an EDM artifact against its DECLARED profile's schema surface.
  *
- * Profile-aware validation:
- * - Detects meta.profile value (defaults to "full" if not specified)
- * - Essential/Extended profiles: validates domain/field conformance only
- * - Full profile: validates against complete Zod schema
+ * Profile-aware validation (defect fix, 2026-07-22 — validateEDM used to
+ * value-check essential/extended domains against the FULL domain zod
+ * schemas, whose required keys — meta.source_type, core.narrative,
+ * governance.exportability, telemetry.extraction_notes — do not exist at
+ * those profiles, so an essential artifact could never pass):
  *
- * This ensures Essential (5 domains) and Extended (7 domains) artifacts
- * pass validation without requiring all 10 domains.
+ * 1. detect meta.profile (defaults to "full" when absent/invalid)
+ * 2. structural conformance — domain/field membership from the profile
+ *    manifests (drift-guarded restatements of the spec composites);
+ *    required-ness from the spec composites/fragments
+ * 3. value validation — each present domain is checked against the full
+ *    domain zod schema NARROWED to the profile's field set and made
+ *    partial (`pick(profileFields).partial()`): every present field's
+ *    VALUE is validated, while required-ness stays with step 2 where the
+ *    spec, not zod key-optionality, is the authority
+ *
+ * Partner profiles (`partner:<id>`): structural completeness is skipped
+ * pending registry lookup (ADR-0012); values of canonical domains that
+ * are present are still validated against the full domain schemas
+ * (partial), so a partner artifact with a malformed canonical field fails.
  */
 export declare function validateEDM(artifact: unknown): ValidationResult;
 /**

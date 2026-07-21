@@ -73,10 +73,12 @@ export interface ExtractionMetadata {
 export type PartnerProfileId = `partner:${string}`;
 /**
  * EDM Implementation Profile
- * - essential: ~20 required fields, minimal extraction for memory platforms
- * - extended: ~45 fields, adds full Constellation and key Gravity fields
- * - full: all 96 fields, complete extraction
+ * - essential: minimal extraction for memory platforms
+ * - extended: adds full Constellation and key Gravity fields
+ * - full: the complete field set, complete extraction
  * - partner:<profile_id>: partner-defined profile per ADR-0017
+ * Field membership per profile is defined by the edm-spec composite
+ * schemas (installed `edm-spec` package) — see assembler.ts manifests.
  */
 export type EdmProfile = 'essential' | 'extended' | 'full' | PartnerProfileId;
 export interface ExtractionOptions {
@@ -86,9 +88,9 @@ export interface ExtractionOptions {
     metadata: ExtractionMetadata;
     /**
      * EDM profile to extract (default: 'full')
-     * - essential: ~20 fields, for memory platforms and agent frameworks
-     * - extended: ~45 fields, for journaling and companion AI
-     * - full: all 96 fields, for therapy and regulated systems
+     * - essential: minimal, for memory platforms and agent frameworks
+     * - extended: mid-tier, for journaling and companion AI
+     * - full: the complete field set, for therapy and regulated systems
      */
     profile?: EdmProfile;
     /** LLM provider to use for extraction (default: 'anthropic') */
@@ -123,14 +125,14 @@ export interface ValidationError {
     message: string;
     code: string;
 }
-export declare const EMOTION_PRIMARY: readonly ["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence"];
-export declare const NARRATIVE_ARC: readonly ["overcoming", "transformation", "connection", "reflection", "closure"];
-export declare const RELATIONAL_DYNAMICS: readonly ["parent_child", "romantic_partnership", "sibling_bond", "friendship", "companionship", "mentorship", "reunion", "community_ritual", "grief", "self_reflection"];
+export declare const EMOTION_PRIMARY: readonly ["joy", "sadness", "fear", "anger", "wonder", "peace", "tenderness", "reverence", "pride", "anxiety", "gratitude", "longing", "hope", "shame", "disappointment", "relief", "frustration"];
+export declare const NARRATIVE_ARC: readonly ["overcoming", "transformation", "connection", "reflection", "closure", "loss", "confrontation"];
+export declare const RELATIONAL_DYNAMICS: readonly ["parent_child", "grandparent_grandchild", "romantic_partnership", "couple", "sibling_bond", "family", "friendship", "friend", "companionship", "colleague", "mentorship", "reunion", "community_ritual", "grief", "self_reflection", "professional", "therapeutic", "service", "adversarial"];
 export declare const TEMPORAL_CONTEXT: readonly ["childhood", "early_adulthood", "midlife", "late_life", "recent", "future", "timeless"];
 export declare const MEMORY_TYPE: readonly ["legacy_artifact", "fleeting_moment", "milestone", "reflection", "formative_experience"];
 export declare const NARRATIVE_ARCHETYPE: readonly ["hero", "caregiver", "seeker", "sage", "lover", "outlaw", "innocent", "magician", "creator", "everyman", "jester", "ruler"];
-export declare const DRIVE_STATE: readonly ["explore", "approach", "avoid", "repair", "persevere", "share"];
-export declare const MOTIVATIONAL_ORIENTATION: readonly ["belonging", "safety", "mastery", "meaning", "autonomy"];
+export declare const DRIVE_STATE: readonly ["explore", "approach", "avoid", "repair", "persevere", "share", "confront", "protect", "process"];
+export declare const MOTIVATIONAL_ORIENTATION: readonly ["belonging", "safety", "mastery", "meaning", "autonomy", "authenticity"];
 export interface ActivateResult {
     activationId: string | null;
     arcTypes: string[];

@@ -12,6 +12,13 @@ export const EXPERIENTIAL_STANCE = [
 ];
 // =============================================================================
 // Enum Constants (for convenience)
+//
+// GUARDED RESTATEMENT: these literal arrays restate the edm-spec fragment
+// vocabularies (`enum` for hard enums, `x-edm-canonical` for two-tier
+// free-text fields) so they keep literal-union TypeScript types — deriving
+// them at runtime would collapse the types to string[]. They are asserted
+// equal to the installed spec's vocabularies, both directions, by
+// tests/spec-drift-guard.test.ts; any drift fails `npm test` loudly.
 // =============================================================================
 export const EMOTION_PRIMARY = [
     "joy",
@@ -22,6 +29,15 @@ export const EMOTION_PRIMARY = [
     "peace",
     "tenderness",
     "reverence",
+    "pride",
+    "anxiety",
+    "gratitude",
+    "longing",
+    "hope",
+    "shame",
+    "disappointment",
+    "relief",
+    "frustration",
 ];
 export const NARRATIVE_ARC = [
     "overcoming",
@@ -29,18 +45,29 @@ export const NARRATIVE_ARC = [
     "connection",
     "reflection",
     "closure",
+    "loss",
+    "confrontation",
 ];
 export const RELATIONAL_DYNAMICS = [
     "parent_child",
+    "grandparent_grandchild",
     "romantic_partnership",
+    "couple",
     "sibling_bond",
+    "family",
     "friendship",
+    "friend",
     "companionship",
+    "colleague",
     "mentorship",
     "reunion",
     "community_ritual",
     "grief",
     "self_reflection",
+    "professional",
+    "therapeutic",
+    "service",
+    "adversarial",
 ];
 export const TEMPORAL_CONTEXT = [
     "childhood",
@@ -79,6 +106,9 @@ export const DRIVE_STATE = [
     "repair",
     "persevere",
     "share",
+    "confront",
+    "protect",
+    "process",
 ];
 export const MOTIVATIONAL_ORIENTATION = [
     "belonging",
@@ -86,5 +116,6 @@ export const MOTIVATIONAL_ORIENTATION = [
     "mastery",
     "meaning",
     "autonomy",
+    "authenticity",
 ];
 //# sourceMappingURL=types.js.map

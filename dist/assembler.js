@@ -9,8 +9,20 @@ import { createMeta, createGovernance, createTelemetry, createSystem, createCros
 // Profile Field Definitions
 // =============================================================================
 /**
- * Essential Profile: 5 domains, 24 fields
+ * PROFILE MANIFESTS — GUARDED RESTATEMENT of the spec composites.
+ *
+ * Field membership per profile is defined by the edm-spec composite
+ * schemas (edm.v0.8.{essential,extended,full}.schema.json in the installed
+ * `edm-spec` package). These literal manifests restate the composites'
+ * property sets so the arrays keep literal-union TypeScript types and a
+ * stable filter order; tests/spec-drift-guard.test.ts asserts exact set
+ * equality with the composites in both directions and fails `npm test`
+ * loudly on any drift (tidy-the-house commitment, ADR-0030).
+ */
+/**
+ * Essential Profile: 5 domains
  * Target: memory platforms, agent frameworks, AI assistants
+ * Field membership = the spec essential composite (drift-guarded).
  */
 export const ESSENTIAL_PROFILE_FIELDS = {
     meta: [
@@ -19,17 +31,20 @@ export const ESSENTIAL_PROFILE_FIELDS = {
     ],
     core: ["anchor", "spark", "wound", "fuel", "bridge", "echo"],
     constellation: ["emotion_primary", "emotion_subtone", "narrative_arc"],
-    governance: ["jurisdiction", "retention_policy", "subject_rights"],
-    telemetry: ["entry_confidence", "extraction_model"],
+    governance: [
+        "jurisdiction", "retention_policy", "subject_rights", "exportability",
+        "k_anonymity", "policy_labels", "masking_rules"
+    ],
+    telemetry: [
+        "entry_confidence", "extraction_model", "extraction_provider",
+        "extraction_notes"
+    ],
 };
 /**
- * Extended Profile: 8 domains, ~50 fields
- * Target: journaling apps, companion AI, workplace wellness
- */
-/**
- * Extended Profile: 7 domains, 50 fields
+ * Extended Profile: 7 domains
  * Target: journaling apps, companion AI, workplace wellness
  * Impulse domain is NOT included in Extended profile
+ * Field membership = the spec extended composite (drift-guarded).
  */
 export const EXTENDED_PROFILE_FIELDS = {
     meta: [
@@ -47,17 +62,24 @@ export const EXTENDED_PROFILE_FIELDS = {
     ],
     milky_way: ["event_type", "location_context", "associated_people", "visibility_context", "tone_shift"],
     gravity: ["emotional_weight", "valence", "tether_type", "recurrence_pattern", "strength_score"],
-    governance: ["jurisdiction", "retention_policy", "subject_rights"],
-    telemetry: ["entry_confidence", "extraction_model"],
+    governance: [
+        "jurisdiction", "retention_policy", "subject_rights", "exportability",
+        "k_anonymity", "policy_labels", "masking_rules"
+    ],
+    telemetry: [
+        "entry_confidence", "extraction_model", "extraction_provider",
+        "extraction_notes"
+    ],
 };
 /**
  * Full Profile: all 10 domains, all fields
  * Target: therapy platforms, clinical tools, regulated systems
+ * Field membership = the spec full composite (drift-guarded).
  */
 export const FULL_PROFILE_FIELDS = {
     meta: [
-        "id", "version", "profile", "created_at", "updated_at", "locale",
-        "owner_user_id", "parent_id", "visibility", "pii_tier", "source_type",
+        "id", "version", "profile", "created_at", "source_timestamp", "updated_at",
+        "locale", "owner_user_id", "parent_id", "visibility", "pii_tier", "source_type",
         "source_context", "consent_basis", "consent_scope", "consent_revoked_at", "tags"
     ],
     core: ["anchor", "spark", "wound", "fuel", "bridge", "echo", "narrative"],
@@ -328,7 +350,7 @@ function makeAnthropicClassifier(client, model, sourceText) {
  * extracted as a conversation input (framed, subject-anchored, stance-guarded),
  * and chunks after the first are threaded to the first chunk's artifact via
  * metadata.parentId. meta.parent_id is defined in ALL profile schemas
- * (essential, extended, full) per the published v0.8.0 schema set, so the
+ * (essential, extended, full) per the published v0.8-line schema set, so the
  * linkage appears in the artifact body for every profile — populated for
  * chunks past the first, explicit null otherwise (whitepaper §5.2 No
  * Omission). Short conversations produce exactly one artifact.

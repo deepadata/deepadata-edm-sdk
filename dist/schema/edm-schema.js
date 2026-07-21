@@ -1,7 +1,17 @@
 /**
  * EDM Zod Schema
- * Generated from canonical JSON schema at deepadata-edm-spec
- * EDM schema version is declared in src/version.ts
+ *
+ * GUARDED RESTATEMENT of the canonical JSON Schema published in the
+ * `edm-spec` package (ADR-0030, amended: the spec is the source of truth;
+ * this zod restates it because zod literal enums are what give the SDK its
+ * public literal-union TypeScript types — deriving them at runtime would
+ * collapse the types to string). Every enum below (hard `z.enum` and the
+ * two-tier `z.union([z.enum, z.string])` canonical vocabularies) is
+ * asserted equal to the installed spec fragments, both directions, by
+ * tests/spec-drift-guard.test.ts — drift fails `npm test` loudly.
+ *
+ * EDM schema version is DERIVED in src/version.ts (installed edm-spec
+ * package version), never restated here.
  */
 import { z } from "zod";
 // =============================================================================
@@ -312,8 +322,14 @@ export const GovernanceSchema = z.object({
     subject_rights: SubjectRightsSchema,
     exportability: z.enum(["allowed", "restricted", "forbidden"]).describe("Export control"),
     k_anonymity: KAnonymitySchema.nullable(),
+    // Spec truth: governance.policy_labels is a FREE string array (nullable)
+    // — the fragment defines no vocabulary. The previous
+    // z.enum(["sensitive","children","health","biometrics","financial","none"])
+    // was a restated vocabulary the spec never had, and rejected spec-valid
+    // artifacts. Reconciled 2026-07-22 (edm-spec 0.8.3).
     policy_labels: z
-        .array(z.enum(["sensitive", "children", "health", "biometrics", "financial", "none"]))
+        .array(z.string())
+        .nullable()
         .describe("Sensitive category labels"),
     masking_rules: z.array(z.string()).describe("Redaction requirements"),
 });

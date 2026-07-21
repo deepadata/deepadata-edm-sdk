@@ -8,24 +8,33 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile, PartnerProfileId } from "./schema/types.js";
 import { type ConversationMessage, type ChunkConversationOptions } from "./conversation.js";
 /**
- * Essential Profile: 5 domains, 24 fields
+ * PROFILE MANIFESTS — GUARDED RESTATEMENT of the spec composites.
+ *
+ * Field membership per profile is defined by the edm-spec composite
+ * schemas (edm.v0.8.{essential,extended,full}.schema.json in the installed
+ * `edm-spec` package). These literal manifests restate the composites'
+ * property sets so the arrays keep literal-union TypeScript types and a
+ * stable filter order; tests/spec-drift-guard.test.ts asserts exact set
+ * equality with the composites in both directions and fails `npm test`
+ * loudly on any drift (tidy-the-house commitment, ADR-0030).
+ */
+/**
+ * Essential Profile: 5 domains
  * Target: memory platforms, agent frameworks, AI assistants
+ * Field membership = the spec essential composite (drift-guarded).
  */
 export declare const ESSENTIAL_PROFILE_FIELDS: {
     readonly meta: readonly ["id", "version", "profile", "created_at", "updated_at", "locale", "owner_user_id", "parent_id", "visibility", "pii_tier", "consent_basis"];
     readonly core: readonly ["anchor", "spark", "wound", "fuel", "bridge", "echo"];
     readonly constellation: readonly ["emotion_primary", "emotion_subtone", "narrative_arc"];
-    readonly governance: readonly ["jurisdiction", "retention_policy", "subject_rights"];
-    readonly telemetry: readonly ["entry_confidence", "extraction_model"];
+    readonly governance: readonly ["jurisdiction", "retention_policy", "subject_rights", "exportability", "k_anonymity", "policy_labels", "masking_rules"];
+    readonly telemetry: readonly ["entry_confidence", "extraction_model", "extraction_provider", "extraction_notes"];
 };
 /**
- * Extended Profile: 8 domains, ~50 fields
- * Target: journaling apps, companion AI, workplace wellness
- */
-/**
- * Extended Profile: 7 domains, 50 fields
+ * Extended Profile: 7 domains
  * Target: journaling apps, companion AI, workplace wellness
  * Impulse domain is NOT included in Extended profile
+ * Field membership = the spec extended composite (drift-guarded).
  */
 export declare const EXTENDED_PROFILE_FIELDS: {
     readonly meta: readonly ["id", "version", "profile", "created_at", "updated_at", "locale", "owner_user_id", "parent_id", "visibility", "pii_tier", "source_type", "source_context", "consent_basis", "consent_scope", "tags"];
@@ -33,15 +42,16 @@ export declare const EXTENDED_PROFILE_FIELDS: {
     readonly constellation: readonly ["emotion_primary", "emotion_subtone", "higher_order_emotion", "meta_emotional_state", "interpersonal_affect", "narrative_arc", "relational_dynamics", "temporal_context", "memory_type", "media_format", "narrative_archetype", "symbolic_anchor", "relational_perspective", "temporal_rhythm", "identity_thread", "expressed_insight", "transformational_pivot", "somatic_signature", "arc_type"];
     readonly milky_way: readonly ["event_type", "location_context", "associated_people", "visibility_context", "tone_shift"];
     readonly gravity: readonly ["emotional_weight", "valence", "tether_type", "recurrence_pattern", "strength_score"];
-    readonly governance: readonly ["jurisdiction", "retention_policy", "subject_rights"];
-    readonly telemetry: readonly ["entry_confidence", "extraction_model"];
+    readonly governance: readonly ["jurisdiction", "retention_policy", "subject_rights", "exportability", "k_anonymity", "policy_labels", "masking_rules"];
+    readonly telemetry: readonly ["entry_confidence", "extraction_model", "extraction_provider", "extraction_notes"];
 };
 /**
  * Full Profile: all 10 domains, all fields
  * Target: therapy platforms, clinical tools, regulated systems
+ * Field membership = the spec full composite (drift-guarded).
  */
 export declare const FULL_PROFILE_FIELDS: {
-    readonly meta: readonly ["id", "version", "profile", "created_at", "updated_at", "locale", "owner_user_id", "parent_id", "visibility", "pii_tier", "source_type", "source_context", "consent_basis", "consent_scope", "consent_revoked_at", "tags"];
+    readonly meta: readonly ["id", "version", "profile", "created_at", "source_timestamp", "updated_at", "locale", "owner_user_id", "parent_id", "visibility", "pii_tier", "source_type", "source_context", "consent_basis", "consent_scope", "consent_revoked_at", "tags"];
     readonly core: readonly ["anchor", "spark", "wound", "fuel", "bridge", "echo", "narrative"];
     readonly constellation: readonly ["emotion_primary", "emotion_subtone", "higher_order_emotion", "meta_emotional_state", "interpersonal_affect", "narrative_arc", "relational_dynamics", "temporal_context", "memory_type", "media_format", "narrative_archetype", "symbolic_anchor", "relational_perspective", "temporal_rhythm", "identity_thread", "expressed_insight", "transformational_pivot", "somatic_signature", "arc_type"];
     readonly milky_way: readonly ["event_type", "location_context", "associated_people", "visibility_context", "tone_shift"];
@@ -111,7 +121,7 @@ export interface ConversationChunkArtifact {
  * extracted as a conversation input (framed, subject-anchored, stance-guarded),
  * and chunks after the first are threaded to the first chunk's artifact via
  * metadata.parentId. meta.parent_id is defined in ALL profile schemas
- * (essential, extended, full) per the published v0.8.0 schema set, so the
+ * (essential, extended, full) per the published v0.8-line schema set, so the
  * linkage appears in the artifact body for every profile — populated for
  * chunks past the first, explicit null otherwise (whitepaper §5.2 No
  * Omission). Short conversations produce exactly one artifact.

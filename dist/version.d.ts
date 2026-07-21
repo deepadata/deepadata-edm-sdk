@@ -1,12 +1,16 @@
 /**
- * Single source of truth for the EDM schema version emitted by this SDK.
- *
- * MUST be updated when the SDK targets a new EDM spec version.
- * Coherence is enforced by tests/version-coherence.test.ts which
- * asserts this matches the canonical example artefact in edm-spec.
- *
- * Per whitepaper §11.4: declared version governs interpretation.
- * Stale values cause downstream readers to misinterpret artefacts.
+ * The EDM schema version stamped into every emitted artifact's
+ * `meta.version`, e.g. "0.8.3". Always the installed edm-spec version.
  */
-export declare const EDM_SCHEMA_VERSION: "0.8.0";
+export declare const EDM_SCHEMA_VERSION: string;
+/** The version line, e.g. "0.8". */
+export declare const EDM_VERSION_LINE: string;
+/**
+ * The version segment used in the spec's schema filenames and $id URLs.
+ * The edm-spec convention pins these at the patch-zero of the line
+ * (e.g. "v0.8.0" while the spec is at 0.8.3).
+ */
+export declare const EDM_SCHEMA_URL_VERSION: string;
+/** Human label, e.g. "v0.8.3". */
+export declare const EDM_VERSION_LABEL: string;
 //# sourceMappingURL=version.d.ts.map

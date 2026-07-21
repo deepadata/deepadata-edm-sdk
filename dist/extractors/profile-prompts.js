@@ -1,19 +1,22 @@
 /**
  * Profile-specific extraction prompts
  *
- * Essential Profile: 24 required fields for memory platforms
- * Extended Profile: 50 fields for journaling apps
- * Full Profile: all 96 fields for therapy/clinical tools
+ * Essential Profile: minimal field set for memory platforms
+ * Extended Profile: mid-tier field set for journaling apps
+ * Full Profile: the complete field set for therapy/clinical tools
+ *
+ * Field membership per profile is defined by the edm-spec composites
+ * (installed `edm-spec` package); counts are not restated here.
  */
 /**
- * Essential Profile System Prompt (24 fields)
+ * Essential Profile System Prompt
  * Target: memory platforms, agent frameworks, AI assistants
  * Core (6 fields) + Constellation (3 fields) = 9 LLM fields
  */
 export const ESSENTIAL_PROFILE_PROMPT = `
 You classify emotionally rich memories into a JSON object. Input may include text and an image.
 
-PROFILE: ESSENTIAL (24 fields)
+PROFILE: ESSENTIAL
 This is a minimal extraction for memory platforms. Focus ONLY on the required fields.
 Domains not listed below are not included in this profile.
 
@@ -63,7 +66,7 @@ ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
 //   Use free text if no canonical value fits accurately.
 `;
 /**
- * Extended Profile System Prompt (50 fields)
+ * Extended Profile System Prompt
  * Target: journaling apps, companion AI, workplace wellness
  * Core (7) + Constellation (18) + Milky_Way (5) + Gravity (5) = 35 LLM fields + metadata domains
  * Impulse, System, Crosswalks — Not included in this profile
@@ -71,7 +74,7 @@ ESSENTIAL PROFILE SCHEMA (extract these fields ONLY):
 export const EXTENDED_PROFILE_PROMPT = `
 You classify emotionally rich memories into a JSON object. Input may include text and an image.
 
-PROFILE: EXTENDED (50 fields)
+PROFILE: EXTENDED
 This extraction adds full Constellation, Milky_Way, and key Gravity fields.
 Impulse domain is NOT included in this profile.
 

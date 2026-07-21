@@ -1,7 +1,17 @@
 /**
  * EDM Zod Schema
- * Generated from canonical JSON schema at deepadata-edm-spec
- * EDM schema version is declared in src/version.ts
+ *
+ * GUARDED RESTATEMENT of the canonical JSON Schema published in the
+ * `edm-spec` package (ADR-0030, amended: the spec is the source of truth;
+ * this zod restates it because zod literal enums are what give the SDK its
+ * public literal-union TypeScript types — deriving them at runtime would
+ * collapse the types to string). Every enum below (hard `z.enum` and the
+ * two-tier `z.union([z.enum, z.string])` canonical vocabularies) is
+ * asserted equal to the installed spec fragments, both directions, by
+ * tests/spec-drift-guard.test.ts — drift fails `npm test` loudly.
+ *
+ * EDM schema version is DERIVED in src/version.ts (installed edm-spec
+ * package version), never restated here.
  */
 import { z } from "zod";
 export declare const MetaSchema: z.ZodObject<{
@@ -351,7 +361,7 @@ export declare const GovernanceSchema: z.ZodObject<{
         k: number | null;
         groups: string[];
     }>>;
-    policy_labels: z.ZodArray<z.ZodEnum<["sensitive", "children", "health", "biometrics", "financial", "none"]>, "many">;
+    policy_labels: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
     masking_rules: z.ZodArray<z.ZodString, "many">;
 }, "strip", z.ZodTypeAny, {
     jurisdiction: "GDPR" | "CCPA" | "HIPAA" | "PIPEDA" | "LGPD" | "None" | "Mixed" | null;
@@ -370,7 +380,7 @@ export declare const GovernanceSchema: z.ZodObject<{
         k: number | null;
         groups: string[];
     } | null;
-    policy_labels: ("none" | "sensitive" | "children" | "health" | "biometrics" | "financial")[];
+    policy_labels: string[] | null;
     masking_rules: string[];
 }, {
     jurisdiction: "GDPR" | "CCPA" | "HIPAA" | "PIPEDA" | "LGPD" | "None" | "Mixed" | null;
@@ -389,7 +399,7 @@ export declare const GovernanceSchema: z.ZodObject<{
         k: number | null;
         groups: string[];
     } | null;
-    policy_labels: ("none" | "sensitive" | "children" | "health" | "biometrics" | "financial")[];
+    policy_labels: string[] | null;
     masking_rules: string[];
 }>;
 export declare const TelemetrySchema: z.ZodObject<{
@@ -786,7 +796,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
             k: number | null;
             groups: string[];
         }>>;
-        policy_labels: z.ZodArray<z.ZodEnum<["sensitive", "children", "health", "biometrics", "financial", "none"]>, "many">;
+        policy_labels: z.ZodNullable<z.ZodArray<z.ZodString, "many">>;
         masking_rules: z.ZodArray<z.ZodString, "many">;
     }, "strip", z.ZodTypeAny, {
         jurisdiction: "GDPR" | "CCPA" | "HIPAA" | "PIPEDA" | "LGPD" | "None" | "Mixed" | null;
@@ -805,7 +815,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
             k: number | null;
             groups: string[];
         } | null;
-        policy_labels: ("none" | "sensitive" | "children" | "health" | "biometrics" | "financial")[];
+        policy_labels: string[] | null;
         masking_rules: string[];
     }, {
         jurisdiction: "GDPR" | "CCPA" | "HIPAA" | "PIPEDA" | "LGPD" | "None" | "Mixed" | null;
@@ -824,7 +834,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
             k: number | null;
             groups: string[];
         } | null;
-        policy_labels: ("none" | "sensitive" | "children" | "health" | "biometrics" | "financial")[];
+        policy_labels: string[] | null;
         masking_rules: string[];
     }>;
     telemetry: z.ZodObject<{
@@ -1014,7 +1024,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
             k: number | null;
             groups: string[];
         } | null;
-        policy_labels: ("none" | "sensitive" | "children" | "health" | "biometrics" | "financial")[];
+        policy_labels: string[] | null;
         masking_rules: string[];
     };
     telemetry: {
@@ -1146,7 +1156,7 @@ export declare const EdmArtifactSchema: z.ZodObject<{
             k: number | null;
             groups: string[];
         } | null;
-        policy_labels: ("none" | "sensitive" | "children" | "health" | "biometrics" | "financial")[];
+        policy_labels: string[] | null;
         masking_rules: string[];
     };
     telemetry: {
