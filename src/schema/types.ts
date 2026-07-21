@@ -118,10 +118,12 @@ export type PartnerProfileId = `partner:${string}`;
 
 /**
  * EDM Implementation Profile
- * - essential: ~20 required fields, minimal extraction for memory platforms
- * - extended: ~45 fields, adds full Constellation and key Gravity fields
- * - full: all 96 fields, complete extraction
+ * - essential: minimal extraction for memory platforms
+ * - extended: adds full Constellation and key Gravity fields
+ * - full: the complete field set, complete extraction
  * - partner:<profile_id>: partner-defined profile per ADR-0017
+ * Field membership per profile is defined by the edm-spec composite
+ * schemas (installed `edm-spec` package) — see assembler.ts manifests.
  */
 export type EdmProfile = 'essential' | 'extended' | 'full' | PartnerProfileId;
 
@@ -132,9 +134,9 @@ export interface ExtractionOptions {
   metadata: ExtractionMetadata;
   /**
    * EDM profile to extract (default: 'full')
-   * - essential: ~20 fields, for memory platforms and agent frameworks
-   * - extended: ~45 fields, for journaling and companion AI
-   * - full: all 96 fields, for therapy and regulated systems
+   * - essential: minimal, for memory platforms and agent frameworks
+   * - extended: mid-tier, for journaling and companion AI
+   * - full: the complete field set, for therapy and regulated systems
    */
   profile?: EdmProfile;
   /** LLM provider to use for extraction (default: 'anthropic') */
@@ -177,6 +179,13 @@ export interface ValidationError {
 
 // =============================================================================
 // Enum Constants (for convenience)
+//
+// GUARDED RESTATEMENT: these literal arrays restate the edm-spec fragment
+// vocabularies (`enum` for hard enums, `x-edm-canonical` for two-tier
+// free-text fields) so they keep literal-union TypeScript types — deriving
+// them at runtime would collapse the types to string[]. They are asserted
+// equal to the installed spec's vocabularies, both directions, by
+// tests/spec-drift-guard.test.ts; any drift fails `npm test` loudly.
 // =============================================================================
 export const EMOTION_PRIMARY = [
   "joy",
@@ -187,6 +196,15 @@ export const EMOTION_PRIMARY = [
   "peace",
   "tenderness",
   "reverence",
+  "pride",
+  "anxiety",
+  "gratitude",
+  "longing",
+  "hope",
+  "shame",
+  "disappointment",
+  "relief",
+  "frustration",
 ] as const;
 
 export const NARRATIVE_ARC = [
@@ -195,19 +213,30 @@ export const NARRATIVE_ARC = [
   "connection",
   "reflection",
   "closure",
+  "loss",
+  "confrontation",
 ] as const;
 
 export const RELATIONAL_DYNAMICS = [
   "parent_child",
+  "grandparent_grandchild",
   "romantic_partnership",
+  "couple",
   "sibling_bond",
+  "family",
   "friendship",
+  "friend",
   "companionship",
+  "colleague",
   "mentorship",
   "reunion",
   "community_ritual",
   "grief",
   "self_reflection",
+  "professional",
+  "therapeutic",
+  "service",
+  "adversarial",
 ] as const;
 
 export const TEMPORAL_CONTEXT = [
@@ -250,6 +279,9 @@ export const DRIVE_STATE = [
   "repair",
   "persevere",
   "share",
+  "confront",
+  "protect",
+  "process",
 ] as const;
 
 export const MOTIVATIONAL_ORIENTATION = [
@@ -258,6 +290,7 @@ export const MOTIVATIONAL_ORIENTATION = [
   "mastery",
   "meaning",
   "autonomy",
+  "authenticity",
 ] as const;
 
 // =============================================================================
