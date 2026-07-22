@@ -1,22 +1,25 @@
 {
   "name": "deepadata-edm-sdk",
-  "version": "0.8.11",
+  "version": "0.8.12",
   "description": "SDK for assembling EDM artifacts from user content. LLM-assisted extraction with interpretation constraints and profile support. Emitted artifacts stamp the installed edm-spec version.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "tsc",
+    "generate:spec": "node scripts/generate-spec-data.mjs",
+    "build": "npm run generate:spec && tsc",
     "prepare": "npm run build",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
+    "bundle-test": "node scripts/bundle-test.mjs",
     "clean": "rimraf dist"
   },
   "keywords": [

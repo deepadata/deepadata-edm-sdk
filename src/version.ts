@@ -7,29 +7,22 @@
  * dependency updates every stamp — no literal EDM version strings belong
  * anywhere else in runtime code.
  *
+ * The derivation happens at BUILD time (scripts/generate-spec-data.mjs →
+ * src/generated/spec-data.ts), never at runtime: a module-scope require of
+ * the spec package breaks under serverless bundlers that ship no
+ * node_modules (the 0.8.11 production regression). The sync guard test
+ * fails the build if the generated value drifts from the installed spec.
+ *
  * Per whitepaper §11.4: declared version governs interpretation.
  * Stale values cause downstream readers to misinterpret artefacts.
  */
-import { createRequire } from "node:module";
-
-// createRequire, not `import ... from "edm-spec/package.json"`: JSON module
-// imports under Node ESM need import attributes (unavailable on Node 18,
-// this package's floor), while require() of JSON works everywhere.
-const require = createRequire(import.meta.url);
-const specPkg = require("edm-spec/package.json") as { version?: unknown };
-
-const specVersion = typeof specPkg.version === "string" ? specPkg.version : undefined;
-if (!specVersion || !/^\d+\.\d+\.\d+$/.test(specVersion)) {
-  throw new Error(
-    `edm-spec package version missing or malformed: ${JSON.stringify(specPkg.version)}`
-  );
-}
+import { EDM_SPEC_VERSION } from "./generated/spec-data.js";
 
 /**
  * The EDM schema version stamped into every emitted artifact's
  * `meta.version`, e.g. "0.8.3". Always the installed edm-spec version.
  */
-export const EDM_SCHEMA_VERSION: string = specVersion;
+export const EDM_SCHEMA_VERSION: string = EDM_SPEC_VERSION;
 
 const [major, minor] = EDM_SCHEMA_VERSION.split(".");
 

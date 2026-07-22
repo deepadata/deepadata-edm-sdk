@@ -19,16 +19,19 @@
  * literal-union types are public API) are GUARDED against these loaders by
  * tests/spec-drift-guard.test.ts, which is wired into `npm test` and fails
  * loudly on any mismatch in either direction.
+ *
+ * The spec is read at BUILD time (scripts/generate-spec-data.mjs →
+ * src/generated/spec-data.ts), not at runtime: readFileSync(require.resolve(
+ * "edm-spec/...")) with template-string paths is untraceable by serverless
+ * bundlers and took production down at 0.8.11. No fs, no createRequire here.
  */
-import { readFileSync } from "node:fs";
-import { createRequire } from "node:module";
+import { SPEC_COMPOSITES, SPEC_FRAGMENTS } from "../generated/spec-data.js";
 import { EDM_VERSION_LINE } from "../version.js";
-const require = createRequire(import.meta.url);
-const loadJson = (specPath) => JSON.parse(readFileSync(require.resolve(specPath), "utf8"));
 /**
- * Composite schema path inside the installed spec for a profile. The
- * filename version segment is the LINE (edm.v0.8.*) — derived from the
- * installed version, not restated.
+ * Composite schema path inside the spec for a profile — kept as a
+ * documentation/diagnostic helper (the filename version segment is the
+ * LINE, e.g. edm.v0.8.*). Resolution no longer goes through the
+ * filesystem; the content lives in the generated spec data.
  */
 export function specCompositePath(profile) {
     return `edm-spec/schema/edm.v${EDM_VERSION_LINE}.${profile}.schema.json`;
@@ -36,21 +39,17 @@ export function specCompositePath(profile) {
 export function specFragmentPath(domain) {
     return `edm-spec/schema/fragments/${domain}.json`;
 }
-const compositeCache = new Map();
-const fragmentCache = new Map();
 export function loadComposite(profile) {
-    let c = compositeCache.get(profile);
+    const c = SPEC_COMPOSITES[profile];
     if (!c) {
-        c = loadJson(specCompositePath(profile));
-        compositeCache.set(profile, c);
+        throw new Error(`spec-truth: no composite for profile "${profile}" in generated spec data`);
     }
     return c;
 }
 export function loadFragment(domain) {
-    let f = fragmentCache.get(domain);
+    const f = SPEC_FRAGMENTS[domain];
     if (!f) {
-        f = loadJson(specFragmentPath(domain));
-        fragmentCache.set(domain, f);
+        throw new Error(`spec-truth: no fragment "${domain}" in generated spec data`);
     }
     return f;
 }

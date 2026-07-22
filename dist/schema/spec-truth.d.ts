@@ -10,9 +10,10 @@ export interface SpecSchemaNode {
 }
 export type CanonicalProfile = "essential" | "extended" | "full";
 /**
- * Composite schema path inside the installed spec for a profile. The
- * filename version segment is the LINE (edm.v0.8.*) — derived from the
- * installed version, not restated.
+ * Composite schema path inside the spec for a profile — kept as a
+ * documentation/diagnostic helper (the filename version segment is the
+ * LINE, e.g. edm.v0.8.*). Resolution no longer goes through the
+ * filesystem; the content lives in the generated spec data.
  */
 export declare function specCompositePath(profile: CanonicalProfile): string;
 export declare function specFragmentPath(domain: string): string;

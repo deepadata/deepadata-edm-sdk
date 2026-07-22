@@ -30,13 +30,13 @@
  * the fragments, never from the composite's inline copies, so the canonical
  * vocabulary rendered in each comment is the one the fragment enforces.
  */
-import { readFileSync } from "node:fs";
-import { createRequire } from "node:module";
-import { specCompositePath, specFragmentPath } from "../schema/spec-truth.js";
-
-const require = createRequire(import.meta.url);
-const loadJson = (specPath: string): JsonSchemaNode =>
-  JSON.parse(readFileSync(require.resolve(specPath), "utf8")) as JsonSchemaNode;
+// Spec content comes from the generated spec data via the spec-truth
+// loaders — no fs/require of edm-spec at runtime (serverless-bundler safe).
+import {
+  loadComposite,
+  loadFragment as loadSpecFragment,
+  type CanonicalProfile,
+} from "../schema/spec-truth.js";
 
 export type FieldBlockProfile = "essential" | "extended" | "full";
 
@@ -61,23 +61,8 @@ interface JsonSchemaNode {
 const LLM_DOMAINS = ["core", "constellation", "milky_way", "gravity", "impulse"] as const;
 type LlmDomain = (typeof LLM_DOMAINS)[number];
 
-// Spec paths are DERIVED from the installed edm-spec version (the filename
-// version segment is the line, e.g. "v0.8") — no restated version strings.
-const FRAGMENT_SPEC: Record<LlmDomain, string> = {
-  core: specFragmentPath("core"),
-  constellation: specFragmentPath("constellation"),
-  milky_way: specFragmentPath("milky_way"),
-  gravity: specFragmentPath("gravity"),
-  impulse: specFragmentPath("impulse"),
-};
-
-const COMPOSITE_SPEC: Record<FieldBlockProfile, string> = {
-  essential: specCompositePath("essential"),
-  extended: specCompositePath("extended"),
-  full: specCompositePath("full"),
-};
-
-const loadFragment = (domain: LlmDomain): JsonSchemaNode => loadJson(FRAGMENT_SPEC[domain]);
+const loadFragment = (domain: LlmDomain): JsonSchemaNode =>
+  loadSpecFragment(domain) as JsonSchemaNode;
 
 /**
  * experiential_stance is a top-level extraction-only field — never sealed into
@@ -277,13 +262,12 @@ function domainFields(
  *   }
  */
 export function generateFieldBlock(profile: FieldBlockProfile): string {
-  const compositeSpec = COMPOSITE_SPEC[profile];
-  if (!compositeSpec) {
+  if (!["essential", "extended", "full"].includes(profile)) {
     throw new Error(
-      `unknown profile "${profile}" (expected one of: ${Object.keys(COMPOSITE_SPEC).join(", ")})`
+      `unknown profile "${profile}" (expected one of: essential, extended, full)`
     );
   }
-  const composite = loadJson(compositeSpec);
+  const composite = loadComposite(profile as CanonicalProfile) as JsonSchemaNode;
   const props = composite.properties ?? {};
 
   // Representational domains present in this profile, in canonical order.
