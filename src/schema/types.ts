@@ -146,10 +146,11 @@ export interface ExtractionOptions {
   /** Temperature for OpenAI extractions (0-2, lower = more deterministic) */
   temperature?: number;
   /**
-   * Output token budget for the extraction call. Defaults to 4096, or
+   * Output token budget for the extraction call. Defaults to 2048 for
+   * non-thinking models (real completions run 600–1,200 tokens), or
    * 16384 when the model is a thinking model (reasoning tokens count
-   * against max_tokens, and 4096 silently truncated extraction on exactly
-   * the most emotionally dense inputs).
+   * against max_tokens, and smaller budgets silently truncated extraction
+   * on exactly the most emotionally dense inputs).
    */
   maxTokens?: number;
   /**

@@ -107,13 +107,19 @@ export function usesMaxCompletionTokens(model: string): boolean {
 // Output token budgets (model-class aware)
 // =============================================================================
 
-/** Default output budget for non-thinking models */
-export const DEFAULT_MAX_TOKENS = 4096;
+/**
+ * Default output budget for non-thinking models. Validated against real
+ * completions (2026-08-04): full-profile extractions run 600–1,200 output
+ * tokens, so 2,048 leaves ~2x headroom while trimming provider-side
+ * latency ceilings.
+ */
+export const DEFAULT_MAX_TOKENS = 2048;
 
 /**
  * Default output budget for thinking models, whose reasoning tokens count
  * against max_tokens. 4096 silently truncated extraction JSON on exactly
  * the most emotionally dense inputs (archive-sample run, 2026-06-10).
+ * Retained ONLY where a thinking-class model is configured.
  */
 export const THINKING_MODEL_MAX_TOKENS = 16_384;
 
