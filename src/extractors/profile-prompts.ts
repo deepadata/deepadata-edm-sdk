@@ -185,18 +185,29 @@ EXTENDED PROFILE SCHEMA:
 `;
 
 /**
- * Get the appropriate system prompt for a profile
+ * Get the appropriate system prompt for a profile.
+ * Returns null for the full profile (callers fall back to
+ * EXTRACTION_SYSTEM_PROMPT).
+ *
+ * Partner profiles route through the EXTENDED base — D2 fix
+ * (partner-profiles 2026-08-02): prompt, output schema, field filter, and
+ * confidence now all use the extended surface pending registry lookup
+ * (ADR-0012). Previously the prompt and schema fell back to FULL while
+ * filtering fell back to EXTENDED, so a partner extract paid full-prompt
+ * inference for fields the filter then dropped.
  */
-export function getProfilePrompt(profile: EdmProfile): string {
+export function getProfilePrompt(profile: EdmProfile): string | null {
   switch (profile) {
     case "essential":
       return ESSENTIAL_PROFILE_PROMPT;
     case "extended":
       return EXTENDED_PROFILE_PROMPT;
     case "full":
+      // Full profile uses the comprehensive EXTRACTION_SYSTEM_PROMPT
+      return null;
     default:
-      // Full profile uses the existing comprehensive prompt
-      return null as unknown as string; // Signal to use default
+      // Partner profile — extended base (ADR-0012)
+      return EXTENDED_PROFILE_PROMPT;
   }
 }
 
