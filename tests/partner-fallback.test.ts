@@ -20,6 +20,11 @@ import {
 import { getProfileSchema } from "../src/extractors/llm-extractor.js";
 import { LlmExtendedFieldsSchema, LlmExtractedFieldsSchema } from "../src/schema/edm-schema.js";
 import { getProfileFields, EXTENDED_PROFILE_FIELDS } from "../src/assembler.js";
+import {
+  isCanonicalProfile,
+  isPartnerProfile,
+  getPartnerProfileId,
+} from "../src/index.js";
 
 const PARTNER = "partner:com.deepadata.journaling.v1" as const;
 
@@ -66,5 +71,16 @@ describe("D2: partner profiles use the extended base on every surface", () => {
     expect(calculateProfileConfidence(populated, PARTNER)).toBe(
       calculateProfileConfidence(populated, "extended")
     );
+  });
+});
+
+describe("D3: prefix guards are exported from the public index", () => {
+  it("exports working isCanonicalProfile / isPartnerProfile / getPartnerProfileId", () => {
+    expect(isCanonicalProfile("extended")).toBe(true);
+    expect(isCanonicalProfile(PARTNER)).toBe(false);
+    expect(isPartnerProfile(PARTNER)).toBe(true);
+    expect(isPartnerProfile("full")).toBe(false);
+    expect(getPartnerProfileId(PARTNER)).toBe("com.deepadata.journaling.v1");
+    expect(getPartnerProfileId("full")).toBeNull();
   });
 });

@@ -41,6 +41,11 @@ export {
   getProfileFields,
   getProfileDomains,
   filterByProfile,
+  // Profile prefix guards (ADR-0017) — public API per D3
+  // (partner-profiles 2026-08-02: only the types were exported before)
+  isCanonicalProfile,
+  isPartnerProfile,
+  getPartnerProfileId,
 } from "./assembler.js";
 
 export type {
