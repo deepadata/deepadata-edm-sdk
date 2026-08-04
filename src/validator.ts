@@ -354,7 +354,10 @@ function detectProfile(artifact: unknown): EdmProfile {
   if (typeof profile === "string" && profile.startsWith("partner:")) {
     return profile as EdmProfile;
   }
-  return "full"; // Default to full if not specified or invalid
+  // Unset/invalid profile resolves to "full" — intentional (founder
+  // decision, 2026-08-04): an initial user gets the entire view. Not a
+  // defect; keep aligned with extractFromContent's default.
+  return "full";
 }
 
 /**

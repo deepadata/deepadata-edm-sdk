@@ -137,6 +137,10 @@ export interface ExtractionOptions {
    * - essential: minimal, for memory platforms and agent frameworks
    * - extended: mid-tier, for journaling and companion AI
    * - full: the complete field set, for therapy and regulated systems
+   *
+   * The 'full' default when unset is INTENTIONAL (founder decision,
+   * 2026-08-04): an initial user gets the entire view of what the EDM
+   * captures. Not a defect — do not change to a lighter default.
    */
   profile?: EdmProfile;
   /** LLM provider to use for extraction (default: 'anthropic') */

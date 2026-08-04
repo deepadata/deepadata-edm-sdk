@@ -86,6 +86,12 @@ EDM v0.7.0 introduces profile-aware extraction. Choose the profile that matches 
 | **extended** | ~45 | Journaling apps, companion AI, workplace wellness |
 | **full** | all | Therapy tools, clinical applications, research |
 
+When `profile` is not set, extraction defaults to **full**. This is an
+intentional product decision (2026-08-04): an initial user gets the entire
+view of what the EDM captures, and narrows to a lighter profile once they
+know what they need. It is not a defect — integrations that want a lighter
+default must pass `profile` explicitly.
+
 ```typescript
 // Essential profile - minimal extraction
 const artifact = await extractFromContent({
