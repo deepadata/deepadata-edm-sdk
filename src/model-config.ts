@@ -88,6 +88,43 @@ export function resolveExtractionModel(
 }
 
 // =============================================================================
+// Stance classifier models
+// =============================================================================
+
+/**
+ * Stance-classifier fallbacks. The classifier is a cheap second call that
+ * answers with one word — it does NOT inherit the extraction model
+ * (a thinking-class extraction model would double latency for nothing).
+ * Resolution: per-request `stanceModel` → `STANCE_MODEL` env → the fast
+ * non-thinking default below. EXTRACTION_MODEL deliberately does not apply.
+ *
+ * - kimi: `moonshot-v1-32k` — non-thinking Moonshot tier; 32k context
+ *   comfortably fits the classifier's 12K-char source slice. OpenRouter
+ *   routing falls back to the vendor-prefixed non-thinking k2 id.
+ */
+const STANCE_FALLBACK_MODELS: Record<ExtractionProvider, string> = {
+  anthropic: "claude-haiku-4-5",
+  openai: "gpt-4o-mini",
+  kimi: "moonshot-v1-32k",
+};
+
+/**
+ * Resolve the stance-classifier model for a provider:
+ * per-request → STANCE_MODEL → fast non-thinking fallback.
+ */
+export function resolveStanceModel(
+  provider: ExtractionProvider,
+  requested?: string
+): string {
+  const resolved = requested ?? envModel("STANCE_MODEL");
+  if (resolved) return resolved;
+  if (provider === "kimi" && usingOpenRouterForKimi()) {
+    return OPENROUTER_KIMI_MODEL;
+  }
+  return STANCE_FALLBACK_MODELS[provider];
+}
+
+// =============================================================================
 // Provider API-surface quirks (model-class aware)
 // =============================================================================
 

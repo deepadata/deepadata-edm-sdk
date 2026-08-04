@@ -154,6 +154,14 @@ export interface ExtractionOptions {
    */
   maxTokens?: number;
   /**
+   * Model for the stance-classifier verification pass. Has its own knob:
+   * per-request here → STANCE_MODEL env → the fast non-thinking default in
+   * model-config. Deliberately does NOT inherit the extraction model (or
+   * EXTRACTION_MODEL) — the classifier answers with one word and a
+   * thinking-class model would double latency for nothing.
+   */
+  stanceModel?: string;
+  /**
    * Stance classifier verification pass (see stance-guard):
    * - "auto" (default): run a cheap classifier call when the input is a
    *   conversation and the extraction claims lived/witnessed material at

@@ -31,6 +31,7 @@ import {
   createCrosswalks,
   detectSourceType,
 } from "./extractors/domain-extractors.js";
+import { resolveStanceModel } from "./model-config.js";
 
 // =============================================================================
 // Profile Field Definitions
@@ -387,24 +388,30 @@ export async function extractFromContent(options: ExtractionOptions): Promise<Re
     profile = "full",
     maxTokens,
     verifyStance = "auto",
+    stanceModel,
   } = options;
   const callOptions = { maxTokens };
 
   let llmResult;
   let classify: ((summary: string) => Promise<ExperientialStance | null>) | null = null;
 
+  // The stance classifier has its own model knob (stanceModel / STANCE_MODEL
+  // env → fast non-thinking default); it no longer inherits the extraction
+  // model.
+  const classifierModel = resolveStanceModel(provider, stanceModel);
+
   if (provider === "openai") {
     const client = createOpenAIClient();
     llmResult = await extractWithOpenAI(client, content, model, temperature, profile, callOptions);
-    classify = makeOpenAICompatibleClassifier(client, llmResult.model, content.text);
+    classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text);
   } else if (provider === "kimi") {
     const client = createKimiClient();
     llmResult = await extractWithKimi(client, content, model, profile, callOptions);
-    classify = makeOpenAICompatibleClassifier(client, llmResult.model, content.text);
+    classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text);
   } else {
     const client = createAnthropicClient();
     llmResult = await extractWithLlm(client, content, model, profile, callOptions);
-    classify = makeAnthropicClassifier(client, llmResult.model, content.text);
+    classify = makeAnthropicClassifier(client, classifierModel, content.text);
   }
 
   const extracted = llmResult.extracted as ProfileExtractedFields;
@@ -514,7 +521,7 @@ export async function extractFromContentWithClient(
   client: Anthropic,
   options: ExtractionOptions
 ): Promise<Record<string, unknown>> {
-  const { content, metadata, model, profile = "full", maxTokens, verifyStance = "auto" } = options;
+  const { content, metadata, model, profile = "full", maxTokens, verifyStance = "auto", stanceModel } = options;
 
   // Extract with LLM
   const llmResult = await extractWithLlm(client, content, model, profile, { maxTokens });
@@ -524,7 +531,7 @@ export async function extractFromContentWithClient(
     extracted: extracted as Record<string, unknown>,
     content,
     verifyStance,
-    classify: makeAnthropicClassifier(client, llmResult.model, content.text),
+    classify: makeAnthropicClassifier(client, resolveStanceModel("anthropic", stanceModel), content.text),
   });
 
   // Assemble profile-specific artifact

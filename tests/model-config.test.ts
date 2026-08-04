@@ -8,6 +8,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import {
   resolveExtractionModel,
+  resolveStanceModel,
   fallbackModel,
   isThinkingModel,
   defaultMaxTokens,
@@ -18,6 +19,7 @@ import {
 
 const MODEL_ENV_KEYS = [
   "EXTRACTION_MODEL",
+  "STANCE_MODEL",
   "ANTHROPIC_MODEL",
   "OPENAI_MODEL",
   "KIMI_MODEL",
@@ -98,6 +100,39 @@ describe("fallbackModel — kimi OpenRouter routing", () => {
     process.env["OPENROUTER_API_KEY"] = "or-key";
     process.env["MOONSHOT_API_KEY"] = "ms-key";
     expect(fallbackModel("kimi")).not.toContain("/");
+  });
+});
+
+describe("resolveStanceModel", () => {
+  it("per-request stanceModel wins over STANCE_MODEL env", () => {
+    process.env["STANCE_MODEL"] = "env-stance";
+    expect(resolveStanceModel("anthropic", "per-request")).toBe("per-request");
+  });
+
+  it("STANCE_MODEL env wins over the fallback", () => {
+    process.env["STANCE_MODEL"] = "env-stance";
+    for (const provider of PROVIDERS) {
+      expect(resolveStanceModel(provider)).toBe("env-stance");
+    }
+  });
+
+  it("does NOT inherit EXTRACTION_MODEL or the extraction fallback", () => {
+    process.env["EXTRACTION_MODEL"] = "big-thinking-model";
+    for (const provider of PROVIDERS) {
+      expect(resolveStanceModel(provider)).not.toBe("big-thinking-model");
+    }
+  });
+
+  it("defaults to a fast non-thinking model per provider", () => {
+    for (const provider of PROVIDERS) {
+      const model = resolveStanceModel(provider);
+      expect(isThinkingModel(model), `${provider} stance default ${model}`).toBe(false);
+    }
+  });
+
+  it("kimi stance fallback follows OpenRouter routing", () => {
+    process.env["OPENROUTER_API_KEY"] = "or-key";
+    expect(resolveStanceModel("kimi")).toBe("moonshotai/kimi-k2");
   });
 });
 
