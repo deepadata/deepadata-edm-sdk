@@ -95,7 +95,7 @@ Schema
     "fuel": "",     // what energized the experience (e.g., "shared laughter", "curiosity")
     "bridge": "",   // connection between past and present (e.g., "replaying old tape", "returning to the porch")
     "echo": "",     // what still resonates (e.g., "her laugh", "smell of oil", "city lights on water")
-    "narrative": "" // 3–5 sentences. REQUIRED: include ALL of the following — ≥1 concrete sensory detail (sight, sound, smell, texture), ≥1 temporal cue that anchors the memory in time, ≥1 symbolic callback that connects past to present. Write from the subject's perspective. Do not compress or summarise — give the memory space to breathe. Faithful and specific. Never generic.
+    "narrative": "" // 3–5 sentences. REQUIRED: include ALL of the following — ≥1 concrete sensory detail (sight, sound, smell, texture), ≥1 temporal cue that anchors the memory in time, ≥1 symbolic callback that connects past to present. Write from the subject's perspective. Faithful and concise. Never generic.
   },
   "constellation": {
     "emotion_primary": "",           // CANONICAL: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame | disappointment | relief | frustration (free text accepted if none fits)
