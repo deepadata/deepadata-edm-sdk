@@ -2,6 +2,63 @@
 
 All notable changes to deepadata-edm-sdk will be documented in this file.
 
+### v0.8.14
+
+Latency + configurability release. Emitted artifacts remain EDM v0.8.3.
+
+- feat(config): single model-config module (`src/model-config.ts`) — the
+  ONLY home for model identifiers, per the standing engineering rule
+  (CLAUDE.md, 2026-08-04). Model resolution per provider: per-request
+  `model` → `EXTRACTION_MODEL` env → provider env (`ANTHROPIC_MODEL` /
+  `OPENAI_MODEL` / `KIMI_MODEL`) → documented fallback constant.
+- feat(config): default extraction provider → anthropic. Provider
+  resolution: per-request `provider` → `EXTRACTION_PROVIDER` env →
+  `anthropic`. An untouched environment resolves to
+  anthropic/claude-haiku-4-5 (founder decision 2026-08-04, model
+  bake-off). Kimi remains a BYOK/optional provider.
+- fix(anthropic): fallback model → `claude-haiku-4-5`;
+  `claude-sonnet-4-20250514` was retired by Anthropic (404 confirmed
+  2026-08-04). Retired ids swept from docs, examples, and test fixtures.
+- fix(openai): gpt-5.x-class / o-series models use
+  `max_completion_tokens` (`max_tokens` is a hard 400 there) and no
+  temperature override — in both the extractor and the OpenAI-compatible
+  stance classifier. gpt-5.4-mini works through the SDK path.
+- fix(openai): light-profile output validates against the profile's own
+  schema — essential/extended used to be checked against full-schema
+  required fields and always failed. `getProfileSchema` is now a single
+  shared export (was duplicated per extractor).
+- perf(extraction): default output cap 2048 for non-thinking models
+  (real full-profile completions run 600–1,200 output tokens); the
+  16,384 budget is retained only where a thinking-class model is
+  configured.
+- feat(prompts): narrative instruction restored to the MVP's "faithful
+  and concise"; removed "Do not compress or summarise — give the memory
+  space to breathe" from the full and extended prompts (and the
+  field-block generator that snapshot-guards them).
+- feat(stance): stance classifier gets its own model knob — per-request
+  `stanceModel` → `STANCE_MODEL` env → fast non-thinking fallback per
+  provider (claude-haiku-4-5 / gpt-4o-mini / moonshot-v1-32k,
+  OpenRouter-aware). It no longer inherits the extraction model;
+  `EXTRACTION_MODEL` deliberately does not apply.
+- fix(partner): D2 — one fallback direction for unresolved partner
+  profiles: EXTENDED on every surface (prompt, output schema, field
+  filter, confidence) pending registry lookup (ADR-0012). Previously the
+  prompt and output schema fell back to FULL while filtering fell back
+  to EXTENDED, paying full-prompt inference for fields the filter
+  dropped.
+- feat(exports): D3 — `isCanonicalProfile` / `isPartnerProfile` /
+  `getPartnerProfileId` (ADR-0017) exported from the public index.
+- feat(validate): D4 — `validateEDM` surfaces the partner
+  completeness-skip as `ValidationResult.warnings`
+  (path/message/code; present only when non-empty), so `/v1/validate`
+  callers can see that conformance was skipped. Platform route must pass
+  `warnings` through (site repo).
+- docs(profile): unset profile remains `full` — intentional founder
+  decision 2026-08-04 ("give an initial user the entire view").
+  Documented at every point the default applies; not a defect.
+- docs: CLAUDE.md engineering rules (no hardcoded model/provider
+  references), version housekeeping.
+
 ### v0.8.9
 
 Extraction hardening from the 2026-06-10 archive-sample evidence run.

@@ -9,9 +9,9 @@ Given text (conversation, journal entry, transcript), it produces
 a structured significance artifact — emotional weight, narrative
 arc, identity threads, recall triggers — encoded at capture time.
 
-- **Current version:** v0.8.6
+- **Current version:** v0.8.14 (local, branch feat/sdk-0.8.14-latency — NOT yet published)
 - **License:** UNLICENSED (commercial)
-- **npm:** deepadata-edm-sdk@0.8.6 published
+- **npm:** deepadata-edm-sdk@0.8.13 published (0.8.14 publish is founder-only, after site-repo integration tests against the packed tarball)
 
 ## Role in the DeepaData System
 
@@ -111,10 +111,12 @@ gratitude, authenticity
 
 ## Pending
 
-- `edm-spec` dependency is temporarily pinned to `file:../edm-spec`
-  (local release/v0.8.3 checkout) for the 0.8.3 version-truth work —
-  flip back to the published npm semver (`^0.8.3`) when the founder
-  publishes edm-spec 0.8.3 to npm.
+- 0.8.14 publish (founder-only). The tomorrow site session
+  integration-tests against the packed tarball BEFORE any publish;
+  platform then bumps to `^0.8.14` and passes `/v1/validate` warnings
+  through (D4).
+- (resolved) the `file:../edm-spec` pin was flipped back to the npm
+  semver `^0.8.3` in f801801.
 
 ## Open Items
 
@@ -130,5 +132,9 @@ For full project context, cross-repo state, and architectural decisions:
 The platform repo (deepadata-com) is the source of truth for
 session state, version alignment, and task tracking.
 
-## Last session: 2026-04-23
-v0.8.6 release (meta.version fix), SDK audit documented.
+## Last session: 2026-08-04
+v0.8.14 latency + configurability release built on
+feat/sdk-0.8.14-latency (model-config module, anthropic/haiku default,
+D2/D3/D4 + openai light-profile fixes, stance knob, 2048 cap). Model
+bake-off + overnight soak recorded counsel-held in
+deepadata-com/planning/findings/. Publish pending founder.

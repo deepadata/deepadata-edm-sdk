@@ -5,7 +5,7 @@ import { extractWithKimi, createKimiClient } from "./extractors/kimi-extractor.j
 import { takeStance, applyStanceGuard, resolveStance, classifyStanceOpenAI, classifyStanceAnthropic, } from "./extractors/stance-guard.js";
 import { chunkConversation, } from "./conversation.js";
 import { createMeta, createGovernance, createTelemetry, createSystem, createCrosswalks, detectSourceType, } from "./extractors/domain-extractors.js";
-import { resolveStanceModel } from "./model-config.js";
+import { resolveStanceModel, resolveExtractionProvider } from "./model-config.js";
 // =============================================================================
 // Profile Field Definitions
 // =============================================================================
@@ -298,7 +298,10 @@ function mergeNotes(...notes) {
  * @returns Profile-conformant EDM artifact
  */
 export async function extractFromContent(options) {
-    const { content, metadata, model, provider = "kimi", temperature, profile = "full", maxTokens, verifyStance = "auto", stanceModel, } = options;
+    const { content, metadata, model, provider: requestedProvider, temperature, profile = "full", maxTokens, verifyStance = "auto", stanceModel, } = options;
+    // Provider resolves via model-config: per-request → EXTRACTION_PROVIDER
+    // env → anthropic (claude-haiku-4-5), per the 2026-08-04 founder decision.
+    const provider = resolveExtractionProvider(requestedProvider);
     const callOptions = { maxTokens };
     let llmResult;
     let classify = null;

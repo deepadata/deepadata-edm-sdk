@@ -55,7 +55,7 @@ export { validateEDM, validateEDMStrict, validateEDMWithProfile, validateProfile
 // =============================================================================
 // The single home for model identifiers and their resolution order:
 // per-request → EXTRACTION_MODEL → provider env → documented fallback.
-export { resolveExtractionModel, resolveStanceModel, fallbackModel, isThinkingModel, } from "./model-config.js";
+export { resolveExtractionProvider, resolveExtractionModel, resolveStanceModel, fallbackModel, isThinkingModel, } from "./model-config.js";
 // =============================================================================
 // LLM Integration
 // =============================================================================
