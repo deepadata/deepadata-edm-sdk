@@ -225,6 +225,7 @@ export type {
   // Validation Types
   ValidationResult,
   ValidationError,
+  ValidationWarning,
 } from "./schema/types.js";
 
 // Enum constants

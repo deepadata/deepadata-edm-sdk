@@ -18,7 +18,7 @@ import {
   SystemSchema,
   CrosswalksSchema,
 } from "./schema/edm-schema.js";
-import type { EdmArtifact, ValidationResult, ValidationError, EdmProfile } from "./schema/types.js";
+import type { EdmArtifact, ValidationResult, ValidationError, ValidationWarning, EdmProfile } from "./schema/types.js";
 import {
   getProfileFields,
   getProfileDomains,
@@ -334,7 +334,25 @@ export function validateEDM(artifact: unknown): ValidationResult {
   const valueErrors = validatePresentDomains(artifact, profile);
 
   const errors = [...structuralErrors, ...valueErrors];
-  return { valid: errors.length === 0, errors };
+  const warnings = conformanceWarnings(profileResult.warnings);
+  return {
+    valid: errors.length === 0,
+    errors,
+    // D4: surface non-fatal conditions (partner completeness skip) so
+    // /v1/validate callers can see that conformance was skipped.
+    ...(warnings.length > 0 ? { warnings } : {}),
+  };
+}
+
+/** Map profile-conformance warnings into the ValidationResult surface */
+function conformanceWarnings(
+  warnings: ProfileConformanceWarning[] | undefined
+): ValidationWarning[] {
+  return (warnings ?? []).map((w) => ({
+    path: "meta.profile",
+    message: w.message,
+    code: w.type,
+  }));
 }
 
 /**

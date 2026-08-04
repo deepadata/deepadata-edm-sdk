@@ -74,6 +74,28 @@ describe("D2: partner profiles use the extended base on every surface", () => {
   });
 });
 
+describe("D4: partner completeness-skip surfaces as a validateEDM warning", () => {
+  it("valid partner artifact carries a partner_profile warning", async () => {
+    const { validateEDM } = await import("../src/index.js");
+    const artifact = {
+      meta: { profile: PARTNER },
+      core: { anchor: "a" },
+    };
+    const result = validateEDM(artifact);
+    expect(result.valid).toBe(true);
+    expect(result.warnings).toBeDefined();
+    expect(result.warnings![0]!.code).toBe("partner_profile");
+    expect(result.warnings![0]!.path).toBe("meta.profile");
+    expect(result.warnings![0]!.message).toContain("completeness validation skipped");
+  });
+
+  it("canonical profiles produce no warnings key", async () => {
+    const { validateEDM } = await import("../src/index.js");
+    const result = validateEDM({ meta: { profile: "full" } });
+    expect(result.warnings).toBeUndefined();
+  });
+});
+
 describe("D3: prefix guards are exported from the public index", () => {
   it("exports working isCanonicalProfile / isPartnerProfile / getPartnerProfileId", () => {
     expect(isCanonicalProfile("extended")).toBe(true);

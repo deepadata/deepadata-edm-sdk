@@ -182,9 +182,24 @@ export interface ExtractionOptions {
 export interface ValidationResult {
   valid: boolean;
   errors: ValidationError[];
+  /**
+   * Non-fatal conditions the caller should surface — e.g. a partner
+   * profile whose completeness validation was SKIPPED pending registry
+   * lookup (ADR-0012). Added for D4 (partner-profiles 2026-08-02):
+   * /v1/validate previously returned a bare `valid: true` and the caller
+   * could not see that conformance was skipped. Present only when
+   * non-empty.
+   */
+  warnings?: ValidationWarning[];
 }
 
 export interface ValidationError {
+  path: string;
+  message: string;
+  code: string;
+}
+
+export interface ValidationWarning {
   path: string;
   message: string;
   code: string;
