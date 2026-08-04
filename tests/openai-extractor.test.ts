@@ -87,15 +87,36 @@ const fullExtraction = {
   },
 };
 
+/** An essential-profile payload: core (6 fields, no narrative) + constellation (3) */
+const essentialExtraction = {
+  core: {
+    anchor: "dad's toolbox",
+    spark: "finding the cassette",
+    wound: null,
+    fuel: null,
+    bridge: null,
+    echo: "smell of oil",
+  },
+  constellation: {
+    emotion_primary: "tenderness",
+    emotion_subtone: ["warm"],
+    narrative_arc: "reflection",
+  },
+  experiential_stance: "lived",
+};
+
 type CapturedParams = Record<string, unknown>;
 
-function fakeClient(capture: { params?: CapturedParams }): OpenAI {
+function fakeClient(
+  capture: { params?: CapturedParams },
+  payload: unknown = fullExtraction
+): OpenAI {
   return {
     chat: {
       completions: {
         create: async (params: CapturedParams) => {
           capture.params = params;
-          return { choices: [{ message: { content: JSON.stringify(fullExtraction) } }] };
+          return { choices: [{ message: { content: JSON.stringify(payload) } }] };
         },
       },
     },
@@ -131,6 +152,22 @@ describe("extractWithOpenAI parameter selection", () => {
     expect(capture.params!["max_tokens"]).toBeUndefined();
     expect(capture.params!["temperature"]).toBeUndefined();
     expect(result.model).toBe("gpt-5.4-mini");
+  });
+
+  it("validates light-profile output against the profile's own schema (0.8.14 fix)", async () => {
+    // Before the fix this rejected essential output with "Required" errors
+    // for full-schema fields the essential prompt never asks for.
+    const capture: { params?: CapturedParams } = {};
+    const result = await extractWithOpenAI(
+      fakeClient(capture, essentialExtraction),
+      input,
+      "gpt-4o-mini",
+      0,
+      "essential"
+    );
+    expect(result.profile).toBe("essential");
+    const core = (result.extracted as Record<string, Record<string, unknown>>)["core"];
+    expect(core!["anchor"]).toBe("dad's toolbox");
   });
 
   it("honors an explicit per-request output budget on the reasoning surface", async () => {

@@ -251,17 +251,22 @@ export interface LlmExtractionResult {
 }
 
 /**
- * Get the appropriate schema for profile-specific validation
+ * Get the appropriate schema for profile-specific validation.
+ * Shared by all extractors (anthropic/openai/kimi) — one source, no drift.
+ * Partner profiles route through the EXTENDED base pending registry
+ * lookup (ADR-0012), matching prompt selection and field filtering.
  */
-function getProfileSchema(profile: EdmProfile) {
+export function getProfileSchema(profile: EdmProfile) {
   switch (profile) {
     case "essential":
       return LlmEssentialFieldsSchema;
     case "extended":
       return LlmExtendedFieldsSchema;
     case "full":
-    default:
       return LlmExtractedFieldsSchema;
+    default:
+      // Partner profile — extended base (see D2, partner-profiles 2026-08-02)
+      return LlmExtendedFieldsSchema;
   }
 }
 

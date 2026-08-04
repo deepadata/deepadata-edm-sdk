@@ -6,31 +6,16 @@
 import OpenAI from "openai";
 import type { ChatCompletionContentPart } from "openai/resources/chat/completions.js";
 import type { LlmExtractedFields, ExtractionInput, EdmProfile } from "../schema/types.js";
-import { LlmExtractedFieldsSchema, LlmEssentialFieldsSchema, LlmExtendedFieldsSchema } from "../schema/edm-schema.js";
 import {
   EXTRACTION_SYSTEM_PROMPT,
   defaultMaxTokens,
   prepareInputText,
+  getProfileSchema,
   type ExtractorCallOptions,
   type LlmExtractionResult,
 } from "./llm-extractor.js";
 import { sanitizeLlmOutput } from "./output-sanitizer.js";
 import { resolveExtractionModel } from "../model-config.js";
-
-/**
- * Get the appropriate schema for profile-specific validation
- */
-function getProfileSchema(profile: EdmProfile) {
-  switch (profile) {
-    case "essential":
-      return LlmEssentialFieldsSchema;
-    case "extended":
-      return LlmExtendedFieldsSchema;
-    case "full":
-    default:
-      return LlmExtractedFieldsSchema;
-  }
-}
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 
 /**

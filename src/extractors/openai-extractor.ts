@@ -6,13 +6,15 @@
 import OpenAI from "openai";
 import type { ChatCompletionContentPart } from "openai/resources/chat/completions.js";
 import type { LlmExtractedFields, ExtractionInput, EdmProfile } from "../schema/types.js";
-import { LlmExtractedFieldsSchema } from "../schema/edm-schema.js";
 import {
   EXTRACTION_SYSTEM_PROMPT,
   defaultMaxTokens,
   prepareInputText,
+  getProfileSchema,
   type ExtractorCallOptions,
   type LlmExtractionResult,
+  type LlmEssentialExtracted,
+  type LlmExtendedExtracted,
 } from "./llm-extractor.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 import { sanitizeLlmOutput } from "./output-sanitizer.js";
@@ -109,8 +111,11 @@ export async function extractWithOpenAI(
   // strict-enum values to null (prefer a null field over a dropped artifact)
   sanitizeLlmOutput(parsed);
 
-  // Validate against schema
-  const result = LlmExtractedFieldsSchema.safeParse(parsed);
+  // Validate against profile-specific schema (0.8.14 fix: light profiles
+  // used to be checked against full-schema field requirements and always
+  // failed with "Required" errors for fields they don't prompt for)
+  const schema = getProfileSchema(profile);
+  const result = schema.safeParse(parsed);
   if (!result.success) {
     const errorDetails = result.error.errors
       .map((e) => `${e.path.join(".")}: ${e.message}`)
@@ -125,7 +130,7 @@ export async function extractWithOpenAI(
   );
 
   return {
-    extracted: result.data,
+    extracted: result.data as LlmExtractedFields | LlmEssentialExtracted | LlmExtendedExtracted,
     confidence,
     model: resolvedModel,
     profile,
