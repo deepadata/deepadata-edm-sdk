@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tests for the 2026-06 extraction hardening:
  * - conversation framing + per_session chunking (replaces head+tail truncation)
  * - output sanitation (strict-enum coercion, array caps)
@@ -189,7 +189,7 @@ describe("defaultMaxTokens", () => {
     expect(defaultMaxTokens("kimi-k2.5")).toBe(THINKING_MODEL_MAX_TOKENS);
     expect(defaultMaxTokens("kimi-k2.6")).toBe(THINKING_MODEL_MAX_TOKENS);
     expect(defaultMaxTokens("kimi-k2-0905")).toBe(DEFAULT_MAX_TOKENS);
-    expect(defaultMaxTokens("claude-sonnet-4-20250514")).toBe(DEFAULT_MAX_TOKENS);
+    expect(defaultMaxTokens("claude-haiku-4-5")).toBe(DEFAULT_MAX_TOKENS);
     expect(defaultMaxTokens("gpt-4o-mini")).toBe(DEFAULT_MAX_TOKENS);
   });
 });

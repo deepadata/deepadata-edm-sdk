@@ -293,11 +293,15 @@ EdmArtifact (identified)
 
 ### Custom LLM Models
 
+Model ids resolve through `src/model-config.ts`: per-request `model` →
+`EXTRACTION_MODEL` env → provider env (`ANTHROPIC_MODEL` / `OPENAI_MODEL`
+/ `KIMI_MODEL`) → the module's documented fallback.
+
 ```typescript
 const artifact = await extractFromContent({
   content: { text: "..." },
   metadata: { consentBasis: "consent" },
-  model: "claude-opus-4-20250514", // Custom model
+  model: "claude-opus-5", // Custom model (per-request override)
 });
 ```
 

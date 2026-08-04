@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Domain Extractors Tests
  */
 import { describe, it, expect } from "vitest";
@@ -107,10 +107,10 @@ describe("createGovernance", () => {
 
 describe("createTelemetry", () => {
   it("should create telemetry with provided values", () => {
-    const telemetry = createTelemetry(0.85, "claude-sonnet-4-20250514", "High quality extraction");
+    const telemetry = createTelemetry(0.85, "claude-haiku-4-5", "High quality extraction");
 
     expect(telemetry.entry_confidence).toBe(0.85);
-    expect(telemetry.extraction_model).toBe("claude-sonnet-4-20250514");
+    expect(telemetry.extraction_model).toBe("claude-haiku-4-5");
     expect(telemetry.extraction_notes).toBe("High quality extraction");
     // alignment_delta removed in v0.7.0
   });
@@ -221,7 +221,7 @@ describe("createCrosswalks", () => {
     expect(crosswalks.plutchik_primary).toBe("trust");
   });
 
-  // HMD_v2_memory_type tests removed — field removed in v0.7.0
+  // HMD_v2_memory_type tests removed â€” field removed in v0.7.0
 
   it("should return null for unmapped emotions", () => {
     const extracted = createExtracted({ emotion_primary: null });

@@ -1,4 +1,4 @@
-{
+﻿{
   "meta": {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
     "version": "0.6.0",
@@ -66,7 +66,7 @@
   },
   "telemetry": {
     "entry_confidence": 0.88,
-    "extraction_model": "claude-sonnet-4-20250514",
+    "extraction_model": "claude-haiku-4-5",
     "extraction_notes": "Essential profile - 24 fields across 5 domains",
     "alignment_delta": null
   }

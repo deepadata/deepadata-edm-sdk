@@ -20,14 +20,16 @@ export type ExtractionProvider = "anthropic" | "openai" | "kimi";
  * Documented fallback models — step 4 of the resolution order and the ONLY
  * place model ids are allowed to live.
  *
- * - anthropic: `claude-sonnet-4-20250514`
+ * - anthropic: `claude-haiku-4-5` — claude-sonnet-4-20250514 was retired
+ *   by Anthropic (404 confirmed 2026-08-04); haiku-4-5 is the fast
+ *   non-thinking tier that fits the extraction latency budget.
  * - openai: `gpt-4o-mini` — cheapest vision-capable default
  * - kimi: `kimi-k2.5` — kimi-k2-0711-preview was retired by Moonshot
  *   (404s as of 2026-06). kimi-k2.5 is a thinking model; defaultMaxTokens()
  *   sizes the output budget accordingly.
  */
 const FALLBACK_MODELS: Record<ExtractionProvider, string> = {
-  anthropic: "claude-sonnet-4-20250514",
+  anthropic: "claude-haiku-4-5",
   openai: "gpt-4o-mini",
   kimi: "kimi-k2.5",
 };

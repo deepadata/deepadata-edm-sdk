@@ -135,8 +135,10 @@ const artifact = await extractFromContent({
     piiTier: "moderate",           // optional
     tags: ["family", "memory"],    // optional
   },
-  model: "claude-sonnet-4-20250514", // optional
   provider: "anthropic",             // optional: "anthropic" | "openai" | "kimi"
+  model: "claude-haiku-4-5",         // optional; omit to resolve via
+                                     // EXTRACTION_MODEL / <PROVIDER>_MODEL env,
+                                     // then the src/model-config.ts fallback
   profile: "full",                   // optional: "essential" | "extended" | "full"
 });
 ```

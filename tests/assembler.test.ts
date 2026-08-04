@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Assembler Tests
  */
 import { describe, it, expect } from "vitest";
@@ -141,7 +141,7 @@ describe("assembleArtifact", () => {
     };
     const context = {
       confidence: 0.85,
-      model: "claude-sonnet-4-20250514",
+      model: "claude-haiku-4-5",
       notes: null,
       hasText: true,
       hasImage: true,
@@ -167,7 +167,7 @@ describe("assembleArtifact", () => {
     };
     const context = {
       confidence: 0.85,
-      model: "claude-sonnet-4-20250514",
+      model: "claude-haiku-4-5",
       notes: null,
       hasText: true,
       hasImage: false,
@@ -206,7 +206,7 @@ describe("assembleArtifact", () => {
     const metadata = { consentBasis: "consent" as const };
     const context = {
       confidence: 0.92,
-      model: "claude-sonnet-4-20250514",
+      model: "claude-haiku-4-5",
       notes: "High quality input",
       hasText: true,
       hasImage: false,
@@ -215,7 +215,7 @@ describe("assembleArtifact", () => {
     const artifact = assembleArtifact(extracted, metadata, context);
 
     expect(artifact.telemetry.entry_confidence).toBe(0.92);
-    expect(artifact.telemetry.extraction_model).toBe("claude-sonnet-4-20250514");
+    expect(artifact.telemetry.extraction_model).toBe("claude-haiku-4-5");
     expect(artifact.telemetry.extraction_notes).toBe("High quality input");
   });
 
