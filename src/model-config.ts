@@ -6,7 +6,15 @@
  * provider model-id strings anywhere outside this module. Every call site
  * resolves its model through the functions below.
  *
- * Resolution order, per provider:
+ * PROVIDER resolution (which provider runs extraction when none is
+ * requested):
+ *   1. per-request option (`provider` on the extraction call)
+ *   2. `EXTRACTION_PROVIDER` env
+ *   3. "anthropic" — founder decision 2026-08-04 after the 0.8.14 model
+ *      bake-off: an untouched environment resolves to
+ *      anthropic/claude-haiku-4-5 (zero-failure, fast non-thinking tier).
+ *
+ * MODEL resolution, per provider:
  *   1. per-request option (`model` on the extraction call)
  *   2. `EXTRACTION_MODEL` env — global override, applies to whichever
  *      provider is selected (set it only when you run a single provider)
@@ -15,6 +23,30 @@
  */
 
 export type ExtractionProvider = "anthropic" | "openai" | "kimi";
+
+/**
+ * Default extraction provider (resolution step 3). With no per-request
+ * provider and no EXTRACTION_PROVIDER env, extraction runs on
+ * anthropic/claude-haiku-4-5.
+ */
+const DEFAULT_EXTRACTION_PROVIDER: ExtractionProvider = "anthropic";
+
+function isProvider(value: string | undefined): value is ExtractionProvider {
+  return value === "anthropic" || value === "openai" || value === "kimi";
+}
+
+/**
+ * Resolve the extraction provider:
+ * per-request → EXTRACTION_PROVIDER env → "anthropic".
+ * Unknown values fall through to the default rather than throwing — a
+ * typo'd env var must not take extraction down.
+ */
+export function resolveExtractionProvider(requested?: string): ExtractionProvider {
+  if (isProvider(requested)) return requested;
+  const fromEnv = process.env["EXTRACTION_PROVIDER"]?.trim().toLowerCase();
+  if (isProvider(fromEnv)) return fromEnv;
+  return DEFAULT_EXTRACTION_PROVIDER;
+}
 
 /**
  * Documented fallback models — step 4 of the resolution order and the ONLY

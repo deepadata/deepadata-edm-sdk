@@ -7,6 +7,7 @@
  */
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import {
+  resolveExtractionProvider,
   resolveExtractionModel,
   resolveStanceModel,
   fallbackModel,
@@ -18,6 +19,7 @@ import {
 } from "../src/model-config.js";
 
 const MODEL_ENV_KEYS = [
+  "EXTRACTION_PROVIDER",
   "EXTRACTION_MODEL",
   "STANCE_MODEL",
   "ANTHROPIC_MODEL",
@@ -47,6 +49,30 @@ afterEach(() => {
 });
 
 const PROVIDERS: ExtractionProvider[] = ["anthropic", "openai", "kimi"];
+
+describe("resolveExtractionProvider", () => {
+  it("defaults to anthropic with nothing set (founder decision 2026-08-04)", () => {
+    expect(resolveExtractionProvider()).toBe("anthropic");
+    // and the resolved default model is the haiku fallback
+    expect(resolveExtractionModel(resolveExtractionProvider())).toBe("claude-haiku-4-5");
+  });
+
+  it("per-request provider wins over env", () => {
+    process.env["EXTRACTION_PROVIDER"] = "openai";
+    expect(resolveExtractionProvider("kimi")).toBe("kimi");
+  });
+
+  it("EXTRACTION_PROVIDER env wins over the default", () => {
+    process.env["EXTRACTION_PROVIDER"] = "kimi";
+    expect(resolveExtractionProvider()).toBe("kimi");
+  });
+
+  it("unknown values fall through to the default instead of throwing", () => {
+    process.env["EXTRACTION_PROVIDER"] = "watsonx";
+    expect(resolveExtractionProvider()).toBe("anthropic");
+    expect(resolveExtractionProvider("bogus")).toBe("anthropic");
+  });
+});
 
 describe("resolveExtractionModel", () => {
   it("per-request model wins over everything", () => {

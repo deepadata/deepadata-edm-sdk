@@ -31,7 +31,7 @@ import {
   createCrosswalks,
   detectSourceType,
 } from "./extractors/domain-extractors.js";
-import { resolveStanceModel } from "./model-config.js";
+import { resolveStanceModel, resolveExtractionProvider } from "./model-config.js";
 
 // =============================================================================
 // Profile Field Definitions
@@ -386,13 +386,16 @@ export async function extractFromContent(options: ExtractionOptions): Promise<Re
     content,
     metadata,
     model,
-    provider = "kimi",
+    provider: requestedProvider,
     temperature,
     profile = "full",
     maxTokens,
     verifyStance = "auto",
     stanceModel,
   } = options;
+  // Provider resolves via model-config: per-request → EXTRACTION_PROVIDER
+  // env → anthropic (claude-haiku-4-5), per the 2026-08-04 founder decision.
+  const provider = resolveExtractionProvider(requestedProvider);
   const callOptions = { maxTokens };
 
   let llmResult;

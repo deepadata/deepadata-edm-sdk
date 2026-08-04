@@ -143,7 +143,11 @@ export interface ExtractionOptions {
    * captures. Not a defect — do not change to a lighter default.
    */
   profile?: EdmProfile;
-  /** LLM provider to use for extraction (default: 'anthropic') */
+  /**
+   * LLM provider to use for extraction. Resolves via model-config:
+   * per-request → EXTRACTION_PROVIDER env → 'anthropic'
+   * (claude-haiku-4-5; founder decision 2026-08-04, 0.8.14 bake-off).
+   */
   provider?: 'anthropic' | 'openai' | 'kimi';
   /** Model to use for extraction (provider-specific, uses default if omitted) */
   model?: string;

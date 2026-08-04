@@ -117,6 +117,7 @@ export {
 // The single home for model identifiers and their resolution order:
 // per-request → EXTRACTION_MODEL → provider env → documented fallback.
 export {
+  resolveExtractionProvider,
   resolveExtractionModel,
   resolveStanceModel,
   fallbackModel,
