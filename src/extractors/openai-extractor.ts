@@ -16,7 +16,7 @@ import {
 } from "./llm-extractor.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 import { sanitizeLlmOutput } from "./output-sanitizer.js";
-import { resolveExtractionModel } from "../model-config.js";
+import { resolveExtractionModel, usesMaxCompletionTokens } from "../model-config.js";
 
 /**
  * Extract EDM fields from content using OpenAI
@@ -59,11 +59,9 @@ export async function extractWithOpenAI(
   const profilePrompt = getProfilePrompt(profile);
   const systemPrompt = profilePrompt || EXTRACTION_SYSTEM_PROMPT;
 
-  const response = await client.chat.completions.create({
+  const params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming = {
     model: resolvedModel,
-    max_tokens: options.maxTokens ?? defaultMaxTokens(resolvedModel),
     response_format: { type: "json_object" },
-    temperature,
     messages: [
       {
         role: "system",
@@ -74,7 +72,19 @@ export async function extractWithOpenAI(
         content: userContent,
       },
     ],
-  });
+  };
+
+  const outputBudget = options.maxTokens ?? defaultMaxTokens(resolvedModel);
+  if (usesMaxCompletionTokens(resolvedModel)) {
+    // gpt-5.x-class / o-series: max_tokens is a hard 400; only the default
+    // temperature is accepted, so no override is sent.
+    params.max_completion_tokens = outputBudget;
+  } else {
+    params.max_tokens = outputBudget;
+    params.temperature = temperature;
+  }
+
+  const response = await client.chat.completions.create(params);
 
   // Extract text response
   const text = response.choices[0]?.message?.content;

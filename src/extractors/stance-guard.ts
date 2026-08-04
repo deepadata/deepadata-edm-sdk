@@ -29,6 +29,7 @@ import type OpenAI from "openai";
 import type Anthropic from "@anthropic-ai/sdk";
 import type { ExperientialStance } from "../schema/types.js";
 import { EXPERIENTIAL_STANCE } from "../schema/types.js";
+import { usesMaxCompletionTokens } from "../model-config.js";
 
 /** Stances whose material must not populate subject significance fields */
 const NON_SUBJECT_STANCES: ReadonlySet<ExperientialStance> = new Set([
@@ -173,15 +174,18 @@ export async function classifyStanceOpenAI(
   model: string,
   input: StanceClassifierInput
 ): Promise<ExperientialStance | null> {
-  const response = await client.chat.completions.create({
+  const params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming = {
     model,
-    max_tokens: 1024,
     // No explicit temperature: kimi-k2.5 rejects any value other than 1.
     messages: [
       { role: "system", content: STANCE_CLASSIFIER_PROMPT },
       { role: "user", content: buildClassifierUserContent(input) },
     ],
-  });
+  };
+  // gpt-5.x-class models 400 on max_tokens; use max_completion_tokens there.
+  if (usesMaxCompletionTokens(model)) params.max_completion_tokens = 1024;
+  else params.max_tokens = 1024;
+  const response = await client.chat.completions.create(params);
   return parseStance(response.choices[0]?.message?.content?.trim().split(/\s+/).pop());
 }
 

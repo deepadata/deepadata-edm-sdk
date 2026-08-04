@@ -88,6 +88,22 @@ export function resolveExtractionModel(
 }
 
 // =============================================================================
+// Provider API-surface quirks (model-class aware)
+// =============================================================================
+
+/**
+ * OpenAI models on the reasoning-era chat API surface (gpt-5.x class and
+ * o-series): they reject `max_tokens` with a hard 400 and accept only
+ * `max_completion_tokens`; they also accept only the default temperature
+ * (any explicit override 400s).
+ */
+const OPENAI_REASONING_SURFACE_RE = /^(gpt-5|o[0-9])/i;
+
+export function usesMaxCompletionTokens(model: string): boolean {
+  return OPENAI_REASONING_SURFACE_RE.test(model);
+}
+
+// =============================================================================
 // Output token budgets (model-class aware)
 // =============================================================================
 
