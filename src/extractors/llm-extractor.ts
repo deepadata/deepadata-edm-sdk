@@ -13,6 +13,7 @@ import {
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 import { sanitizeLlmOutput } from "./output-sanitizer.js";
 import { frameTranscript } from "../conversation.js";
+import { resolveExtractionModel, defaultMaxTokens } from "../model-config.js";
 
 /**
  * Per-extractor call options.
@@ -22,21 +23,13 @@ export interface ExtractorCallOptions {
   maxTokens?: number;
 }
 
-/** Default output budget for non-thinking models */
-export const DEFAULT_MAX_TOKENS = 4096;
-/**
- * Default output budget for thinking models, whose reasoning tokens count
- * against max_tokens. 4096 silently truncated extraction JSON on exactly
- * the most emotionally dense inputs (archive-sample run, 2026-06-10).
- */
-export const THINKING_MODEL_MAX_TOKENS = 16_384;
-
-/** Models that spend output tokens on reasoning before emitting JSON */
-const THINKING_MODEL_RE = /k2\.[5-9]|k2\.\d{2,}|k3|thinking|reasoner|o[13](-|$)|gpt-5/i;
-
-export function defaultMaxTokens(model: string): number {
-  return THINKING_MODEL_RE.test(model) ? THINKING_MODEL_MAX_TOKENS : DEFAULT_MAX_TOKENS;
-}
+// Token budgets live in model-config (model-class knowledge belongs there);
+// re-exported here for backward compatibility.
+export {
+  DEFAULT_MAX_TOKENS,
+  THINKING_MODEL_MAX_TOKENS,
+  defaultMaxTokens,
+} from "../model-config.js";
 
 /** Apply conversation framing when the input declares transcript content */
 export function prepareInputText(input: ExtractionInput): string | undefined {
@@ -277,16 +270,18 @@ function getProfileSchema(profile: EdmProfile) {
  *
  * @param client - Anthropic client
  * @param input - Content to extract from
- * @param model - Model to use (default: claude-sonnet-4-20250514)
+ * @param model - Model to use (default: resolved via model-config —
+ *   EXTRACTION_MODEL / ANTHROPIC_MODEL env, then the module's fallback)
  * @param profile - EDM profile (default: 'full')
  */
 export async function extractWithLlm(
   client: Anthropic,
   input: ExtractionInput,
-  model: string = "claude-sonnet-4-20250514",
+  model?: string,
   profile: EdmProfile = "full",
   options: ExtractorCallOptions = {}
 ): Promise<LlmExtractionResult> {
+  const resolvedModel = resolveExtractionModel("anthropic", model);
   const userContent: Anthropic.MessageCreateParams["messages"][0]["content"] = [];
 
   // Add text content (conversation inputs get source-material framing)
@@ -315,8 +310,8 @@ export async function extractWithLlm(
   const systemPrompt = profilePrompt || EXTRACTION_SYSTEM_PROMPT;
 
   const response = await client.messages.create({
-    model,
-    max_tokens: options.maxTokens ?? defaultMaxTokens(model),
+    model: resolvedModel,
+    max_tokens: options.maxTokens ?? defaultMaxTokens(resolvedModel),
     system: systemPrompt,
     messages: [
       {
@@ -368,7 +363,7 @@ export async function extractWithLlm(
   return {
     extracted: result.data as LlmExtractedFields | LlmEssentialExtracted | LlmExtendedExtracted,
     confidence,
-    model,
+    model: resolvedModel,
     profile,
     notes: null,
   };

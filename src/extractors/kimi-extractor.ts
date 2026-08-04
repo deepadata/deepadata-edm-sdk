@@ -15,6 +15,7 @@ import {
   type LlmExtractionResult,
 } from "./llm-extractor.js";
 import { sanitizeLlmOutput } from "./output-sanitizer.js";
+import { resolveExtractionModel } from "../model-config.js";
 
 /**
  * Get the appropriate schema for profile-specific validation
@@ -33,34 +34,29 @@ function getProfileSchema(profile: EdmProfile) {
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 
 /**
- * Default Kimi model identifier
- * MoonshotAI exposes this via their OpenAI-compatible endpoint.
- * kimi-k2-0711-preview was retired by Moonshot (404s as of 2026-06).
- * Note: kimi-k2.5 is a thinking model — defaultMaxTokens() sizes the
- * output budget accordingly.
- */
-const DEFAULT_KIMI_MODEL = "kimi-k2.5";
-
-/**
  * Kimi API base URLs
  * - Direct: api.moonshot.cn or api.moonshot.ai (requires MOONSHOT_API_KEY or KIMI_API_KEY)
  * - OpenRouter: openrouter.ai (requires OPENROUTER_API_KEY)
  * Set MOONSHOT_BASE_URL env var to override the default
+ * Model ids (including the OpenRouter-prefixed Kimi id) live in model-config.
  */
 const DEFAULT_KIMI_BASE_URL = "https://api.moonshot.cn/v1";
 const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
-const OPENROUTER_KIMI_MODEL = "moonshotai/kimi-k2";
 
 /**
  * Extract EDM fields from content using Kimi K2
+ *
+ * Model defaults via model-config: EXTRACTION_MODEL / KIMI_MODEL env, then
+ * the module's fallback constant (OpenRouter-aware).
  */
 export async function extractWithKimi(
   client: OpenAI,
   input: ExtractionInput,
-  model: string = DEFAULT_KIMI_MODEL,
+  model?: string,
   profile: EdmProfile = "full",
   options: ExtractorCallOptions = {}
 ): Promise<LlmExtractionResult> {
+  const resolvedModel = resolveExtractionModel("kimi", model);
   const userContent: ChatCompletionContentPart[] = [];
 
   // Add text content (conversation inputs get source-material framing)
@@ -88,8 +84,8 @@ export async function extractWithKimi(
   const systemPrompt = profilePrompt || EXTRACTION_SYSTEM_PROMPT;
 
   const response = await client.chat.completions.create({
-    model,
-    max_tokens: options.maxTokens ?? defaultMaxTokens(model),
+    model: resolvedModel,
+    max_tokens: options.maxTokens ?? defaultMaxTokens(resolvedModel),
     messages: [
       {
         role: "system",
@@ -144,7 +140,7 @@ export async function extractWithKimi(
   return {
     extracted: result.data as LlmExtractedFields,
     confidence,
-    model,
+    model: resolvedModel,
     profile,
     notes: null,
   };
@@ -184,12 +180,10 @@ export function createKimiClient(apiKey?: string): OpenAI {
 }
 
 /**
- * Get the appropriate model ID based on which client is being used
+ * Get the model ID Kimi extraction will use when no per-request model is
+ * given. Delegates to model-config (env overrides + OpenRouter-aware
+ * fallback).
  */
 export function getKimiModelId(): string {
-  // If using OpenRouter, use their model identifier
-  if (process.env["OPENROUTER_API_KEY"] && !process.env["MOONSHOT_API_KEY"] && !process.env["KIMI_API_KEY"]) {
-    return OPENROUTER_KIMI_MODEL;
-  }
-  return DEFAULT_KIMI_MODEL;
+  return resolveExtractionModel("kimi");
 }

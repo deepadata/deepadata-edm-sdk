@@ -16,18 +16,23 @@ import {
 } from "./llm-extractor.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 import { sanitizeLlmOutput } from "./output-sanitizer.js";
+import { resolveExtractionModel } from "../model-config.js";
 
 /**
  * Extract EDM fields from content using OpenAI
+ *
+ * Model defaults via model-config: EXTRACTION_MODEL / OPENAI_MODEL env,
+ * then the module's fallback constant.
  */
 export async function extractWithOpenAI(
   client: OpenAI,
   input: ExtractionInput,
-  model: string = "gpt-4o-mini",
+  model?: string,
   temperature: number = 0,
   profile: EdmProfile = "full",
   options: ExtractorCallOptions = {}
 ): Promise<LlmExtractionResult> {
+  const resolvedModel = resolveExtractionModel("openai", model);
   const userContent: ChatCompletionContentPart[] = [];
 
   // Add text content (conversation inputs get source-material framing)
@@ -55,8 +60,8 @@ export async function extractWithOpenAI(
   const systemPrompt = profilePrompt || EXTRACTION_SYSTEM_PROMPT;
 
   const response = await client.chat.completions.create({
-    model,
-    max_tokens: options.maxTokens ?? defaultMaxTokens(model),
+    model: resolvedModel,
+    max_tokens: options.maxTokens ?? defaultMaxTokens(resolvedModel),
     response_format: { type: "json_object" },
     temperature,
     messages: [
@@ -112,7 +117,7 @@ export async function extractWithOpenAI(
   return {
     extracted: result.data,
     confidence,
-    model,
+    model: resolvedModel,
     profile,
     notes: null,
   };

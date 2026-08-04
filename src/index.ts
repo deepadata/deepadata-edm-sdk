@@ -107,6 +107,19 @@ export {
 } from "./validator.js";
 
 // =============================================================================
+// Model Configuration
+// =============================================================================
+// The single home for model identifiers and their resolution order:
+// per-request → EXTRACTION_MODEL → provider env → documented fallback.
+export {
+  resolveExtractionModel,
+  fallbackModel,
+  isThinkingModel,
+} from "./model-config.js";
+
+export type { ExtractionProvider } from "./model-config.js";
+
+// =============================================================================
 // LLM Integration
 // =============================================================================
 export {

@@ -59,6 +59,26 @@ happens in deepadata-com.
 | Do not add providers without test validation | Empirical trust — ADR-0002 |
 | Interpretation only, never inference | EU AI Act compliance |
 
+## Engineering Rules
+
+**No hardcoded model/provider references (standing rule, 2026-08-04).**
+Model identifiers (`kimi-*`, `gpt-*`, `claude-*`, `moonshot-*`, …) live
+ONLY in `src/model-config.ts`. Every call site resolves through that
+module. Resolution order per provider:
+
+1. per-request option (`model` on the call)
+2. `EXTRACTION_MODEL` env (global override)
+3. provider env: `ANTHROPIC_MODEL` / `OPENAI_MODEL` / `KIMI_MODEL`
+4. the documented fallback constant in `src/model-config.ts`
+
+The stance classifier has its own knob (`stanceModel` per-request /
+`STANCE_MODEL` env) and does NOT inherit the extraction model. Tests may
+pass explicit model ids as per-request options; runtime code may not.
+
+**Unset profile defaults to `full` — intentional.** Founder decision
+2026-08-04: "give an initial user the entire view." Not a defect; do not
+re-flag or change without a founder decision.
+
 **Interpretation vs Inference:** The SDK interprets affective
 meaning implicit in narrative and symbols. It does NOT infer
 latent psychological states, predict behavior, or diagnose.

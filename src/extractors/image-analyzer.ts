@@ -3,6 +3,7 @@
  * Extracts grounding context from images to supplement text extraction
  */
 import Anthropic from "@anthropic-ai/sdk";
+import { resolveExtractionModel } from "../model-config.js";
 
 export interface ImageContext {
   /** Detected location or setting */
@@ -46,10 +47,10 @@ export async function analyzeImage(
   client: Anthropic,
   imageBase64: string,
   mediaType: "image/jpeg" | "image/png" | "image/gif" | "image/webp" = "image/jpeg",
-  model: string = "claude-sonnet-4-20250514"
+  model?: string
 ): Promise<ImageContext> {
   const response = await client.messages.create({
-    model,
+    model: resolveExtractionModel("anthropic", model),
     max_tokens: 1024,
     messages: [
       {

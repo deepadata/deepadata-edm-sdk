@@ -10,7 +10,7 @@ import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile, Pa
 import { EDM_SCHEMA_VERSION } from "./version.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
 import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
-import { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
+import { extractWithKimi, createKimiClient } from "./extractors/kimi-extractor.js";
 import {
   takeStance,
   applyStanceGuard,
@@ -399,7 +399,7 @@ export async function extractFromContent(options: ExtractionOptions): Promise<Re
     classify = makeOpenAICompatibleClassifier(client, llmResult.model, content.text);
   } else if (provider === "kimi") {
     const client = createKimiClient();
-    llmResult = await extractWithKimi(client, content, model ?? getKimiModelId(), profile, callOptions);
+    llmResult = await extractWithKimi(client, content, model, profile, callOptions);
     classify = makeOpenAICompatibleClassifier(client, llmResult.model, content.text);
   } else {
     const client = createAnthropicClient();
