@@ -4,45 +4,27 @@
  * Supports profile-aware extraction (essential/extended/full)
  */
 import OpenAI from "openai";
-import { LlmExtractedFieldsSchema, LlmEssentialFieldsSchema, LlmExtendedFieldsSchema } from "../schema/edm-schema.js";
-import { EXTRACTION_SYSTEM_PROMPT, defaultMaxTokens, prepareInputText, } from "./llm-extractor.js";
+import { EXTRACTION_SYSTEM_PROMPT, defaultMaxTokens, prepareInputText, getProfileSchema, } from "./llm-extractor.js";
 import { sanitizeLlmOutput } from "./output-sanitizer.js";
-/**
- * Get the appropriate schema for profile-specific validation
- */
-function getProfileSchema(profile) {
-    switch (profile) {
-        case "essential":
-            return LlmEssentialFieldsSchema;
-        case "extended":
-            return LlmExtendedFieldsSchema;
-        case "full":
-        default:
-            return LlmExtractedFieldsSchema;
-    }
-}
+import { resolveExtractionModel } from "../model-config.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
-/**
- * Default Kimi model identifier
- * MoonshotAI exposes this via their OpenAI-compatible endpoint.
- * kimi-k2-0711-preview was retired by Moonshot (404s as of 2026-06).
- * Note: kimi-k2.5 is a thinking model — defaultMaxTokens() sizes the
- * output budget accordingly.
- */
-const DEFAULT_KIMI_MODEL = "kimi-k2.5";
 /**
  * Kimi API base URLs
  * - Direct: api.moonshot.cn or api.moonshot.ai (requires MOONSHOT_API_KEY or KIMI_API_KEY)
  * - OpenRouter: openrouter.ai (requires OPENROUTER_API_KEY)
  * Set MOONSHOT_BASE_URL env var to override the default
+ * Model ids (including the OpenRouter-prefixed Kimi id) live in model-config.
  */
 const DEFAULT_KIMI_BASE_URL = "https://api.moonshot.cn/v1";
 const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
-const OPENROUTER_KIMI_MODEL = "moonshotai/kimi-k2";
 /**
  * Extract EDM fields from content using Kimi K2
+ *
+ * Model defaults via model-config: EXTRACTION_MODEL / KIMI_MODEL env, then
+ * the module's fallback constant (OpenRouter-aware).
  */
-export async function extractWithKimi(client, input, model = DEFAULT_KIMI_MODEL, profile = "full", options = {}) {
+export async function extractWithKimi(client, input, model, profile = "full", options = {}) {
+    const resolvedModel = resolveExtractionModel("kimi", model);
     const userContent = [];
     // Add text content (conversation inputs get source-material framing)
     const text = prepareInputText(input);
@@ -66,8 +48,8 @@ export async function extractWithKimi(client, input, model = DEFAULT_KIMI_MODEL,
     const profilePrompt = getProfilePrompt(profile);
     const systemPrompt = profilePrompt || EXTRACTION_SYSTEM_PROMPT;
     const response = await client.chat.completions.create({
-        model,
-        max_tokens: options.maxTokens ?? defaultMaxTokens(model),
+        model: resolvedModel,
+        max_tokens: options.maxTokens ?? defaultMaxTokens(resolvedModel),
         messages: [
             {
                 role: "system",
@@ -114,7 +96,7 @@ export async function extractWithKimi(client, input, model = DEFAULT_KIMI_MODEL,
     return {
         extracted: result.data,
         confidence,
-        model,
+        model: resolvedModel,
         profile,
         notes: null,
     };
@@ -148,13 +130,11 @@ export function createKimiClient(apiKey) {
     throw new Error("Kimi API key is required. Set MOONSHOT_API_KEY, KIMI_API_KEY, or OPENROUTER_API_KEY environment variable.");
 }
 /**
- * Get the appropriate model ID based on which client is being used
+ * Get the model ID Kimi extraction will use when no per-request model is
+ * given. Delegates to model-config (env overrides + OpenRouter-aware
+ * fallback).
  */
 export function getKimiModelId() {
-    // If using OpenRouter, use their model identifier
-    if (process.env["OPENROUTER_API_KEY"] && !process.env["MOONSHOT_API_KEY"] && !process.env["KIMI_API_KEY"]) {
-        return OPENROUTER_KIMI_MODEL;
-    }
-    return DEFAULT_KIMI_MODEL;
+    return resolveExtractionModel("kimi");
 }
 //# sourceMappingURL=kimi-extractor.js.map

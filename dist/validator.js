@@ -235,7 +235,22 @@ export function validateEDM(artifact) {
     // see structural AND value errors in one pass (present domains only).
     const valueErrors = validatePresentDomains(artifact, profile);
     const errors = [...structuralErrors, ...valueErrors];
-    return { valid: errors.length === 0, errors };
+    const warnings = conformanceWarnings(profileResult.warnings);
+    return {
+        valid: errors.length === 0,
+        errors,
+        // D4: surface non-fatal conditions (partner completeness skip) so
+        // /v1/validate callers can see that conformance was skipped.
+        ...(warnings.length > 0 ? { warnings } : {}),
+    };
+}
+/** Map profile-conformance warnings into the ValidationResult surface */
+function conformanceWarnings(warnings) {
+    return (warnings ?? []).map((w) => ({
+        path: "meta.profile",
+        message: w.message,
+        code: w.type,
+    }));
 }
 /**
  * Detect profile from artifact's meta.profile field
@@ -253,7 +268,10 @@ function detectProfile(artifact) {
     if (typeof profile === "string" && profile.startsWith("partner:")) {
         return profile;
     }
-    return "full"; // Default to full if not specified or invalid
+    // Unset/invalid profile resolves to "full" — intentional (founder
+    // decision, 2026-08-04): an initial user gets the entire view. Not a
+    // defect; keep aligned with extractFromContent's default.
+    return "full";
 }
 /**
  * Zod schema for one domain of one profile: the full domain schema

@@ -95,6 +95,9 @@ type ProfileExtractedFields = Record<string, unknown>;
 /**
  * Extract a complete EDM artifact from content
  *
+ * An unset profile defaults to "full" — intentional (founder decision,
+ * 2026-08-04): an initial user gets the entire view. Not a defect.
+ *
  * @param options - Extraction options including profile
  * @returns Profile-conformant EDM artifact
  */

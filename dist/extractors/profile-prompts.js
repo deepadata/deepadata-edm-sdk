@@ -112,7 +112,7 @@ EXTENDED PROFILE SCHEMA:
     "fuel": "",     // what energized the experience (e.g., "shared laughter", "curiosity")
     "bridge": "",   // connection between past and present (e.g., "replaying old tape", "returning to the porch")
     "echo": "",     // what still resonates (e.g., "her laugh", "smell of oil", "city lights on water")
-    "narrative": "" // 3–5 sentences. REQUIRED: include ALL of the following — ≥1 concrete sensory detail (sight, sound, smell, texture), ≥1 temporal cue that anchors the memory in time, ≥1 symbolic callback that connects past to present. Write from the subject's perspective. Do not compress or summarise — give the memory space to breathe. Faithful and specific. Never generic.
+    "narrative": "" // 3–5 sentences. REQUIRED: include ALL of the following — ≥1 concrete sensory detail (sight, sound, smell, texture), ≥1 temporal cue that anchors the memory in time, ≥1 symbolic callback that connects past to present. Write from the subject's perspective. Faithful and concise. Never generic.
   },
   "constellation": {
     "emotion_primary": "",           // CANONICAL: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame | disappointment | relief | frustration (free text accepted if none fits)
@@ -180,7 +180,16 @@ EXTENDED PROFILE SCHEMA:
 //   Extract what specifically was lost or why it hurts.
 `;
 /**
- * Get the appropriate system prompt for a profile
+ * Get the appropriate system prompt for a profile.
+ * Returns null for the full profile (callers fall back to
+ * EXTRACTION_SYSTEM_PROMPT).
+ *
+ * Partner profiles route through the EXTENDED base — D2 fix
+ * (partner-profiles 2026-08-02): prompt, output schema, field filter, and
+ * confidence now all use the extended surface pending registry lookup
+ * (ADR-0012). Previously the prompt and schema fell back to FULL while
+ * filtering fell back to EXTENDED, so a partner extract paid full-prompt
+ * inference for fields the filter then dropped.
  */
 export function getProfilePrompt(profile) {
     switch (profile) {
@@ -189,9 +198,11 @@ export function getProfilePrompt(profile) {
         case "extended":
             return EXTENDED_PROFILE_PROMPT;
         case "full":
+            // Full profile uses the comprehensive EXTRACTION_SYSTEM_PROMPT
+            return null;
         default:
-            // Full profile uses the existing comprehensive prompt
-            return null; // Signal to use default
+            // Partner profile — extended base (ADR-0012)
+            return EXTENDED_PROFILE_PROMPT;
     }
 }
 /**

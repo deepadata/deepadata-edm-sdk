@@ -91,6 +91,10 @@ export interface ExtractionOptions {
      * - essential: minimal, for memory platforms and agent frameworks
      * - extended: mid-tier, for journaling and companion AI
      * - full: the complete field set, for therapy and regulated systems
+     *
+     * The 'full' default when unset is INTENTIONAL (founder decision,
+     * 2026-08-04): an initial user gets the entire view of what the EDM
+     * captures. Not a defect — do not change to a lighter default.
      */
     profile?: EdmProfile;
     /** LLM provider to use for extraction (default: 'anthropic') */
@@ -100,12 +104,21 @@ export interface ExtractionOptions {
     /** Temperature for OpenAI extractions (0-2, lower = more deterministic) */
     temperature?: number;
     /**
-     * Output token budget for the extraction call. Defaults to 4096, or
+     * Output token budget for the extraction call. Defaults to 2048 for
+     * non-thinking models (real completions run 600–1,200 tokens), or
      * 16384 when the model is a thinking model (reasoning tokens count
-     * against max_tokens, and 4096 silently truncated extraction on exactly
-     * the most emotionally dense inputs).
+     * against max_tokens, and smaller budgets silently truncated extraction
+     * on exactly the most emotionally dense inputs).
      */
     maxTokens?: number;
+    /**
+     * Model for the stance-classifier verification pass. Has its own knob:
+     * per-request here → STANCE_MODEL env → the fast non-thinking default in
+     * model-config. Deliberately does NOT inherit the extraction model (or
+     * EXTRACTION_MODEL) — the classifier answers with one word and a
+     * thinking-class model would double latency for nothing.
+     */
+    stanceModel?: string;
     /**
      * Stance classifier verification pass (see stance-guard):
      * - "auto" (default): run a cheap classifier call when the input is a
@@ -119,8 +132,22 @@ export interface ExtractionOptions {
 export interface ValidationResult {
     valid: boolean;
     errors: ValidationError[];
+    /**
+     * Non-fatal conditions the caller should surface — e.g. a partner
+     * profile whose completeness validation was SKIPPED pending registry
+     * lookup (ADR-0012). Added for D4 (partner-profiles 2026-08-02):
+     * /v1/validate previously returned a bare `valid: true` and the caller
+     * could not see that conformance was skipped. Present only when
+     * non-empty.
+     */
+    warnings?: ValidationWarning[];
 }
 export interface ValidationError {
+    path: string;
+    message: string;
+    code: string;
+}
+export interface ValidationWarning {
     path: string;
     message: string;
     code: string;

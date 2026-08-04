@@ -8,19 +8,10 @@ import { LlmExtractedFieldsSchema, LlmEssentialFieldsSchema, LlmExtendedFieldsSc
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 import { sanitizeLlmOutput } from "./output-sanitizer.js";
 import { frameTranscript } from "../conversation.js";
-/** Default output budget for non-thinking models */
-export const DEFAULT_MAX_TOKENS = 4096;
-/**
- * Default output budget for thinking models, whose reasoning tokens count
- * against max_tokens. 4096 silently truncated extraction JSON on exactly
- * the most emotionally dense inputs (archive-sample run, 2026-06-10).
- */
-export const THINKING_MODEL_MAX_TOKENS = 16_384;
-/** Models that spend output tokens on reasoning before emitting JSON */
-const THINKING_MODEL_RE = /k2\.[5-9]|k2\.\d{2,}|k3|thinking|reasoner|o[13](-|$)|gpt-5/i;
-export function defaultMaxTokens(model) {
-    return THINKING_MODEL_RE.test(model) ? THINKING_MODEL_MAX_TOKENS : DEFAULT_MAX_TOKENS;
-}
+import { resolveExtractionModel, defaultMaxTokens } from "../model-config.js";
+// Token budgets live in model-config (model-class knowledge belongs there);
+// re-exported here for backward compatibility.
+export { DEFAULT_MAX_TOKENS, THINKING_MODEL_MAX_TOKENS, defaultMaxTokens, } from "../model-config.js";
 /** Apply conversation framing when the input declares transcript content */
 export function prepareInputText(input) {
     if (!input.text)
@@ -85,7 +76,7 @@ Schema
     "fuel": "",     // what energized the experience (e.g., "shared laughter", "curiosity")
     "bridge": "",   // connection between past and present (e.g., "replaying old tape", "returning to the porch")
     "echo": "",     // what still resonates (e.g., "her laugh", "smell of oil", "city lights on water")
-    "narrative": "" // 3–5 sentences. REQUIRED: include ALL of the following — ≥1 concrete sensory detail (sight, sound, smell, texture), ≥1 temporal cue that anchors the memory in time, ≥1 symbolic callback that connects past to present. Write from the subject's perspective. Do not compress or summarise — give the memory space to breathe. Faithful and specific. Never generic.
+    "narrative": "" // 3–5 sentences. REQUIRED: include ALL of the following — ≥1 concrete sensory detail (sight, sound, smell, texture), ≥1 temporal cue that anchors the memory in time, ≥1 symbolic callback that connects past to present. Write from the subject's perspective. Faithful and concise. Never generic.
   },
   "constellation": {
     "emotion_primary": "",           // CANONICAL: joy | sadness | fear | anger | wonder | peace | tenderness | reverence | pride | anxiety | gratitude | longing | hope | shame | disappointment | relief | frustration (free text accepted if none fits)
@@ -202,17 +193,22 @@ Schema
   //   - narrative_archetype: Use "caregiver" NOT "caretaker". The Jungian archetype label is "caregiver".
 `;
 /**
- * Get the appropriate schema for profile-specific validation
+ * Get the appropriate schema for profile-specific validation.
+ * Shared by all extractors (anthropic/openai/kimi) — one source, no drift.
+ * Partner profiles route through the EXTENDED base pending registry
+ * lookup (ADR-0012), matching prompt selection and field filtering.
  */
-function getProfileSchema(profile) {
+export function getProfileSchema(profile) {
     switch (profile) {
         case "essential":
             return LlmEssentialFieldsSchema;
         case "extended":
             return LlmExtendedFieldsSchema;
         case "full":
-        default:
             return LlmExtractedFieldsSchema;
+        default:
+            // Partner profile — extended base (see D2, partner-profiles 2026-08-02)
+            return LlmExtendedFieldsSchema;
     }
 }
 /**
@@ -220,10 +216,12 @@ function getProfileSchema(profile) {
  *
  * @param client - Anthropic client
  * @param input - Content to extract from
- * @param model - Model to use (default: claude-sonnet-4-20250514)
+ * @param model - Model to use (default: resolved via model-config —
+ *   EXTRACTION_MODEL / ANTHROPIC_MODEL env, then the module's fallback)
  * @param profile - EDM profile (default: 'full')
  */
-export async function extractWithLlm(client, input, model = "claude-sonnet-4-20250514", profile = "full", options = {}) {
+export async function extractWithLlm(client, input, model, profile = "full", options = {}) {
+    const resolvedModel = resolveExtractionModel("anthropic", model);
     const userContent = [];
     // Add text content (conversation inputs get source-material framing)
     const text = prepareInputText(input);
@@ -248,8 +246,8 @@ export async function extractWithLlm(client, input, model = "claude-sonnet-4-202
     const profilePrompt = getProfilePrompt(profile);
     const systemPrompt = profilePrompt || EXTRACTION_SYSTEM_PROMPT;
     const response = await client.messages.create({
-        model,
-        max_tokens: options.maxTokens ?? defaultMaxTokens(model),
+        model: resolvedModel,
+        max_tokens: options.maxTokens ?? defaultMaxTokens(resolvedModel),
         system: systemPrompt,
         messages: [
             {
@@ -293,7 +291,7 @@ export async function extractWithLlm(client, input, model = "claude-sonnet-4-202
     return {
         extracted: result.data,
         confidence,
-        model,
+        model: resolvedModel,
         profile,
         notes: null,
     };

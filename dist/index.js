@@ -29,7 +29,10 @@
 // =============================================================================
 export { extractFromContent, extractFromContentWithClient, extractFromConversation, assembleArtifact, createEmptyArtifact, 
 // Profile field definitions
-ESSENTIAL_PROFILE_FIELDS, EXTENDED_PROFILE_FIELDS, FULL_PROFILE_FIELDS, getProfileFields, getProfileDomains, filterByProfile, } from "./assembler.js";
+ESSENTIAL_PROFILE_FIELDS, EXTENDED_PROFILE_FIELDS, FULL_PROFILE_FIELDS, getProfileFields, getProfileDomains, filterByProfile, 
+// Profile prefix guards (ADR-0017) — public API per D3
+// (partner-profiles 2026-08-02: only the types were exported before)
+isCanonicalProfile, isPartnerProfile, getPartnerProfileId, } from "./assembler.js";
 // =============================================================================
 // Conversation Input (transcript framing + per_session chunking)
 // =============================================================================
@@ -47,6 +50,12 @@ export { createStatelessArtifact, isStateless, validateStateless, } from "./stat
 // Validation
 // =============================================================================
 export { validateEDM, validateEDMStrict, validateEDMWithProfile, validateProfileConformance, validateDomain, validateCompleteness, } from "./validator.js";
+// =============================================================================
+// Model Configuration
+// =============================================================================
+// The single home for model identifiers and their resolution order:
+// per-request → EXTRACTION_MODEL → provider env → documented fallback.
+export { resolveExtractionModel, resolveStanceModel, fallbackModel, isThinkingModel, } from "./model-config.js";
 // =============================================================================
 // LLM Integration
 // =============================================================================

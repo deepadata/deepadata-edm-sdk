@@ -8,6 +8,9 @@ import type { ExtractionInput, EdmProfile } from "../schema/types.js";
 import { type ExtractorCallOptions, type LlmExtractionResult } from "./llm-extractor.js";
 /**
  * Extract EDM fields from content using Kimi K2
+ *
+ * Model defaults via model-config: EXTRACTION_MODEL / KIMI_MODEL env, then
+ * the module's fallback constant (OpenRouter-aware).
  */
 export declare function extractWithKimi(client: OpenAI, input: ExtractionInput, model?: string, profile?: EdmProfile, options?: ExtractorCallOptions): Promise<LlmExtractionResult>;
 /**
@@ -16,7 +19,9 @@ export declare function extractWithKimi(client: OpenAI, input: ExtractionInput, 
  */
 export declare function createKimiClient(apiKey?: string): OpenAI;
 /**
- * Get the appropriate model ID based on which client is being used
+ * Get the model ID Kimi extraction will use when no per-request model is
+ * given. Delegates to model-config (env overrides + OpenRouter-aware
+ * fallback).
  */
 export declare function getKimiModelId(): string;
 //# sourceMappingURL=kimi-extractor.d.ts.map

@@ -1,10 +1,11 @@
 import { EDM_SCHEMA_VERSION } from "./version.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
 import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
-import { extractWithKimi, createKimiClient, getKimiModelId } from "./extractors/kimi-extractor.js";
+import { extractWithKimi, createKimiClient } from "./extractors/kimi-extractor.js";
 import { takeStance, applyStanceGuard, resolveStance, classifyStanceOpenAI, classifyStanceAnthropic, } from "./extractors/stance-guard.js";
 import { chunkConversation, } from "./conversation.js";
 import { createMeta, createGovernance, createTelemetry, createSystem, createCrosswalks, detectSourceType, } from "./extractors/domain-extractors.js";
+import { resolveStanceModel } from "./model-config.js";
 // =============================================================================
 // Profile Field Definitions
 // =============================================================================
@@ -290,28 +291,35 @@ function mergeNotes(...notes) {
 /**
  * Extract a complete EDM artifact from content
  *
+ * An unset profile defaults to "full" — intentional (founder decision,
+ * 2026-08-04): an initial user gets the entire view. Not a defect.
+ *
  * @param options - Extraction options including profile
  * @returns Profile-conformant EDM artifact
  */
 export async function extractFromContent(options) {
-    const { content, metadata, model, provider = "kimi", temperature, profile = "full", maxTokens, verifyStance = "auto", } = options;
+    const { content, metadata, model, provider = "kimi", temperature, profile = "full", maxTokens, verifyStance = "auto", stanceModel, } = options;
     const callOptions = { maxTokens };
     let llmResult;
     let classify = null;
+    // The stance classifier has its own model knob (stanceModel / STANCE_MODEL
+    // env → fast non-thinking default); it no longer inherits the extraction
+    // model.
+    const classifierModel = resolveStanceModel(provider, stanceModel);
     if (provider === "openai") {
         const client = createOpenAIClient();
         llmResult = await extractWithOpenAI(client, content, model, temperature, profile, callOptions);
-        classify = makeOpenAICompatibleClassifier(client, llmResult.model, content.text);
+        classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text);
     }
     else if (provider === "kimi") {
         const client = createKimiClient();
-        llmResult = await extractWithKimi(client, content, model ?? getKimiModelId(), profile, callOptions);
-        classify = makeOpenAICompatibleClassifier(client, llmResult.model, content.text);
+        llmResult = await extractWithKimi(client, content, model, profile, callOptions);
+        classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text);
     }
     else {
         const client = createAnthropicClient();
         llmResult = await extractWithLlm(client, content, model, profile, callOptions);
-        classify = makeAnthropicClassifier(client, llmResult.model, content.text);
+        classify = makeAnthropicClassifier(client, classifierModel, content.text);
     }
     const extracted = llmResult.extracted;
     const { note: stanceNote } = await applyAttributionGuard({
@@ -380,7 +388,7 @@ export async function extractFromConversation(options) {
  * Extract from content with a provided Anthropic client
  */
 export async function extractFromContentWithClient(client, options) {
-    const { content, metadata, model, profile = "full", maxTokens, verifyStance = "auto" } = options;
+    const { content, metadata, model, profile = "full", maxTokens, verifyStance = "auto", stanceModel } = options;
     // Extract with LLM
     const llmResult = await extractWithLlm(client, content, model, profile, { maxTokens });
     const extracted = llmResult.extracted;
@@ -388,7 +396,7 @@ export async function extractFromContentWithClient(client, options) {
         extracted: extracted,
         content,
         verifyStance,
-        classify: makeAnthropicClassifier(client, llmResult.model, content.text),
+        classify: makeAnthropicClassifier(client, resolveStanceModel("anthropic", stanceModel), content.text),
     });
     // Assemble profile-specific artifact
     const artifact = assembleProfileArtifact(extracted, metadata, {

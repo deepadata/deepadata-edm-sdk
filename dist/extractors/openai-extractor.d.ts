@@ -8,6 +8,9 @@ import type { ExtractionInput, EdmProfile } from "../schema/types.js";
 import { type ExtractorCallOptions, type LlmExtractionResult } from "./llm-extractor.js";
 /**
  * Extract EDM fields from content using OpenAI
+ *
+ * Model defaults via model-config: EXTRACTION_MODEL / OPENAI_MODEL env,
+ * then the module's fallback constant.
  */
 export declare function extractWithOpenAI(client: OpenAI, input: ExtractionInput, model?: string, temperature?: number, profile?: EdmProfile, options?: ExtractorCallOptions): Promise<LlmExtractionResult>;
 /**

@@ -1,3 +1,4 @@
+import { resolveExtractionModel } from "../model-config.js";
 const IMAGE_ANALYSIS_PROMPT = `
 Analyze this image to extract context for an emotional memory. Return ONLY a JSON object with these fields:
 
@@ -20,9 +21,9 @@ Rules:
 /**
  * Analyze an image to extract grounding context
  */
-export async function analyzeImage(client, imageBase64, mediaType = "image/jpeg", model = "claude-sonnet-4-20250514") {
+export async function analyzeImage(client, imageBase64, mediaType = "image/jpeg", model) {
     const response = await client.messages.create({
-        model,
+        model: resolveExtractionModel("anthropic", model),
         max_tokens: 1024,
         messages: [
             {
