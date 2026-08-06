@@ -132,9 +132,16 @@ For full project context, cross-repo state, and architectural decisions:
 The platform repo (deepadata-com) is the source of truth for
 session state, version alignment, and task tracking.
 
-## Last session: 2026-08-04
-v0.8.14 latency + configurability release built on
-feat/sdk-0.8.14-latency (model-config module, anthropic/haiku default,
-D2/D3/D4 + openai light-profile fixes, stance knob, 2048 cap). Model
-bake-off + overnight soak recorded counsel-held in
-deepadata-com/planning/findings/. Publish pending founder.
+## Last session: 2026-08-06/07 (overnight)
+0.8.15 work on branch feat/sdk-0.8.15 (off feat/sdk-0.8.14-latency),
+no push/publish/version bump. Two units, both validated live:
+- F1 lenient fence extraction (`parseLlmJson`, shared by all three
+  extractors) — the 5 previously failing corpus runs re-ran 5/5
+  clean on haiku, zod-valid (commit 7871f49).
+- Kimi stance fallback moonshot-v1-32k → kimi-k2.6 with Moonshot
+  `thinking:{type:"disabled"}` via `stanceRequestExtensions()`
+  (moonshot-v1 retires 2026-08-31); live stance call verdict correct
+  in 1,271ms (commit f62f767).
+Suite 235/235, CHANGELOG under "Unreleased (0.8.15)". F2 candidate
+(SDK-side guard for empty/whitespace input) left open. 0.8.14 publish
+still pending founder.
