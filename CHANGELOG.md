@@ -2,6 +2,19 @@
 
 All notable changes to deepadata-edm-sdk will be documented in this file.
 
+### Unreleased (0.8.15)
+
+- fix(parse): lenient fence extraction (F1, overnight validation
+  2026-08-05). The strict fence-stripper failed when the model wrapped
+  its JSON in markdown it couldn't unwrap — a preamble line above the
+  fence, an annotated fence, or a missing closing fence (5/60 corpus
+  runs, all large technical documents). Parsing now recovers the
+  outermost brace-balanced JSON object regardless of fence state, via a
+  shared `parseLlmJson` helper used by all three extractors
+  (anthropic/openai/kimi); strict-fence and bare-JSON responses take the
+  same fast path as before. Regression tests reproduce the observed
+  failing shapes.
+
 ### v0.8.14
 
 Latency + configurability release. Emitted artifacts remain EDM v0.8.3.

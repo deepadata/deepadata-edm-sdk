@@ -18,6 +18,7 @@ import {
 } from "./llm-extractor.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 import { sanitizeLlmOutput } from "./output-sanitizer.js";
+import { parseLlmJson } from "./json-recovery.js";
 import { resolveExtractionModel, usesMaxCompletionTokens } from "../model-config.js";
 
 /**
@@ -94,15 +95,10 @@ export async function extractWithOpenAI(
     throw new Error("No text response from OpenAI");
   }
 
-  // Parse JSON response (strip markdown code fences if present)
-  let jsonText = text.trim();
-  const fenceMatch = jsonText.match(/^```(?:json)?\s*\n?([\s\S]*?)\n?\s*```$/);
-  if (fenceMatch?.[1]) {
-    jsonText = fenceMatch[1].trim();
-  }
+  // Parse JSON response — tolerant of markdown fencing (F1, 0.8.15)
   let parsed: unknown;
   try {
-    parsed = JSON.parse(jsonText);
+    parsed = parseLlmJson(text);
   } catch {
     throw new Error(`Failed to parse OpenAI response as JSON: ${text.slice(0, 200)}...`);
   }
