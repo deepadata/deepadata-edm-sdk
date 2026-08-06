@@ -31,7 +31,12 @@ import {
   createCrosswalks,
   detectSourceType,
 } from "./extractors/domain-extractors.js";
-import { resolveStanceModel, resolveExtractionProvider } from "./model-config.js";
+import {
+  resolveStanceModel,
+  resolveExtractionProvider,
+  stanceRequestExtensions,
+  type ExtractionProvider,
+} from "./model-config.js";
 
 // =============================================================================
 // Profile Field Definitions
@@ -409,11 +414,11 @@ export async function extractFromContent(options: ExtractionOptions): Promise<Re
   if (provider === "openai") {
     const client = createOpenAIClient();
     llmResult = await extractWithOpenAI(client, content, model, temperature, profile, callOptions);
-    classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text);
+    classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text, provider);
   } else if (provider === "kimi") {
     const client = createKimiClient();
     llmResult = await extractWithKimi(client, content, model, profile, callOptions);
-    classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text);
+    classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text, provider);
   } else {
     const client = createAnthropicClient();
     llmResult = await extractWithLlm(client, content, model, profile, callOptions);
@@ -449,10 +454,13 @@ export async function extractFromContent(options: ExtractionOptions): Promise<Re
 function makeOpenAICompatibleClassifier(
   client: OpenAI,
   model: string,
-  sourceText: string | undefined
+  sourceText: string | undefined,
+  provider: ExtractionProvider
 ): ((summary: string) => Promise<ExperientialStance | null>) | null {
   if (!sourceText) return null;
-  return (summary) => classifyStanceOpenAI(client, model, { sourceText, extractedSummary: summary });
+  const extensions = stanceRequestExtensions(provider, model);
+  return (summary) =>
+    classifyStanceOpenAI(client, model, { sourceText, extractedSummary: summary }, extensions);
 }
 
 function makeAnthropicClassifier(

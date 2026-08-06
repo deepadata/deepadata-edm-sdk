@@ -168,11 +168,16 @@ function buildClassifierUserContent(input: StanceClassifierInput): string {
  * Classify stance with an OpenAI-compatible client (Kimi/OpenAI).
  * max_tokens leaves headroom for thinking models that spend output
  * tokens on reasoning before the one-word answer.
+ *
+ * `extensions` carries provider request-body extensions resolved by
+ * model-config's stanceRequestExtensions() — e.g. Moonshot's
+ * `thinking: {type: "disabled"}` on the kimi path.
  */
 export async function classifyStanceOpenAI(
   client: OpenAI,
   model: string,
-  input: StanceClassifierInput
+  input: StanceClassifierInput,
+  extensions?: Record<string, unknown>
 ): Promise<ExperientialStance | null> {
   const params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming = {
     model,
@@ -185,6 +190,7 @@ export async function classifyStanceOpenAI(
   // gpt-5.x-class models 400 on max_tokens; use max_completion_tokens there.
   if (usesMaxCompletionTokens(model)) params.max_completion_tokens = 1024;
   else params.max_tokens = 1024;
+  if (extensions) Object.assign(params, extensions);
   const response = await client.chat.completions.create(params);
   return parseStance(response.choices[0]?.message?.content?.trim().split(/\s+/).pop());
 }

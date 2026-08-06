@@ -10,6 +10,7 @@ import {
   resolveExtractionProvider,
   resolveExtractionModel,
   resolveStanceModel,
+  stanceRequestExtensions,
   fallbackModel,
   isThinkingModel,
   defaultMaxTokens,
@@ -149,11 +150,25 @@ describe("resolveStanceModel", () => {
     }
   });
 
-  it("defaults to a fast non-thinking model per provider", () => {
-    for (const provider of PROVIDERS) {
+  it("defaults to a fast non-thinking model for anthropic and openai", () => {
+    for (const provider of ["anthropic", "openai"] as const) {
       const model = resolveStanceModel(provider);
       expect(isThinkingModel(model), `${provider} stance default ${model}`).toBe(false);
     }
+  });
+
+  it("kimi stance fallback is kimi-k2.6 with thinking disabled by extension", () => {
+    // moonshot-v1-32k (previous non-thinking fallback) retires 2026-08-31;
+    // k2.6 is thinking-class, so the stance path must disable thinking.
+    const model = resolveStanceModel("kimi");
+    expect(model).toBe("kimi-k2.6");
+    expect(stanceRequestExtensions("kimi", model)).toEqual({ thinking: { type: "disabled" } });
+  });
+
+  it("stance request extensions apply only to thinking-class kimi models", () => {
+    expect(stanceRequestExtensions("kimi", "moonshot-v1-32k")).toEqual({});
+    expect(stanceRequestExtensions("openai", "gpt-4o-mini")).toEqual({});
+    expect(stanceRequestExtensions("anthropic", "claude-haiku-4-5")).toEqual({});
   });
 
   it("kimi stance fallback follows OpenRouter routing", () => {

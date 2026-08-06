@@ -4,6 +4,14 @@ All notable changes to deepadata-edm-sdk will be documented in this file.
 
 ### Unreleased (0.8.15)
 
+- fix(stance): kimi stance fallback `moonshot-v1-32k` → `kimi-k2.6`
+  ahead of Moonshot's 2026-08-31 retirement of the moonshot-v1 tier.
+  k2.6 is thinking-class, so the kimi stance path now sends Moonshot's
+  `thinking: {type: "disabled"}` request extension (new
+  `stanceRequestExtensions()` in model-config, applied only to
+  thinking-class kimi models) to keep the one-word classifier at
+  non-thinking latency. ADR-0002 live validation 2026-08-06: verdict
+  `lived` (correct) in 1,271ms on kimi-k2.6 via the Moonshot API.
 - fix(parse): lenient fence extraction (F1, overnight validation
   2026-08-05). The strict fence-stripper failed when the model wrapped
   its JSON in markdown it couldn't unwrap — a preamble line above the

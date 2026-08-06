@@ -17,6 +17,7 @@ import {
   takeStance,
   resolveStance,
   isNonSubjectStance,
+  classifyStanceOpenAI,
 } from "../src/extractors/stance-guard.js";
 import { defaultMaxTokens, DEFAULT_MAX_TOKENS, THINKING_MODEL_MAX_TOKENS } from "../src/extractors/llm-extractor.js";
 import { LlmExtendedFieldsSchema } from "../src/schema/edm-schema.js";
@@ -181,6 +182,50 @@ describe("takeStance / resolveStance", () => {
     expect(resolveStance(null, "assistant_generated")).toBe("assistant_generated");
     expect(isNonSubjectStance("witnessed")).toBe(false);
     expect(isNonSubjectStance("assistant_generated")).toBe(true);
+  });
+});
+
+describe("classifyStanceOpenAI request extensions", () => {
+  it("merges provider extensions into the request body (kimi thinking-disable)", async () => {
+    let captured: Record<string, unknown> | null = null;
+    const client = {
+      chat: {
+        completions: {
+          create: async (params: Record<string, unknown>) => {
+            captured = params;
+            return { choices: [{ message: { content: "lived" } }] };
+          },
+        },
+      },
+    };
+    const result = await classifyStanceOpenAI(
+      client as never,
+      "kimi-k2.6",
+      { sourceText: "source", extractedSummary: "summary" },
+      { thinking: { type: "disabled" } }
+    );
+    expect(result).toBe("lived");
+    expect(captured!["thinking"]).toEqual({ type: "disabled" });
+    expect(captured!["max_tokens"]).toBe(1024);
+  });
+
+  it("sends no extension fields when none are provided", async () => {
+    let captured: Record<string, unknown> | null = null;
+    const client = {
+      chat: {
+        completions: {
+          create: async (params: Record<string, unknown>) => {
+            captured = params;
+            return { choices: [{ message: { content: "witnessed" } }] };
+          },
+        },
+      },
+    };
+    await classifyStanceOpenAI(client as never, "gpt-4o-mini", {
+      sourceText: "source",
+      extractedSummary: "summary",
+    });
+    expect(captured!["thinking"]).toBeUndefined();
   });
 });
 

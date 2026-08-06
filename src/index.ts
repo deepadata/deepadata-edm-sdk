@@ -120,6 +120,7 @@ export {
   resolveExtractionProvider,
   resolveExtractionModel,
   resolveStanceModel,
+  stanceRequestExtensions,
   fallbackModel,
   isThinkingModel,
 } from "./model-config.js";
