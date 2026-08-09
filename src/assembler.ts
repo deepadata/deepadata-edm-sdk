@@ -6,7 +6,7 @@
  */
 import Anthropic from "@anthropic-ai/sdk";
 import type OpenAI from "openai";
-import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile, PartnerProfileId, ExperientialStance } from "./schema/types.js";
+import type { EdmArtifact, ExtractionOptions, ExtractionInput, LlmExtractedFields, EdmProfile, PartnerProfileId, ExperientialStance } from "./schema/types.js";
 import { EDM_SCHEMA_VERSION } from "./version.js";
 import { extractWithLlm, createAnthropicClient } from "./extractors/llm-extractor.js";
 import { extractWithOpenAI, createOpenAIClient } from "./extractors/openai-extractor.js";
@@ -377,6 +377,39 @@ function mergeNotes(...notes: (string | null | undefined)[]): string | null {
   return merged.length > 0 ? merged : null;
 }
 
+// =============================================================================
+// Empty-Input Guard (F2, 2026-08-05 overnight validation)
+// =============================================================================
+
+/**
+ * Thrown when extraction is requested for input with no extractable
+ * content. Raised BEFORE any provider client is created — empty and
+ * whitespace-only inputs previously burned a provider round-trip to
+ * receive a 400 (finding F2, 0.8.14 overnight validation).
+ */
+export class EmptyInputError extends Error {
+  /** Stable programmatic discriminator for callers that map errors. */
+  readonly code = "EMPTY_INPUT";
+  constructor() {
+    super(
+      "Extraction input is empty: content.text is empty or whitespace-only " +
+        "and no image was provided. No provider call was made."
+    );
+    this.name = "EmptyInputError";
+  }
+}
+
+/**
+ * Reject inputs with nothing to extract. Image-only input is allowed
+ * (the extractors support image analysis without accompanying text).
+ */
+export function assertExtractableInput(content: ExtractionInput): void {
+  const hasText = typeof content.text === "string" && content.text.trim().length > 0;
+  if (!hasText && !content.image) {
+    throw new EmptyInputError();
+  }
+}
+
 /**
  * Extract a complete EDM artifact from content
  *
@@ -398,6 +431,7 @@ export async function extractFromContent(options: ExtractionOptions): Promise<Re
     verifyStance = "auto",
     stanceModel,
   } = options;
+  assertExtractableInput(content);
   // Provider resolves via model-config: per-request → EXTRACTION_PROVIDER
   // env → anthropic (claude-haiku-4-5), per the 2026-08-04 founder decision.
   const provider = resolveExtractionProvider(requestedProvider);
@@ -536,6 +570,7 @@ export async function extractFromContentWithClient(
   options: ExtractionOptions
 ): Promise<Record<string, unknown>> {
   const { content, metadata, model, profile = "full", maxTokens, verifyStance = "auto", stanceModel } = options;
+  assertExtractableInput(content);
 
   // Extract with LLM
   const llmResult = await extractWithLlm(client, content, model, profile, { maxTokens });

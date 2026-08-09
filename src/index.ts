@@ -46,6 +46,9 @@ export {
   isCanonicalProfile,
   isPartnerProfile,
   getPartnerProfileId,
+  // Empty-input guard (F2) — typed pre-provider rejection
+  EmptyInputError,
+  assertExtractableInput,
 } from "./assembler.js";
 
 export type {

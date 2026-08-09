@@ -4,6 +4,14 @@ All notable changes to deepadata-edm-sdk will be documented in this file.
 
 ### Unreleased (0.8.15)
 
+- feat(guard): empty-input guard (F2, overnight validation 2026-08-05).
+  Empty and whitespace-only inputs previously reached the provider and
+  burned a round-trip to receive a 400. `extractFromContent` and
+  `extractFromContentWithClient` now reject them SDK-side with a typed
+  `EmptyInputError` (`name: "EmptyInputError"`, `code: "EMPTY_INPUT"`)
+  before any provider client is created. Image-only input (empty text
+  with an image attached) remains allowed. New exports:
+  `EmptyInputError`, `assertExtractableInput`.
 - fix(stance): kimi stance fallback `moonshot-v1-32k` → `kimi-k2.6`
   ahead of Moonshot's 2026-08-31 retirement of the moonshot-v1 tier.
   k2.6 is thinking-class, so the kimi stance path now sends Moonshot's
