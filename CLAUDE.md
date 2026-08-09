@@ -9,9 +9,9 @@ Given text (conversation, journal entry, transcript), it produces
 a structured significance artifact — emotional weight, narrative
 arc, identity threads, recall triggers — encoded at capture time.
 
-- **Current version:** v0.8.14 (local, branch feat/sdk-0.8.14-latency — NOT yet published)
+- **Current version:** v0.8.15 — PUBLISHED 2026-08-09 (registry-checked), tag `v0.8.15`, `feat/sdk-0.8.15` merged to main (release commit `fd6b524`)
 - **License:** UNLICENSED (commercial)
-- **npm:** deepadata-edm-sdk@0.8.13 published (0.8.14 publish is founder-only, after site-repo integration tests against the packed tarball)
+- **npm:** deepadata-edm-sdk@0.8.15 = latest; platform (deepadata-com) bumped to `^0.8.15` (its commit `58edc5b`)
 
 ## Role in the DeepaData System
 
@@ -111,10 +111,9 @@ gratitude, authenticity
 
 ## Pending
 
-- 0.8.14 publish (founder-only). The tomorrow site session
-  integration-tests against the packed tarball BEFORE any publish;
-  platform then bumps to `^0.8.14` and passes `/v1/validate` warnings
-  through (D4).
+- (resolved 2026-08-08) 0.8.14 published; platform bumped `^0.8.14`,
+  D4 warnings pass-through shipped platform-side (`2dccb3c`).
+- (resolved 2026-08-09) 0.8.15 published — see Last session below.
 - (resolved) the `file:../edm-spec` pin was flipped back to the npm
   semver `^0.8.3` in f801801.
 
@@ -127,12 +126,25 @@ gratitude, authenticity
 
 For full project context, cross-repo state, and architectural decisions:
 
-→ **See `deepadata-com/planning/CLAUDE_PROJECT.md`**
+→ **See `deepadata-com/planning/BACKLOG-2026-08-08.md` (rows) +
+`planning/STATE.md` (state) + the newest `planning/findings/` doc.**
+(`CLAUDE_PROJECT.md` is retired as a worklist authority per N14,
+2026-08-09 park session.)
 
 The platform repo (deepadata-com) is the source of truth for
 session state, version alignment, and task tracking.
 
-## Last session: 2026-08-06/07 (overnight)
+## Last session: 2026-08-09 (release day, founder-run)
+**0.8.15 PUBLISHED**: F1 lenient fence parse (`7871f49`) + kimi stance
+sunset moonshot-v1-32k → kimi-k2.6 (`f62f767`, ahead of the 2026-08-31
+retirement) + F2 empty-input guard (`100debb` — EmptyInputError, typed
+pre-provider rejection, founder chose ship-with). Suite 244/244.
+Release commit `fd6b524`, tag `v0.8.15` pushed, `feat/sdk-0.8.15`
+merged to main. Platform bumped `^0.8.15` (deepadata-com `58edc5b`).
+This CLAUDE.md was synced to publish reality by the platform park
+session (H13); stale 0.8.14-era lines corrected above.
+
+## Prior session: 2026-08-06/07 (overnight)
 0.8.15 work on branch feat/sdk-0.8.15 (off feat/sdk-0.8.14-latency),
 no push/publish/version bump. Two units, both validated live:
 - F1 lenient fence extraction (`parseLlmJson`, shared by all three
