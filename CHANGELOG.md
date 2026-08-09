@@ -2,7 +2,7 @@
 
 All notable changes to deepadata-edm-sdk will be documented in this file.
 
-### Unreleased (0.8.15)
+### v0.8.15 (2026-08-09)
 
 - feat(guard): empty-input guard (F2, overnight validation 2026-08-05).
   Empty and whitespace-only inputs previously reached the provider and

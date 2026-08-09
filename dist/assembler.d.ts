@@ -5,7 +5,7 @@
  * EDM schema version is declared in src/version.ts
  */
 import Anthropic from "@anthropic-ai/sdk";
-import type { EdmArtifact, ExtractionOptions, LlmExtractedFields, EdmProfile, PartnerProfileId } from "./schema/types.js";
+import type { EdmArtifact, ExtractionOptions, ExtractionInput, LlmExtractedFields, EdmProfile, PartnerProfileId } from "./schema/types.js";
 import { type ConversationMessage, type ChunkConversationOptions } from "./conversation.js";
 /**
  * PROFILE MANIFESTS — GUARDED RESTATEMENT of the spec composites.
@@ -92,6 +92,22 @@ export declare function filterByProfile(artifact: Record<string, unknown>, profi
  * Profile-specific extracted fields (union type)
  */
 type ProfileExtractedFields = Record<string, unknown>;
+/**
+ * Thrown when extraction is requested for input with no extractable
+ * content. Raised BEFORE any provider client is created — empty and
+ * whitespace-only inputs previously burned a provider round-trip to
+ * receive a 400 (finding F2, 0.8.14 overnight validation).
+ */
+export declare class EmptyInputError extends Error {
+    /** Stable programmatic discriminator for callers that map errors. */
+    readonly code = "EMPTY_INPUT";
+    constructor();
+}
+/**
+ * Reject inputs with nothing to extract. Image-only input is allowed
+ * (the extractors support image analysis without accompanying text).
+ */
+export declare function assertExtractableInput(content: ExtractionInput): void;
 /**
  * Extract a complete EDM artifact from content
  *

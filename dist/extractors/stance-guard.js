@@ -125,8 +125,12 @@ function buildClassifierUserContent(input) {
  * Classify stance with an OpenAI-compatible client (Kimi/OpenAI).
  * max_tokens leaves headroom for thinking models that spend output
  * tokens on reasoning before the one-word answer.
+ *
+ * `extensions` carries provider request-body extensions resolved by
+ * model-config's stanceRequestExtensions() — e.g. Moonshot's
+ * `thinking: {type: "disabled"}` on the kimi path.
  */
-export async function classifyStanceOpenAI(client, model, input) {
+export async function classifyStanceOpenAI(client, model, input, extensions) {
     const params = {
         model,
         // No explicit temperature: kimi-k2.5 rejects any value other than 1.
@@ -140,6 +144,8 @@ export async function classifyStanceOpenAI(client, model, input) {
         params.max_completion_tokens = 1024;
     else
         params.max_tokens = 1024;
+    if (extensions)
+        Object.assign(params, extensions);
     const response = await client.chat.completions.create(params);
     return parseStance(response.choices[0]?.message?.content?.trim().split(/\s+/).pop());
 }

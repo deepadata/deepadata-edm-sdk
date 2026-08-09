@@ -44,6 +44,14 @@ export declare function resolveExtractionModel(provider: ExtractionProvider, req
  * per-request → STANCE_MODEL → fast non-thinking fallback.
  */
 export declare function resolveStanceModel(provider: ExtractionProvider, requested?: string): string;
+/**
+ * Extra request-body fields for a provider's stance-classifier call.
+ * Kimi only: thinking-class Kimi models accept Moonshot's
+ * `thinking: {type: "disabled"}` extension, which skips reasoning and
+ * keeps the one-word classifier at non-thinking latency. Not sent for
+ * non-thinking Kimi models (moonshot-v1-*) or other providers.
+ */
+export declare function stanceRequestExtensions(provider: ExtractionProvider, model: string): Record<string, unknown>;
 export declare function usesMaxCompletionTokens(model: string): boolean;
 /**
  * Default output budget for non-thinking models. Validated against real

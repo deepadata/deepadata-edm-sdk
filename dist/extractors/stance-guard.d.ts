@@ -62,8 +62,12 @@ export interface StanceClassifierInput {
  * Classify stance with an OpenAI-compatible client (Kimi/OpenAI).
  * max_tokens leaves headroom for thinking models that spend output
  * tokens on reasoning before the one-word answer.
+ *
+ * `extensions` carries provider request-body extensions resolved by
+ * model-config's stanceRequestExtensions() — e.g. Moonshot's
+ * `thinking: {type: "disabled"}` on the kimi path.
  */
-export declare function classifyStanceOpenAI(client: OpenAI, model: string, input: StanceClassifierInput): Promise<ExperientialStance | null>;
+export declare function classifyStanceOpenAI(client: OpenAI, model: string, input: StanceClassifierInput, extensions?: Record<string, unknown>): Promise<ExperientialStance | null>;
 /** Classify stance with an Anthropic client */
 export declare function classifyStanceAnthropic(client: Anthropic, model: string, input: StanceClassifierInput): Promise<ExperientialStance | null>;
 /**

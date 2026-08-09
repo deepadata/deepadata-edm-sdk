@@ -24,7 +24,7 @@
  * const validation = validateProfileConformance(artifact);
  * ```
  */
-export { extractFromContent, extractFromContentWithClient, extractFromConversation, assembleArtifact, createEmptyArtifact, ESSENTIAL_PROFILE_FIELDS, EXTENDED_PROFILE_FIELDS, FULL_PROFILE_FIELDS, getProfileFields, getProfileDomains, filterByProfile, isCanonicalProfile, isPartnerProfile, getPartnerProfileId, } from "./assembler.js";
+export { extractFromContent, extractFromContentWithClient, extractFromConversation, assembleArtifact, createEmptyArtifact, ESSENTIAL_PROFILE_FIELDS, EXTENDED_PROFILE_FIELDS, FULL_PROFILE_FIELDS, getProfileFields, getProfileDomains, filterByProfile, isCanonicalProfile, isPartnerProfile, getPartnerProfileId, EmptyInputError, assertExtractableInput, } from "./assembler.js";
 export type { ConversationExtractionOptions, ConversationChunkArtifact, } from "./assembler.js";
 export { flattenConversation, frameTranscript, chunkConversation, DEFAULT_CHUNK_MAX_CHARS, } from "./conversation.js";
 export type { ConversationMessage, ConversationChunk, ChunkConversationOptions, } from "./conversation.js";
@@ -34,7 +34,7 @@ export { sanitizeLlmOutput, formatSanitationNotes, } from "./extractors/output-s
 export type { SanitationNote } from "./extractors/output-sanitizer.js";
 export { createStatelessArtifact, isStateless, validateStateless, } from "./stateless.js";
 export { validateEDM, validateEDMStrict, validateEDMWithProfile, validateProfileConformance, validateDomain, validateCompleteness, } from "./validator.js";
-export { resolveExtractionProvider, resolveExtractionModel, resolveStanceModel, fallbackModel, isThinkingModel, } from "./model-config.js";
+export { resolveExtractionProvider, resolveExtractionModel, resolveStanceModel, stanceRequestExtensions, fallbackModel, isThinkingModel, } from "./model-config.js";
 export type { ExtractionProvider } from "./model-config.js";
 export { extractWithLlm, createAnthropicClient, EXTRACTION_SYSTEM_PROMPT, calculateConfidence, defaultMaxTokens, DEFAULT_MAX_TOKENS, THINKING_MODEL_MAX_TOKENS, } from "./extractors/llm-extractor.js";
 export type { LlmExtractionResult, LlmEssentialExtracted, LlmExtendedExtracted, ExtractorCallOptions, } from "./extractors/llm-extractor.js";

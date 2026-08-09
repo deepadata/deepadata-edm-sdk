@@ -5,7 +5,7 @@ import { extractWithKimi, createKimiClient } from "./extractors/kimi-extractor.j
 import { takeStance, applyStanceGuard, resolveStance, classifyStanceOpenAI, classifyStanceAnthropic, } from "./extractors/stance-guard.js";
 import { chunkConversation, } from "./conversation.js";
 import { createMeta, createGovernance, createTelemetry, createSystem, createCrosswalks, detectSourceType, } from "./extractors/domain-extractors.js";
-import { resolveStanceModel, resolveExtractionProvider } from "./model-config.js";
+import { resolveStanceModel, resolveExtractionProvider, stanceRequestExtensions, } from "./model-config.js";
 // =============================================================================
 // Profile Field Definitions
 // =============================================================================
@@ -288,6 +288,34 @@ function mergeNotes(...notes) {
     const merged = notes.filter(Boolean).join("; ");
     return merged.length > 0 ? merged : null;
 }
+// =============================================================================
+// Empty-Input Guard (F2, 2026-08-05 overnight validation)
+// =============================================================================
+/**
+ * Thrown when extraction is requested for input with no extractable
+ * content. Raised BEFORE any provider client is created — empty and
+ * whitespace-only inputs previously burned a provider round-trip to
+ * receive a 400 (finding F2, 0.8.14 overnight validation).
+ */
+export class EmptyInputError extends Error {
+    /** Stable programmatic discriminator for callers that map errors. */
+    code = "EMPTY_INPUT";
+    constructor() {
+        super("Extraction input is empty: content.text is empty or whitespace-only " +
+            "and no image was provided. No provider call was made.");
+        this.name = "EmptyInputError";
+    }
+}
+/**
+ * Reject inputs with nothing to extract. Image-only input is allowed
+ * (the extractors support image analysis without accompanying text).
+ */
+export function assertExtractableInput(content) {
+    const hasText = typeof content.text === "string" && content.text.trim().length > 0;
+    if (!hasText && !content.image) {
+        throw new EmptyInputError();
+    }
+}
 /**
  * Extract a complete EDM artifact from content
  *
@@ -299,6 +327,7 @@ function mergeNotes(...notes) {
  */
 export async function extractFromContent(options) {
     const { content, metadata, model, provider: requestedProvider, temperature, profile = "full", maxTokens, verifyStance = "auto", stanceModel, } = options;
+    assertExtractableInput(content);
     // Provider resolves via model-config: per-request → EXTRACTION_PROVIDER
     // env → anthropic (claude-haiku-4-5), per the 2026-08-04 founder decision.
     const provider = resolveExtractionProvider(requestedProvider);
@@ -312,12 +341,12 @@ export async function extractFromContent(options) {
     if (provider === "openai") {
         const client = createOpenAIClient();
         llmResult = await extractWithOpenAI(client, content, model, temperature, profile, callOptions);
-        classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text);
+        classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text, provider);
     }
     else if (provider === "kimi") {
         const client = createKimiClient();
         llmResult = await extractWithKimi(client, content, model, profile, callOptions);
-        classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text);
+        classify = makeOpenAICompatibleClassifier(client, classifierModel, content.text, provider);
     }
     else {
         const client = createAnthropicClient();
@@ -343,10 +372,11 @@ export async function extractFromContent(options) {
     });
     return artifact;
 }
-function makeOpenAICompatibleClassifier(client, model, sourceText) {
+function makeOpenAICompatibleClassifier(client, model, sourceText, provider) {
     if (!sourceText)
         return null;
-    return (summary) => classifyStanceOpenAI(client, model, { sourceText, extractedSummary: summary });
+    const extensions = stanceRequestExtensions(provider, model);
+    return (summary) => classifyStanceOpenAI(client, model, { sourceText, extractedSummary: summary }, extensions);
 }
 function makeAnthropicClassifier(client, model, sourceText) {
     if (!sourceText)
@@ -392,6 +422,7 @@ export async function extractFromConversation(options) {
  */
 export async function extractFromContentWithClient(client, options) {
     const { content, metadata, model, profile = "full", maxTokens, verifyStance = "auto", stanceModel } = options;
+    assertExtractableInput(content);
     // Extract with LLM
     const llmResult = await extractWithLlm(client, content, model, profile, { maxTokens });
     const extracted = llmResult.extracted;

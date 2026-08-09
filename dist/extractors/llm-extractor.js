@@ -7,6 +7,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { LlmExtractedFieldsSchema, LlmEssentialFieldsSchema, LlmExtendedFieldsSchema, } from "../schema/edm-schema.js";
 import { getProfilePrompt, calculateProfileConfidence } from "./profile-prompts.js";
 import { sanitizeLlmOutput } from "./output-sanitizer.js";
+import { parseLlmJson } from "./json-recovery.js";
 import { frameTranscript } from "../conversation.js";
 import { resolveExtractionModel, defaultMaxTokens } from "../model-config.js";
 // Token budgets live in model-config (model-class knowledge belongs there);
@@ -261,15 +262,10 @@ export async function extractWithLlm(client, input, model, profile = "full", opt
     if (!textBlock || textBlock.type !== "text") {
         throw new Error("No text response from LLM");
     }
-    // Parse JSON response (strip markdown code fences if present)
-    let jsonText = textBlock.text.trim();
-    const fenceMatch = jsonText.match(/^```(?:json)?\s*\n?([\s\S]*?)\n?\s*```$/);
-    if (fenceMatch?.[1]) {
-        jsonText = fenceMatch[1].trim();
-    }
+    // Parse JSON response — tolerant of markdown fencing (F1, 0.8.15)
     let parsed;
     try {
-        parsed = JSON.parse(jsonText);
+        parsed = parseLlmJson(textBlock.text);
     }
     catch {
         throw new Error(`Failed to parse LLM response as JSON: ${textBlock.text.slice(0, 200)}...`);

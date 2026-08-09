@@ -109,16 +109,19 @@ export function resolveExtractionModel(provider, requested) {
  * answers with one word — it does NOT inherit the extraction model
  * (a thinking-class extraction model would double latency for nothing).
  * Resolution: per-request `stanceModel` → `STANCE_MODEL` env → the fast
- * non-thinking default below. EXTRACTION_MODEL deliberately does not apply.
+ * default below. EXTRACTION_MODEL deliberately does not apply.
  *
- * - kimi: `moonshot-v1-32k` — non-thinking Moonshot tier; 32k context
- *   comfortably fits the classifier's 12K-char source slice. OpenRouter
- *   routing falls back to the vendor-prefixed non-thinking k2 id.
+ * - kimi: `kimi-k2.6` — moonshot-v1-32k (the previous non-thinking
+ *   fallback) is retired by Moonshot 2026-08-31. k2.6 is thinking-class,
+ *   so the stance path sends Moonshot's `thinking: {type: "disabled"}`
+ *   request extension (stanceRequestExtensions below) to keep the
+ *   classifier on non-thinking latency. OpenRouter routing falls back to
+ *   the vendor-prefixed non-thinking k2 id.
  */
 const STANCE_FALLBACK_MODELS = {
     anthropic: "claude-haiku-4-5",
     openai: "gpt-4o-mini",
-    kimi: "moonshot-v1-32k",
+    kimi: "kimi-k2.6",
 };
 /**
  * Resolve the stance-classifier model for a provider:
@@ -132,6 +135,19 @@ export function resolveStanceModel(provider, requested) {
         return OPENROUTER_KIMI_MODEL;
     }
     return STANCE_FALLBACK_MODELS[provider];
+}
+/**
+ * Extra request-body fields for a provider's stance-classifier call.
+ * Kimi only: thinking-class Kimi models accept Moonshot's
+ * `thinking: {type: "disabled"}` extension, which skips reasoning and
+ * keeps the one-word classifier at non-thinking latency. Not sent for
+ * non-thinking Kimi models (moonshot-v1-*) or other providers.
+ */
+export function stanceRequestExtensions(provider, model) {
+    if (provider === "kimi" && isThinkingModel(model)) {
+        return { thinking: { type: "disabled" } };
+    }
+    return {};
 }
 // =============================================================================
 // Provider API-surface quirks (model-class aware)
